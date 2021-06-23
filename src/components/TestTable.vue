@@ -1,8 +1,12 @@
 <template>
-    <table>
-        <thead>
-            <tr>
-                <th class="cursor-pointer hover:text-gray-600" v-for="header in headers" @click="sortMePlx(header)">
+    <table class="min-w-full bg-white dark:bg-gray-800">
+        <thead class="sticky top-0">
+            <tr class="w-full h-16 border-gray-300 border-b py-8">
+                <th
+                    class="pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
+                    v-for="header in headers"
+                    @click="sortMePlx(header)"
+                >
                     <slot :name="`header-${header}`" :header="header">
                         {{ header }}
                     </slot>
@@ -10,8 +14,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="data in dataList">
-                <td v-for="header in headers" :data-name="`data-${header}`">
+            <tr class="h-24 border-gray-300 border-b" v-for="data in dataList">
+                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4" v-for="header in headers" :data-name="`data-${header}`">
                     <slot :name="`data-${header}`" :data="data[header]" :row="data">
                         {{ data[header] }}
                     </slot>
