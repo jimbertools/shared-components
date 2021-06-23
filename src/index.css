@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, #app {
+    height: 100vh;
+    height: -webkit-fill-available;
+}
+html {
+    height: -webkit-fill-available;
+}
