@@ -46,6 +46,7 @@
         const i = reverse ? -1 : 1;
 
         return array.sort((a: AbstractData, b: AbstractData) => {
+            //@todo fixme
             const aValue = sortMethods?.[sortKey] ? sortMethods[sortKey](<any>a[sortKey]) : a[sortKey];
             const bValue = sortMethods?.[sortKey] ? sortMethods[sortKey](<any>b[sortKey]) : b[sortKey];
             return (
@@ -61,6 +62,7 @@
     const sortKey = ref<string | null>(null);
     const reverse = ref<boolean>(false);
 
+    //@todo: add pagination
     export default defineComponent({
         name: 'TestTable',
         setup(props) {
@@ -72,6 +74,8 @@
             });
 
             const sortMePlx = (header: string) => {
+                //@todo: add external sort
+
                 if ((sortKey.value = header)) {
                     reverse.value = !reverse.value;
                     return;
