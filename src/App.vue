@@ -1,62 +1,74 @@
 <template>
-  <div class="debug-screens w-full h-full bg-gray-200">
-    <Table />
-    <element-table :tableData="data" :key="data.length"
-    @row-click="(e)=>rowClicked(e)"/>
-  </div>
+    <div class="debug-screens w-full h-full bg-gray-200">
+        <test-table :data="data" :headers="headers" :sort-methods-override="sortMethodsOverride">
+            <template v-slot:header-name="{ header }">
+                <h2 class="inline">{{ header }}</h2>
+            </template>
+            <template v-slot:data-name="{ data, row }">
+                <img class="inline-block w-6 h-6 aspect-1/1 rounded-full shadow" :src="row.image" alt="" />
+                <h1 class="ml-4 inline">{{ data.first }}&nbsp</h1>
+                <h2 class="inline">{{ data.last }}</h2>
+            </template>
+        </test-table>
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue';
-import Table from './components/Table.vue';
-import ElementTable from './components/ElementTable.vue';
-import axios from 'axios';
+    import { defineComponent, onBeforeMount, ref } from 'vue';
+    import Table from './components/Table.vue';
+    import ElementTable from './components/ElementTable.vue';
+    import axios from 'axios';
+    import TestTable from './components/TestTable.vue';
 
-const getEverything = async () => {
-  const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
-  return res.data.results.map((u: any) => ({
-    id: u.id.value,
-    name: `${u.name.first} ${u.name.last}`,
-    title: 'Regional Paradigm Technician',
-    department: 'Optimization',
-    role: 'Admin',
-    email: u.email,
-    image: u.picture.thumbnail,
-    active: true,
-  }));
-};
-const data = ref<any[]>([]);
-const headers = [
-  {
-    "key": "id",
-    "value": "Identifier"
-  },
-  "name"
-]
+    const getEverything = async () => {
+        const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
+        let map = res.data.results.map((u: any) => ({
+            id: u.login.uuid,
+            name: { first: `${u.name.first}`, last: `${u.name.last}` },
+            title: 'Regional Paradigm Technician',
+            department: 'Optimization',
+            role: 'Admin',
+            email: u.email,
+            image: u.picture.thumbnail,
+            active: true,
+            age: u.dob.age,
+        }));
+        map[0].age = 3;
 
-const rowClicked = (e:any)=> {
-console.log(e)
-}
-
-export default defineComponent({
-  name: 'App',
-  components: {
-    Table,
-    ElementTable
-  },
-  setup() {
-    onBeforeMount(async () => {
-      data.value = await getEverything();
-      console.log(data.value);
-    });
-    return {
-      data,
-      headers,
-      rowClicked
+        return map;
     };
-  },
-});
+    const data = ref<any[]>([]);
+    const headers = ['id', 'name', 'email', 'age'];
+
+    const rowClicked = (e: any) => {
+        console.log(e);
+    };
+
+    export default defineComponent({
+        name: 'App',
+        components: {
+            TestTable,
+            Table,
+            ElementTable,
+        },
+        setup() {
+            onBeforeMount(async () => {
+                data.value = await getEverything();
+                console.log(data.value);
+            });
+            const sortMethodsOverride = {
+                name(data: any) {
+                    return `${data.name.first} ${data.name.last}`;
+                },
+            };
+            return {
+                data,
+                headers,
+                rowClicked,
+                sortMethodsOverride,
+            };
+        },
+    });
 </script>
 
-<style>
-</style>
+<style></style>
