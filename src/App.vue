@@ -1,12 +1,15 @@
 <template>
   <div class="debug-screens w-full h-full bg-gray-200">
-    <HelloWorld :data="data" :headers="headers" />
+    <Table />
+    <element-table :tableData="data" :key="data.length"
+    @row-click="(e)=>rowClicked(e)"/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue';
-import HelloWorld from './components/Table.vue';
+import Table from './components/Table.vue';
+import ElementTable from './components/ElementTable.vue';
 import axios from 'axios';
 
 const getEverything = async () => {
@@ -31,10 +34,15 @@ const headers = [
   "name"
 ]
 
+const rowClicked = (e:any)=> {
+console.log(e)
+}
+
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld,
+    Table,
+    ElementTable
   },
   setup() {
     onBeforeMount(async () => {
@@ -43,7 +51,8 @@ export default defineComponent({
     });
     return {
       data,
-      headers
+      headers,
+      rowClicked
     };
   },
 });

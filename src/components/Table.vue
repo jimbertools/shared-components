@@ -1144,15 +1144,12 @@
     </div>
 </template>
 <script>
+import { defineComponent, onBeforeMount, ref } from 'vue';
+
 export default {
     name: 'CompactTableWithActionsAndSelect',
     setup() {
-        onBeforeMount(async () => {
-            data.value = await getEverything();
-            console.log(data.value);
-        });
         return {
-            data,
         };
     },
 };
