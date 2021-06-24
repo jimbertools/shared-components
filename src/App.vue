@@ -1,6 +1,6 @@
 <template>
     <div class="debug-screens w-full h-full bg-gray-200">
-        <test-table :data="data" :headers="headers" :page-size="5" :page-index="2">
+        <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
             <template v-slot:header-name="{ header }">
                 <h2 class="inline">{{ header }} custom header</h2>
             </template>
@@ -69,16 +69,11 @@
                 data.value = await getEverything();
                 console.log(data.value);
             });
-            // const sortMethodsOverride = {
-            //     name(data: any) {
-            //         return `${data.name.first} ${data.name.last}`;
-            //     },
-            // };
+
             return {
                 data,
                 headers,
                 rowClicked,
-                // sortMethodsOverride,
             };
         },
     });

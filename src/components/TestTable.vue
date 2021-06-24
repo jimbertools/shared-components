@@ -59,11 +59,6 @@
         console.log(sortKey);
         const getData = headers.find((h: any) => h.key == sortKey).sort;
         return array.sort((a: AbstractData, b: AbstractData) => {
-            //@todo fixme
-
-            // const aValue = sortMethods?.[sortKey] ? sortMethods[sortKey](<any>a[sortKey]) : a[sortKey];
-            // const bValue = sortMethods?.[sortKey] ? sortMethods[sortKey](<any>b[sortKey]) : b[sortKey];
-
             const aValue = getData ? getData(a[sortKey]) : a[sortKey];
             const bValue = getData ? getData(b[sortKey]) : b[sortKey];
             return (
@@ -116,7 +111,8 @@
             headers: { type: Array, required: true },
             pageIndex: { type: Number, required: false, default: 0 },
             pageSize: { type: Number, required: false, default: -1 },
-            // sortMethodsOverride: { type: Object, default: {}, required: false },
+            //@todo naming: is client = is sorting on client
+            isClient: {type: Boolean, required:false, default:false}
         },
     });
 </script>
