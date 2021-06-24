@@ -1,6 +1,6 @@
-
 export interface IHeader {
-
+    key: keyof TEntry | string;
+    displayName: string;
 }
 
 // export  interface IFile {

@@ -1,5 +1,5 @@
 <template>
-    <div class="debug-screens w-full h-full bg-gray-200">
+    <div class='debug-screens w-full h-full bg-gray-200'>
         <!-- <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
             <template v-slot:header-name="{ header }">
                 <h2 class="inline">{{ header }} custom header</h2>
@@ -13,19 +13,19 @@
             </template>
         </test-table> -->
 
-        <file-manager :data="data" />
+        <file-manager :data='data' :headers='headers'/>
     </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
     import { defineComponent, onBeforeMount, ref } from 'vue';
     import Table from './components/Table.vue';
     import ElementTable from './components/ElementTable.vue';
     import axios from 'axios';
     import TestTable from './components/TestTable.vue';
-import FileManager from './components/FileManager.vue';
-import jsonData from './data.json' 
-    import { IHeader,IFile,IBaseFolder,TEntry } from './infrastructure/types/FileManagerTypes'
+    import FileManager from './components/FileManager.vue';
+    import jsonData from './data.json';
+    import { IHeader, TEntry } from './infrastructure/types/FileManagerTypes';
 
 
     const getEverything = async () => {
@@ -45,7 +45,7 @@ import jsonData from './data.json'
 
         // return map;
         //@ts-ignore
-        return <TEntry[]>jsonData  
+        return <TEntry[]>jsonData;
 
     };
     const data = ref<any[]>([]);
@@ -59,7 +59,6 @@ import jsonData from './data.json'
         components: {
             TestTable,
             Table,
-            ElementTable,
             FileManager,
         },
         setup() {
@@ -67,10 +66,14 @@ import jsonData from './data.json'
                 data.value = await getEverything();
                 console.log(data.value);
             });
+            const headers : IHeader[] = [
+
+            ]
 
             return {
                 data,
                 rowClicked,
+                headers
             };
         },
     });

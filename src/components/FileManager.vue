@@ -17,25 +17,17 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue';
     import TestTable from './TestTable.vue';
-    import { IHeader,IFile,IBaseFolder,TEntry } from '../infrastructure/types/FileManagerTypes'
+    import { IHeader,TEntry } from '../infrastructure/types/FileManagerTypes'
 
 
-
-
-const headers = [
-    { displayName: 'id', key: 'id' },
-    {
-        displayName: 'name',
-        key: 'name',
-        sort: (data: any) => {
-            return `${data.first} ${data.last}`;
-        },
-    },
-    { displayName: 'modified', key: 'modified' },
-    { displayName: 'created', key: 'created' },
-    { displayName: 'size', key: 'size' },
-    { displayName: 'extension', key: 'extension' },
-    { displayName: 'isFolder', key: 'isFolder' },
+const defaultHeaders = [
+    { displayName: 'Id', key: 'id' },
+    { displayName: 'Name', key: 'name' },
+    { displayName: 'Modified', key: 'modified' },
+    { displayName: 'Created', key: 'created' },
+    { displayName: 'Size', key: 'size' },
+    { displayName: 'Extension', key: 'extension' },
+    { displayName: 'IsFolder', key: 'isFolder' },
 ];
 
 export default defineComponent({
@@ -48,6 +40,20 @@ export default defineComponent({
             return props.data;
         });
 
+        const headers = computed(() => {
+            if(!props.headers || !(props.headers.length > 0)) return defaultHeaders;
+            const headrs =  props.headers.map(h => {
+                if(!h?.key) return;
+                const defaultValue = defaultHeaders.find(x => x.key === h.key);
+                return {
+                    ...defaultValue,
+                    ...h
+                }
+            }).filter(h => !!h);
+            console.log(headrs);
+            return headrs;
+        });
+
         return {
             dataList,
             headers,
@@ -55,7 +61,7 @@ export default defineComponent({
     },
     props: {
         data: { type: Array as PropType<Partial<TEntry[]>>, required: true },
-        // headers: { type: Array as PropType<THeader[]>, required: true },
+        headers: { type: Array as PropType<Partial<IHeader[]>>, required: false},
     },
 });
 </script>
