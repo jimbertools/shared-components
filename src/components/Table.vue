@@ -340,7 +340,7 @@
                 <table class="min-w-full bg-white dark:bg-gray-800">
                     <thead>
                         <tr class="w-full h-16 border-gray-300 border-b py-8">
-                            <th class="pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">
+                            <th class=" text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -381,7 +381,7 @@
                     </thead>
                     <tbody>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -507,7 +507,7 @@
                             </td>
                         </tr>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -632,7 +632,7 @@
                             </td>
                         </tr>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -757,7 +757,7 @@
                             </td>
                         </tr>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -882,7 +882,7 @@
                             </td>
                         </tr>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
@@ -1010,7 +1010,7 @@
                             </td>
                         </tr>
                         <tr class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+                            <td class=" pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                                 <input
                                     type="checkbox"
                                     class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"
