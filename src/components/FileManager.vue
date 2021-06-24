@@ -1,24 +1,23 @@
 <template>
-    <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
-        <!-- <template v-slot:header-name="{ header }">
-                <h2 class="inline">{{ header }} custom header</h2>
-            </template>
-            <template v-slot:data-name="{ data, row }">
-                <td class="pink">
-                    <img class="inline-block w-6 h-6 aspect-1/1 rounded-full shadow" :src="row.image" alt="" />
-                    <h1 class="ml-4 inline">{{ data.first }}&nbsp</h1>
-                    <h2 class="inline">{{ data.last }}</h2>
-                </td>
-            </template> -->
-    </test-table>
-</template>
+<div class="flex flex-row w-full">
+    <div class="flex-1">
+    <test-table class="" :data="data" :headers="headers" :page-size="20" :page-index="0" @clickedRow="data => $emit('changeSelected', data)"> </test-table>
+    </div>
+    <div class="w-100" v-if="sidebarData">
+        <slot name="sideBar"> 
+            <div v-for="key of Object.keys(sidebarData)" :key="key">
+            <span class="font-bold"> {{key}} </span> <span class="italic">{{sidebarData[key]}}</span><br/>
 
+            </div>
+        </slot>
+    </div>
+</div>
+</template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue';
-    import TestTable from './TestTable.vue';
-    import { IHeader,TEntry } from '../infrastructure/types/FileManagerTypes'
-
+import TestTable from './TestTable.vue';
+import { IHeader, TEntry } from '../infrastructure/types/FileManagerTypes';
 
 const defaultHeaders = [
     { displayName: 'Id', key: 'id' },
@@ -32,24 +31,26 @@ const defaultHeaders = [
 
 export default defineComponent({
     name: 'FileManager',
-            components: {
-            TestTable
-        },
+    components: {
+        TestTable,
+    },
     setup(props) {
         const dataList = computed(() => {
             return props.data;
         });
 
         const headers = computed(() => {
-            if(!props.headers || !(props.headers.length > 0)) return defaultHeaders;
-            const headrs =  props.headers.map(h => {
-                if(!h?.key) return;
-                const defaultValue = defaultHeaders.find(x => x.key === h.key);
-                return {
-                    ...defaultValue,
-                    ...h
-                }
-            }).filter(h => !!h);
+            if (!props.headers || !(props.headers.length > 0)) return defaultHeaders;
+            const headrs = props.headers
+                .map(h => {
+                    if (!h?.key) return;
+                    const defaultValue = defaultHeaders.find(x => x.key === h.key);
+                    return {
+                        ...defaultValue,
+                        ...h,
+                    };
+                })
+                .filter(h => !!h);
             console.log(headrs);
             return headrs;
         });
@@ -61,8 +62,10 @@ export default defineComponent({
     },
     props: {
         data: { type: Array as PropType<Partial<TEntry[]>>, required: true },
-        headers: { type: Array as PropType<Partial<IHeader[]>>, required: false},
+        sidebarData: { type: Object, required: false },
+        headers: { type: Array as PropType<Partial<IHeader[]>>, required: false },
     },
+    emits: ['changeSelected'],
 });
 </script>
 

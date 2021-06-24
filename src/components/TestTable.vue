@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="h-24 border-gray-300 border-b" v-for="data in dataList" :key="data">
+            <tr class="h-24 border-gray-300 border-b cursor-pointer hover:bg-gray-100" v-for="data in dataList" :key="data" @click.prevent="$emit('clickedRow',data)">
                 <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data" v-for="header in headers" :key="data[header.key]">
                     <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4" :data-name="`data-${header.key}`">
                         {{ data[header.key] }}
@@ -114,6 +114,9 @@
             //@todo naming: is client = is sorting on client
             isClient: {type: Boolean, required:false, default:false}
         },
+        emits: [
+            "clickedRow"
+        ]
     });
 </script>
 

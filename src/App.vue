@@ -13,7 +13,7 @@
             </template>
         </test-table> -->
 
-        <file-manager :data='data' :headers='headers'/>
+        <file-manager :data='data' :headers='headers' @changeSelected="changeSelected" :sidebarData="sidebarData"/>
     </div>
 </template>
 
@@ -54,6 +54,8 @@
         console.log(e);
     };
 
+    const sidebarData = ref<Object>()
+
     export default defineComponent({
         name: 'App',
         components: {
@@ -70,10 +72,17 @@
 
             ]
 
+            const changeSelected = (clickedItem:any) => {
+                //@todo actually fetch the data
+                sidebarData.value = clickedItem
+            }
+
             return {
                 data,
                 rowClicked,
-                headers
+                headers,
+                changeSelected,
+                sidebarData
             };
         },
     });
