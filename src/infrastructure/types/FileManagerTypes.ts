@@ -1,6 +1,15 @@
-export interface IHeader {
-    key: keyof TEntry | string;
+export interface IHeader<T> {
+    key: keyof T;
     displayName: string;
+    enableSorting?: boolean;
+    sortValue?: (t: T) => any;
+    customTemplate?: boolean;
+    width?: number;
+}
+
+export interface ISort {
+    prop: string,
+    order: "ascending" | "descending"
 }
 
 // export  interface IFile {

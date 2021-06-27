@@ -1,5 +1,5 @@
 <template>
-    <div class="debug-screens w-full h-full">
+    <div class='debug-screens w-full h-full'>
         <!-- <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
             <template v-slot:header-name="{ header }">
                 <h2 class="inline">{{ header }} custom header</h2>
@@ -13,86 +13,112 @@
             </template>
         </test-table> -->
 
-        <file-manager :data="data" :headers="headers" @changeSelected="changeSelected" :sidebarData="sidebarData">
+        <file-manager
+            :data='data'
+            :headers='headers'
+            :sidebarData='sidebarData'
+            @[FileManagerEmits.SelectedChanged]='changeSelected'
+            @[FileManagerEmits.SortChanged]='onSort'>
             <template v-slot:sideBar>
-                <div class="flex flex-row p-6 border-b-2 border-grey-100">
-                    <em class="fas fa-file text-lg"></em>
-                    <h1 class="flex-1 px-4 truncate">
-                        {{ sidebarData.name }}.{{sidebarData.extension}}
+                <div class='flex flex-row p-6 border-b-2 border-grey-100'>
+                    <em class='fas fa-file text-lg'></em>
+                    <h1 class='flex-1 px-4 truncate'>
+                        {{ sidebarData.name }}.{{ sidebarData.extension }}
                     </h1>
-                    <em class="fas fa-save"></em>
+                    <em class='fas fa-save'></em>
                 </div>
-                <hr  />
+                <hr />
+            </template>
+            <template #id='bla'>
+                {{ bla.row.id }}
             </template>
         </file-manager>
     </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onBeforeMount, ref } from 'vue';
-import Table from './components/Table.vue';
-import ElementTable from './components/ElementTable.vue';
-import axios from 'axios';
-import TestTable from './components/TestTable.vue';
-import FileManager from './components/FileManager.vue';
-import jsonData from './data.json';
-import { IHeader, TEntry } from './infrastructure/types/FileManagerTypes';
+    import { defineComponent, onBeforeMount, ref } from 'vue';
+    import Table from './components/Table.vue';
+    import ElementTable from './components/ElementTable.vue';
+    import axios from 'axios';
+    import FileManager, { Emits as FileManagerEmits } from './components/FileManager.vue';
+    import jsonData from './data.json';
+    import { IHeader, ISort, TEntry } from './infrastructure/types/FileManagerTypes';
 
-const getEverything = async () => {
-    // const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
-    // let map = res.data.results.map((u: any) => ({
-    //     id: u.login.uuid,
-    //     name: { first: `${u.name.first}`, last: `${u.name.last}` },
-    //     title: 'Regional Paradigm Technician',
-    //     department: 'Optimization',
-    //     role: 'Admin',
-    //     email: u.email,
-    //     image: u.picture.thumbnail,
-    //     active: true,
-    //     age: u.dob.age,
-    // }));
-    // map[0].age = 3;
+    const getEverything = async () => {
+        // const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
+        // let map = res.data.results.map((u: any) => ({
+        //     id: u.login.uuid,
+        //     name: { first: `${u.name.first}`, last: `${u.name.last}` },
+        //     title: 'Regional Paradigm Technician',
+        //     department: 'Optimization',
+        //     role: 'Admin',
+        //     email: u.email,
+        //     image: u.picture.thumbnail,
+        //     active: true,
+        //     age: u.dob.age,
+        // }));
+        // map[0].age = 3;
 
-    // return map;
-    //@ts-ignore
-    return <TEntry[]>jsonData;
-};
-const data = ref<any[]>([]);
+        // return map;
+        //@ts-ignore
+        return <TEntry[]>jsonData;
+    };
+    const data = ref<any[]>([]);
 
-const rowClicked = (e: any) => {
-    console.log(e);
-};
+    const rowClicked = (e: any) => {
+        console.log(e);
+    };
 
-const sidebarData = ref<Object>();
+    const sidebarData = ref<Object>();
 
-export default defineComponent({
-    name: 'App',
-    components: {
-        TestTable,
-        Table,
-        FileManager,
-    },
-    setup() {
-        onBeforeMount(async () => {
-            data.value = await getEverything();
-            console.log(data.value);
-        });
-        const headers: IHeader[] = [];
+    export default defineComponent({
+        name: 'App',
+        components: {
+            Table,
+            FileManager,
+        },
+        setup() {
+            onBeforeMount(async () => {
+                data.value = await getEverything();
+                console.log(data.value);
+            });
+            const headers: IHeader<TEntry>[] = [];
 
-        const changeSelected = (clickedItem: any) => {
-            //@todo actually fetch the data
-            sidebarData.value = clickedItem;
-        };
+            const changeSelected = (clickedItem: any) => {
+                //@todo actually fetch the data
+                console.log('here');
+                sidebarData.value = clickedItem;
+            };
 
-        return {
-            data,
-            rowClicked,
-            headers,
-            changeSelected,
-            sidebarData,
-        };
-    },
-});
+            const onSort = (e: ISort) => {
+                const i = e.order === 'ascending' ? -1 : 1;
+
+                const getData = headers?.find((h: any) => h.key == e.prop)?.sortValue;
+                data.value = [...data.value.sort((a: any, b: any) => {
+                    const aValue = getData ? getData(a[e.prop]) : a[e.prop];
+                    const bValue = getData ? getData(b[e.prop]) : b[e.prop];
+                    return (
+                        i *
+                        ('' + aValue).localeCompare('' + bValue, undefined, {
+                            sensitivity: 'base',
+                            numeric: true,
+                        })
+                    );
+                })];
+            };
+
+            return {
+                data,
+                rowClicked,
+                headers,
+                changeSelected,
+                sidebarData,
+                onSort,
+                FileManagerEmits,
+            };
+        },
+    });
 </script>
 
 <style></style>
