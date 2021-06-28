@@ -17,9 +17,9 @@
         </thead>
         <tbody>
             <tr v-for="data in dataList" :key="data" @click.prevent="$emit('clickedRow', data)" class="h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100">
-                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4" v-for="header in headers" :data-name="`data-${header.key}`" :key="data[header.key]">
+                <td  v-for="header in headers" :data-name="`data-${header.key}`" :key="data[header.key]" class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
                     <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data" >
-                        {{ data[header.key] }}
+                        {{ header.formatter ? header.formatter(data) : data[header.key] }}
                     </slot>
                 </td>
             </tr>
@@ -54,15 +54,15 @@ export enum Emits {
     PageSizeChanged = 'page-size-changed',
 }
 
-export const orderBy = (array: AbstractData[], sortKey: string, reverse: boolean, headers: any[]): AbstractData[] => {
-    const i = reverse ? -1 : 1;
+export const orderBy = (array: AbstractData[], sortKey:ISort, headers: any[]): AbstractData[] => {
+    const i = sortKey.order==='descending' ? -1 : 1;
 
-    console.log(headers);
-    console.log(sortKey);
-    const getData = headers.find((h: any) => h.key == sortKey).sort;
+    const comparer = headers.find((h: any) => h.key == sortKey.prop)?.comparer;
     return array.sort((a: AbstractData, b: AbstractData) => {
-        const aValue = getData ? getData(a[sortKey]) : a[sortKey];
-        const bValue = getData ? getData(b[sortKey]) : b[sortKey];
+        if(comparer)
+            return comparer(a,b,i);
+        const aValue = a[sortKey.prop];
+        const bValue = b[sortKey.prop];
         return (
             i *
             ('' + aValue).localeCompare('' + bValue, undefined, {
@@ -73,8 +73,6 @@ export const orderBy = (array: AbstractData[], sortKey: string, reverse: boolean
     });
 };
 
-const sortKey = ref<string | null>(null);
-const reverse = ref<boolean>(false);
 function defineGenericComponent<T>() {
     return defineComponent({
         name: 'TestTable',
@@ -91,16 +89,17 @@ function defineGenericComponent<T>() {
         },
         emits: Object.values(Emits),
         setup(props, { emit }) {
+            const sort = ref<ISort|undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page)
             const currentPageSize = ref<number>(props.pageSize)
             const dataList = computed(() => {
                 if (props.backendPaginationSorting) {
                     return props.data;
                 }
-                if (!sortKey.value) {
+                if (!sort.value) {
                     return props.data.slice((currentPage.value -1) * currentPageSize.value, (currentPage.value) * currentPageSize.value);
                 }
-                const dataList = orderBy(<any>props.data, sortKey.value, reverse.value, props.headers);
+                const dataList = orderBy(<any>props.data, sort.value, props.headers);
 
                 if (currentPageSize.value !== -1) return dataList.slice((currentPage.value -1) * currentPageSize.value, (currentPage.value  ) * currentPageSize.value);
 
@@ -110,12 +109,14 @@ function defineGenericComponent<T>() {
             const sortMePlx = (header: string) => {
                 //@todo: add external sort
                 console.log(header);
-                if ((sortKey.value = header)) {
-                    reverse.value = !reverse.value;
+                if (sort && sort.value && sort.value.prop == header) {
+                    sort.value.order = sort.value.order === "descending" ? "ascending" : "descending";
                     return;
                 }
-                reverse.value = false;
-                sortKey.value = header;
+                sort.value = {
+                    order : "ascending",
+                    prop : header
+                }
             };
 
             const paginatedData = computed(() => {
@@ -147,8 +148,7 @@ function defineGenericComponent<T>() {
 
             return {
                 dataList,
-                sortKey,
-                reverse,
+                sort,
                 sortMePlx,
                 paginatedData,
                 handleSortChanged,

@@ -1,3 +1,5 @@
+import { TEntry } from "../types/FileManagerTypes";
+
 export enum FileType {
     Unknown,
     Word,
@@ -134,3 +136,10 @@ export const getIconColor = (item: FileType) => {
 
     }
 };
+
+export const getName = (item :TEntry) => {
+    if(item.isFolder){
+        return item.name
+    }
+    return `${item.name}.${item.extension}` 
+}

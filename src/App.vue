@@ -22,14 +22,24 @@
             @[FileManagerEmits.SelectedChanged]='changeSelected'
             @[FileManagerEmits.SortChanged]='onSort'>
             <template #sideBar>
-                <div class='flex flex-row p-6 border-b-2 border-grey-100'>
-                    <em class='fas fa-file text-lg'></em>
+                <div class=" p-6 ">
+                <div class='flex flex-rowborder-b-2 pb-6 border-grey-100' :key="sidebarData.fileType">
+                    <em class='text-xl' :class="getIcon(sidebarData.fileType ) + ' ' + getIconColor(sidebarData.fileType )"></em>
                     <h1 class='flex-1 px-4 truncate'>
-                        {{ sidebarData.name }}.{{ sidebarData.extension }}
+                        {{getName(sidebarData)}}
                     </h1>
                     <em class='fas fa-save'></em>
                 </div>
                 <hr />
+                <h2 class="text-lg pt-2 font-bold">Details</h2>
+                {{sidebarData}}
+                <span> 
+                    Aangemaakt: {{sidebarData.created}}
+                </span>
+                <span>
+                    Laatst gewijzigd: {{sidebarData.modified}}
+                </span>
+                </div>
             </template>
             <template #id='name'>
                 {{ name.row.id }}
@@ -50,6 +60,7 @@
     import jsonData from './data.json';
     import { IHeader, ISort, TEntry } from './infrastructure/types/FileManagerTypes';
 import { getFileType } from './infrastructure/utils/FileUtil';
+import {getIcon,getIconColor, getName} from './infrastructure/utils/FileUtil'
 
     const getEverything = async () => {
         // const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
@@ -104,20 +115,21 @@ import { getFileType } from './infrastructure/utils/FileUtil';
             };
 
             const onSort = (e: ISort) => {
-                const i = e.order === 'ascending' ? -1 : 1;
+                console.log("@todo implement this",e)
+                // const i = e.order === 'ascending' ? -1 : 1;
 
-                const getData = headers?.find((h: any) => h.key == e.prop)?.sortValue;
-                data.value = [...data.value.sort((a: any, b: any) => {
-                    const aValue = getData ? getData(a[e.prop]) : a[e.prop];
-                    const bValue = getData ? getData(b[e.prop]) : b[e.prop];
-                    return (
-                        i *
-                        ('' + aValue).localeCompare('' + bValue, undefined, {
-                            sensitivity: 'base',
-                            numeric: true,
-                        })
-                    );
-                })];
+                // const getData = headers?.find((h: any) => h.key == e.prop)?.comparer;
+                // data.value = [...data.value.sort((a: any, b: any) => {
+                //     const aValue = getData ? getData(a[e.prop]) : a[e.prop];
+                //     const bValue = getData ? getData(b[e.prop]) : b[e.prop];
+                //     return (
+                //         i *
+                //         ('' + aValue).localeCompare('' + bValue, undefined, {
+                //             sensitivity: 'base',
+                //             numeric: true,
+                //         })
+                //     );
+                // })];
             };
 
             return {
@@ -128,6 +140,9 @@ import { getFileType } from './infrastructure/utils/FileUtil';
                 sidebarData,
                 onSort,
                 FileManagerEmits,
+                getIcon,
+                getIconColor,
+                getName
 
             };
         },

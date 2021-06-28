@@ -4,7 +4,9 @@ export interface IHeader<T> {
     key: keyof T;
     displayName: string;
     enableSorting?: boolean;
-    sortValue?: (t: T) => any;
+    // sortValue?: (t: T) => any;
+    comparer?: (t1:T, t2:T,i:number) => any
+    formatter?: (dataToFormat:T) => string
     customTemplate?: boolean;
     width?: number;
 }
@@ -34,7 +36,7 @@ export interface ISort {
 export interface TEntry {
     id: string,
     name:string,
-    modified?: Date,
+    modified?: string,
     created?: Date,
     size?:number,
     extension?:string,

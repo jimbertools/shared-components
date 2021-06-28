@@ -20,13 +20,13 @@
                                 :pageSize="pageSize"
                                 :page="page"
                                 :total="total"
-                                :defaultSort="defaultSort"
+                                :defaultSort="defaultSort ?? { prop: 'name', order: 'ascending' }"
                                 @[TableEmits.RowClicked]="data => $emit(Emits.SelectedChanged, data)"
                                 @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                             >
                                 <template v-if="!hasSlot('data-name')" #data-name="rowData">
-                                    <em :class="getIcon(rowData.row.fileType ) + ' ' + getIconColor(rowData.row.fileType )"></em>
-                                    {{ rowData.row.name }}<span v-if="!rowData.row.isFolder">.{{ rowData.row.extension }}</span>
+                                    <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
+                                    {{ getName(rowData.row) }}
                                 </template>
                                 <template v-for="(_, slot) of $slots" v-slot:[slot]="props">
                                     <slot :name="slot" v-bind="props"> </slot>
@@ -52,21 +52,35 @@
 import { computed, defineComponent, PropType } from 'vue';
 import TestTable, { Emits as TableEmits } from './TestTable.vue';
 import { IHeader, ISort, TEntry } from '../infrastructure/types/FileManagerTypes';
-import {getIcon, getIconColor} from '../infrastructure/utils/FileUtil'
+import { getIcon, getIconColor, getName } from '../infrastructure/utils/FileUtil';
 export enum Emits {
     SortChanged = 'sort-changed',
     SelectedChanged = 'changeSelected',
 }
 
+const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
+    if (!a.isFolder && b.isFolder) return 1;
+    if (a.isFolder && !b.isFolder) return -1;
+
+    return a.name.localeCompare(b.name) * i;
+};
+
 const defaultHeaders = [
     { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true },
-    { displayName: 'Name', key: 'name', enableSorting: true },
+    { displayName: 'Name', key: 'name', enableSorting: true, comparer: (entry1, entry2, i) => comparerFunction(entry1, entry2, i) },
     // { displayName: 'Name', key: 'name', enableSorting: true, },
-    { displayName: 'Modified', key: 'modified', enableSorting: true },
+    {
+        displayName: 'Modified',
+        key: 'modified',
+        enableSorting: true,
+        formatter: entry => {
+            if (entry.isFolder) return;
+            const date = new Date(<string>entry.modified);
+            return date.toDateString();
+        },
+    },
     { displayName: 'Created', key: 'created', enableSorting: true },
     { displayName: 'Size', key: 'size', enableSorting: true },
-    { displayName: 'Extension', key: 'extension', enableSorting: true },
-    { displayName: 'IsFolder', key: 'isFolder', enableSorting: true },
 ] as IHeader<TEntry>[];
 
 function defineGenericComponent<T extends Partial<TEntry>>() {
@@ -86,7 +100,7 @@ function defineGenericComponent<T extends Partial<TEntry>>() {
             backendPaginationSorting: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
-            icons: {type:Object, required: false}
+            icons: { type: Object, required: false },
         },
         emits: Object.values(Emits),
         setup(props, { slots }) {
@@ -126,7 +140,8 @@ function defineGenericComponent<T extends Partial<TEntry>>() {
                 Emits,
                 hasSlot,
                 getIcon,
-                getIconColor
+                getIconColor,
+                getName,
             };
         },
     });
