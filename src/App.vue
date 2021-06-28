@@ -32,11 +32,10 @@
                 </div>
                 <hr />
                 <h2 class="text-lg pt-2 font-bold">Details</h2>
-                {{sidebarData}}
-                <span> 
+                <span class="block"> 
                     Aangemaakt: {{sidebarData.created}}
                 </span>
-                <span>
+                <span class="block">
                     Laatst gewijzigd: {{sidebarData.modified}}
                 </span>
                 </div>
