@@ -17,9 +17,11 @@
             :data='data'
             :headers='headers'
             :sidebarData='sidebarData'
+            :icons='icons'
+            withPagination
             @[FileManagerEmits.SelectedChanged]='changeSelected'
             @[FileManagerEmits.SortChanged]='onSort'>
-            <template v-slot:sideBar>
+            <template #sideBar>
                 <div class='flex flex-row p-6 border-b-2 border-grey-100'>
                     <em class='fas fa-file text-lg'></em>
                     <h1 class='flex-1 px-4 truncate'>
@@ -29,9 +31,12 @@
                 </div>
                 <hr />
             </template>
-            <template #id='bla'>
-                {{ bla.row.id }}
+            <template #id='name'>
+                {{ name.row.id }}
             </template>
+                    <!-- <template #data-name='name'>
+                overwritesss
+            </template> -->
         </file-manager>
     </div>
 </template>
@@ -44,6 +49,7 @@
     import FileManager, { Emits as FileManagerEmits } from './components/FileManager.vue';
     import jsonData from './data.json';
     import { IHeader, ISort, TEntry } from './infrastructure/types/FileManagerTypes';
+import { getFileType } from './infrastructure/utils/FileUtil';
 
     const getEverything = async () => {
         // const res = await axios.get('https://randomuser.me/api/?seed=fea8be3e64777240&results=20');
@@ -62,7 +68,13 @@
 
         // return map;
         //@ts-ignore
-        return <TEntry[]>jsonData;
+        const dataToReturn = jsonData.map((dataItem)=>{
+        //@ts-ignore
+            const type = getFileType(dataItem.isFolder? "dir" : dataItem.extension)
+            return {...dataItem, fileType:type}
+        })
+        //@ts-ignore
+        return <TEntry[]>dataToReturn;
     };
     const data = ref<any[]>([]);
 
@@ -116,6 +128,7 @@
                 sidebarData,
                 onSort,
                 FileManagerEmits,
+
             };
         },
     });

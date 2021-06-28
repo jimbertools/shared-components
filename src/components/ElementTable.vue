@@ -53,7 +53,6 @@ export default {
     },
     setup({tableData}) {
         onBeforeMount(()=> {
-            console.log("adsasdf",tableData)
         })
         return {
             tableData

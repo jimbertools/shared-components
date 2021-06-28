@@ -1,3 +1,5 @@
+import { FileType } from "../utils/FileUtil";
+
 export interface IHeader<T> {
     key: keyof T;
     displayName: string;
@@ -36,7 +38,8 @@ export interface TEntry {
     created?: Date,
     size?:number,
     extension?:string,
-    isFolder: boolean
+    isFolder: boolean,
+    fileType: FileType
 }
 
 // export  type TEntry = IFile | IBaseFolder
