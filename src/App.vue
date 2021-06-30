@@ -19,6 +19,7 @@
             :sidebarData='sidebarData'
             :icons='icons'
             withPagination
+            withFiltering
             @[FileManagerEmits.SelectedChanged]='changeSelected'
             @[FileManagerEmits.SortChanged]='onSort'>
             <template #sideBar>
@@ -32,7 +33,7 @@
                 </div>
                 <hr />
                 <h2 class="text-lg pt-2 font-bold">Details</h2>
-                <span class="block"> 
+                <span class="block">
                     Aangemaakt: {{sidebarData.created}}
                 </span>
                 <span class="block">
