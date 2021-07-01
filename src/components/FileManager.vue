@@ -9,10 +9,10 @@
             </div>
             <div class='flex flex-row justify-end mb-4'>
                 <el-input class='mr-auto max-w-xs'
-                    v-if='withFiltering'
-                    v-model='searchValue'
-                    placeholder='Search...'
-                    @input='debounceSearch'
+                          v-if='withFiltering'
+                          v-model='searchValue'
+                          placeholder='Search...'
+                          @input='debounceSearch'
                 >
                     <template #prefix>
                         <em class='fas fa-search'></em>
@@ -64,7 +64,8 @@
                                 <test-table
                                     :withPagination='withPagination'
                                     :backendPaginationSorting='backendPaginationSorting'
-                                    class=''
+                                    class='table'
+                                    rowClass='bg-gray-50'
                                     :data='dataList'
                                     :headers='headers'
                                     :pageSize='pageSize'
@@ -87,7 +88,7 @@
                                 <grid-view
                                     :withPagination='withPagination'
                                     :backendPaginationSorting='backendPaginationSorting'
-                                    class=''
+                                    gridClass='bg-gray-50'
                                     :data='dataList'
                                     :headers='headers'
                                     :pageSize='pageSize'
@@ -99,14 +100,21 @@
                                 >
                                     <template #grid-item='gridData' :key='gridData.item.name' class=''>
                                         <div
-                                            class='flex-col items-center justify-center text-center w-24 break-word p-2 hover:bg-gray-100 cursor-pointer'
+                                            class='flex-col items-center justify-center text-center w-28 break-word p-2 hover:bg-gray-100 cursor-pointer'
                                             :key='getName(gridData.item)'
                                         >
                                             <div class='flex justify-center'>
                                                 <em class='fa-2x'
                                                     :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
                                             </div>
-                                            <span class=''>{{ getName(gridData.item) }}</span>
+
+
+                                            <el-tooltip class='item' effect='dark' :content='getName(gridData.item)'
+                                                        placement='bottom-start'>
+                                                <span class='block truncate whitespace-normal'>
+                                                    {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
+                                                </span>
+                                            </el-tooltip>
                                         </div>
                                     </template>
                                 </grid-view>
@@ -198,7 +206,7 @@
             },
             emits: Object.values(Emits),
             setup(props, { slots, emit }) {
-                const activeView = ref<View>(View.Grid);
+                const activeView = ref<View>(View.List);
                 const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });
                 const searchValue = ref<string>();
                 const debouncedSearchValue = ref<string>();
@@ -228,9 +236,9 @@
                             return props.data.filter(x => x.name?.toLowerCase().includes(debouncedSearchValue.value));
 
                         return props.data;
-                    }
+                    };
                     const dl = getData();
-                    totalValue.value = dl.length
+                    totalValue.value = dl.length;
                     return dl;
                 });
 
@@ -272,8 +280,8 @@
                 const debounceSearch = (input: string) => {
                     clearTimeout(debounce);
                     debounce = setTimeout(() => {
-                        if(props.backendFiltering)
-                            emit(Emits.SearchChanged, input)
+                        if (props.backendFiltering)
+                            emit(Emits.SearchChanged, input);
 
                         debouncedSearchValue.value = input;
                         pageValue.value = 1;
@@ -296,10 +304,10 @@
                     activeView,
                     View,
                     sortDisplayName,
-                    debounceSearch ,
+                    debounceSearch,
                     totalValue,
                     pageValue,
-                    searchValue
+                    searchValue,
                 };
             },
         });
@@ -311,5 +319,9 @@
 <style>
     .active-view {
         color: #409eff
+    }
+
+    .table tr {
+        background: gray;
     }
 </style>

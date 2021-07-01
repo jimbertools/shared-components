@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)"
-            class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100'>
+            class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'>
             <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
                 class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
                 <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
@@ -65,6 +65,7 @@
                 backendPaginationSorting: { type: Boolean, required: false, default: false },
                 withPagination: { type: Boolean, required: false, default: false },
                 defaultSort: { type: Object as PropType<ISort>, required: false },
+                rowClass: {type: String, required: false}
             },
             emits: Object.values(Emits),
             setup(props, { emit }) {

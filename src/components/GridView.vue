@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class='full-w flex flex-row flex-wrap'>
+        <div class='full-w flex flex-row flex-wrap p-2' :class='gridClass'>
             <div v-for='item in dataList' class='item'>
                 <slot name='grid-item' :item='item'></slot>
             </div>
@@ -42,10 +42,10 @@
                 page: { type: Number, required: false, default: 1 },
                 pageSize: { type: Number, required: false, default: 10 },
                 total: { type: Number, required: false },
-                //@todo naming: is client = is sorting on client
                 backendPaginationSorting: { type: Boolean, required: false, default: false },
                 withPagination: { type: Boolean, required: false, default: false },
                 defaultSort: { type: Object as PropType<ISort>, required: false },
+                gridClass: { type: String, required: false },
             },
             emits: Object.values(Emits),
             setup(props, { emit }) {
@@ -106,7 +106,6 @@
                 };
 
 
-
                 return {
                     dataList,
                     paginatedData,
@@ -115,7 +114,7 @@
                     handleSizeChanged,
                     Emits,
                     currentPage,
-                    currentPageSize
+                    currentPageSize,
                 };
             },
         });
