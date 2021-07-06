@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, PropType, ref } from 'vue';
-  import { IHeader, ISort } from '../infrastructure/types/FileManagerTypes';
+  import { IHeader, ISort } from '../types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
 

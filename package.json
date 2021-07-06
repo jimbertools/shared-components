@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "name": "@jimber/shared-components",
   "description": "All purpose vue components made by Jimber",
@@ -9,7 +9,8 @@
     "prepublish": "vue-tsc --noEmit && vite build ",
     "serve": "vite preview",
     "build": "vue-tsc --noEmit && vite build",
-    "build-package": "vue-tsc --noEmit && vite build --target lib --name file-browser ./src/FileManager.vue",
+    "postbuild": "tsc -p ./tsconfig.types.json",
+    "build-package": "vue-tsc && vite build --target lib --name file-browser ./src/FileManager.vue",
     "dev": "vite",
     "pretty": "prettier --write \"./**/*.{js,jsx,json,vue,ts}\""
   },
@@ -19,39 +20,35 @@
     "tailwindcss-debug-screens": "^2.0.0",
     "vue": "^3.0.5"
   },
+  "main": "./dist/shared-components.umd.js",
+  "module": "./dist/shared-components.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/shared-components.es.js",
+      "require": "./dist/shared-components.umd.js"
+    }
+  },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/line-clamp": "^0.2.1",
     "@tailwindcss/typography": "^0.4.1",
+    "@types/node": "^16.0.0",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",
     "autoprefixer": "^10.2.6",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.2.2",
-    "babel-preset-env": "^1.7.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^5.2.6",
-    "file-loader": "^6.2.0",
-    "node-sass": "^6.0.1",
-    "postcss": "^8.3.5",
     "prettier": "^2.3.1",
-    "sass-loader": "^12.1.0",
     "tailwindcss": "^2.2.2",
     "typescript": "^4.3.2",
     "vite": "^2.3.8",
-    "vue-cli-plugin-element-plus": "~0.0.13",
-    "vue-loader": "^16.3.0",
-    "vue-template-compiler": "^2.6.14",
-    "vue-tsc": "^0.0.24",
-    "webpack": "^5.42.1",
-    "webpack-dev-server": "^3.11.2"
+    "vue-tsc": "^0.0.24"
   },
   "publishConfig": {
     "access": "public"
-},
-"files": [
-    "dist/*/"
-]
+  },
+  "files": [
+    "dist"
+  ]
 }

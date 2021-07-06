@@ -1,4 +1,4 @@
-import { FileType } from '../utils/FileUtil';
+import { FileType } from '../infrastructure/utils/FileUtil';
 
 export interface IHeader<T extends Record<string, any>> {
   key: keyof T;
