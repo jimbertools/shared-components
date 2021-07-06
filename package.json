@@ -1,11 +1,12 @@
 {
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": false,
-  "name": "file-browser",
-  "description": "All purpose vue file browser component",
+  "name": "@jimber/shared-components",
+  "description": "All purpose vue components made by Jimber",
   "author": "Jimber",
   "license": "MIT",
   "scripts": {
+    "prepublish": "vue-tsc --noEmit && vite build ",
     "serve": "vite preview",
     "build": "vue-tsc --noEmit && vite build",
     "build-package": "vue-tsc --noEmit && vite build --target lib --name file-browser ./src/FileManager.vue",
@@ -46,5 +47,11 @@
     "vue-tsc": "^0.0.24",
     "webpack": "^5.42.1",
     "webpack-dev-server": "^3.11.2"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+},
+"files": [
+    "dist/*/"
+]
 }
