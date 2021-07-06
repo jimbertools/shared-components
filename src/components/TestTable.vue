@@ -15,17 +15,36 @@
             </th>
         </tr>
         </thead>
+
         <tbody>
         <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)"
-            class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'>
+            class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'
+            draggable="true"
+            @dragstart='dragStart' @dragend='dragEnd' @dragenter='dragEnter' @dragleave='dragLeave'>
             <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
-                class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
+                class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'
+                draggable='false'
+                >
                 <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
                     {{ header.formatter ? header.formatter(data) : data[header.key] }}
                 </slot>
             </td>
         </tr>
         </tbody>
+
+        <!-- ### Original ### -->
+        <!-- <tbody> -->
+        <!-- <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)" -->
+        <!--     class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'> -->
+        <!--     <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]' -->
+        <!--         class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'> -->
+        <!--         <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'> -->
+        <!--             {{ header.formatter ? header.formatter(data) : data[header.key] }} -->
+        <!--         </slot> -->
+        <!--     </td> -->
+        <!-- </tr> -->
+        <!-- </tbody> -->
+
     </table>
     <div class='block' v-if='withPagination'>
         <el-pagination
@@ -123,6 +142,30 @@
                     currentPageSize.value = sizeEvent;
                 };
 
+
+            // @dragend='dragEnd' @dragstart='dragStart' @dragover='dragOver'>
+
+                const dragStart = (event: Event) => {
+                    (<HTMLElement> event.target).classList.add('selected');
+                }
+
+                const dragEnd = (event: Event) => {
+                    (<HTMLElement> event.target).classList.remove('selected');
+                }
+
+                const dragEnter = (event: Event) => {
+                    (<HTMLElement> event.target).parentElement.classList.add('drag-over');
+                }
+
+                const dragLeave = (event: Event) => {
+                    (<HTMLElement> event.target).parentElement.classList.remove('drag-over');
+
+                }
+
+                // function drag(ev) {
+                //   ev.dataTransfer.setData("text", ev.target.id);
+                // }
+
                 return {
                     dataList,
                     sort,
@@ -134,6 +177,10 @@
                     Emits,
                     currentPage,
                     currentPageSize,
+                    dragStart,
+                    dragEnd,
+                    dragEnter,
+                    dragLeave,
                 };
             },
         });
@@ -142,4 +189,12 @@
     export default defineGenericComponent();
 </script>
 
-<style></style>
+<style>
+.selected {
+    border: solid 10px blue;
+}
+
+.drag-over {
+    border: dashed 3px red;
+}
+</style>

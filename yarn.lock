@@ -1277,6 +1277,11 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
+sortablejs@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
+  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
+
 source-map-js@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-0.6.2.tgz#0bb5de631b41cfbda6cfba8bd05a80efdfd2385e"
@@ -1447,6 +1452,13 @@ vue@^3.0.5:
     "@vue/compiler-dom" "3.1.2"
     "@vue/runtime-dom" "3.1.2"
     "@vue/shared" "3.1.2"
+
+vuedraggable@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-4.0.3.tgz#98832a3562d44c73bbe4e205cc2dafce07b6ca14"
+  integrity sha512-NkJYk+UyxgEoSQcgvVZtqY6dYpdXkBHS8aq6CqoJAfXVM9ZRYT0WPdlBbTttG4nCwllU2M5JGGgo9Drt/L0a7w==
+  dependencies:
+    sortablejs "1.10.2"
 
 wrappy@1:
   version "1.0.2"

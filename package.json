@@ -1,11 +1,10 @@
 {
   "version": "0.0.0",
-  "private":false,
+  "private": false,
   "name": "file-browser",
   "description": "All purpose vue file browser component",
   "author": "Jimber",
   "license": "MIT",
-
   "scripts": {
     "serve": "vite preview",
     "build": "vue-tsc --noEmit && vite build",
@@ -16,7 +15,8 @@
     "axios": "^0.21.1",
     "element-plus": "^1.0.2-beta.28",
     "tailwindcss-debug-screens": "^2.0.0",
-    "vue": "^3.0.5"
+    "vue": "^3.0.5",
+    "vuedraggable": "^4.0.3"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
