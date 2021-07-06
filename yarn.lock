@@ -4800,12 +4800,6 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-<<<<<<< HEAD
-sortablejs@1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
-  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
-=======
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -4862,11 +4856,15 @@ sockjs@^0.3.21:
     uuid "^3.4.0"
     websocket-driver "^0.7.4"
 
+sortablejs@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
+  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
+
 source-list-map@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
   integrity sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==
->>>>>>> 31cc716a72537bd2137d087044f17f2789af3a18
 
 source-map-js@^0.6.2:
   version "0.6.2"
@@ -5511,14 +5509,13 @@ vue@^3.0.5:
     "@vue/runtime-dom" "3.1.2"
     "@vue/shared" "3.1.2"
 
-<<<<<<< HEAD
 vuedraggable@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-4.0.3.tgz#98832a3562d44c73bbe4e205cc2dafce07b6ca14"
   integrity sha512-NkJYk+UyxgEoSQcgvVZtqY6dYpdXkBHS8aq6CqoJAfXVM9ZRYT0WPdlBbTttG4nCwllU2M5JGGgo9Drt/L0a7w==
   dependencies:
     sortablejs "1.10.2"
-=======
+
 watchpack@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-2.2.0.tgz#47d78f5415fe550ecd740f99fe2882323a58b1ce"
@@ -5677,7 +5674,6 @@ wrap-ansi@^5.1.0:
     ansi-styles "^3.2.0"
     string-width "^3.0.0"
     strip-ansi "^5.0.0"
->>>>>>> 31cc716a72537bd2137d087044f17f2789af3a18
 
 wrappy@1:
   version "1.0.2"

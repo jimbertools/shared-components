@@ -46,43 +46,7 @@
         <!-- </tbody> -->
 
     </table>
-    <div class='block' v-if='withPagination'>
-        <el-pagination
-            :page-sizes='[10, 20, 50, 100]'
-            :page-size='currentPageSize'
-            :current-page='currentPage'
-            :total='!total && data ? data.length : total'
-            layout='total, sizes, prev, pager, next'
-            @size-change='handleSizeChanged'
-            @current-change='handlePageChanged'
-        >
-          <slot :name="`header-${header}`" :header="header">
-            {{ header.displayName }}
-          </slot>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="data in dataList"
-        :key="data"
-        @click.prevent="$emit(Emits.RowClicked, data)"
-        class="h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100"
-        :class="rowClass"
-      >
-        <td
-          v-for="header in headers"
-          :data-name="`data-${String(header.key)}`"
-          :key="data[header.key]"
-          class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4"
-        >
-          <slot :name="`data-${String(header.key)}`" :data="data[header.key]" :row="data">
-            {{ header.formatter ? header.formatter(data) : data[header.key] }}
-          </slot>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
   <div class="block" v-if="withPagination">
     <el-pagination
       :page-sizes="[10, 20, 50, 100]"
@@ -178,24 +142,28 @@
         currentPageSize.value = sizeEvent;
       };
             // @dragend='dragEnd' @dragstart='dragStart' @dragover='dragOver'>
-
-                const dragStart = (event: Event) => {
-                    (<HTMLElement> event.target).classList.add('selected');
-                }
-
-                const dragEnd = (event: Event) => {
-                    (<HTMLElement> event.target).classList.remove('selected');
-                }
-
-                const dragEnter = (event: Event) => {
-                    (<HTMLElement> event.target).parentElement.classList.add('drag-over');
-                }
-
-                const dragLeave = (event: Event) => {
-                    (<HTMLElement> event.target).parentElement.classList.remove('drag-over');
-
-                }
-
+  
+      const dragStart = (event: Event) => {
+          (<HTMLElement> event.target).classList.add('selected');
+      }
+  
+      const dragEnd = (event: Event) => {
+          (<HTMLElement> event.target).classList.remove('selected');
+      }
+  
+      const dragEnter = (event: Event) => {
+        let parent = (<HTMLElement> event.target).parentElement;
+        if (parent != null) {
+          parent.classList.add('drag-over');
+        }
+      }
+  
+      const dragLeave = (event: Event) => {
+        let parent = (<HTMLElement> event.target).parentElement;
+        if (parent != null) {
+          parent.classList.remove('drag-over');
+        }
+      }
 
       return {
         dataList,
@@ -208,10 +176,10 @@
         Emits,
         currentPage,
         currentPageSize,
-                    dragStart,
-                    dragEnd,
-                    dragEnter,
-                    dragLeave,
+        dragStart,
+        dragEnd,
+        dragEnter,
+        dragLeave,
       };
     },
   });

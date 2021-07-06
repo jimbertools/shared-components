@@ -1,15 +1,8 @@
 {
-<<<<<<< HEAD
-  "version": "0.0.0",
-  "private": false,
-  "name": "file-browser",
-  "description": "All purpose vue file browser component",
-=======
   "version": "0.0.1",
   "private": false,
   "name": "@jimber/shared-components",
   "description": "All purpose vue components made by Jimber",
->>>>>>> 31cc716a72537bd2137d087044f17f2789af3a18
   "author": "Jimber",
   "license": "MIT",
   "scripts": {
