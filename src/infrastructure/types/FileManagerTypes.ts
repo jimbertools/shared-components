@@ -1,19 +1,19 @@
-import { FileType } from "../utils/FileUtil";
+import { FileType } from '../utils/FileUtil';
 
-export interface IHeader<T> {
-    key: keyof T;
-    displayName: string;
-    enableSorting?: boolean;
-    // sortValue?: (t: T) => any;
-    comparer?: (t1:T, t2:T,i:number) => any
-    formatter?: (dataToFormat:T) => string
-    customTemplate?: boolean;
-    width?: number;
+export interface IHeader<T extends Record<string, any>> {
+  key: keyof T;
+  displayName?: string;
+  enableSorting?: boolean;
+  // sortValue?: (t: T) => any;
+  comparer?: (t1: T, t2: T, i: number) => any;
+  formatter?: (dataToFormat: T) => string;
+  customTemplate?: boolean;
+  width?: number;
 }
 
 export interface ISort {
-    prop: string,
-    order: "ascending" | "descending"
+  prop: string;
+  order: 'ascending' | 'descending';
 }
 
 // export  interface IFile {
@@ -34,14 +34,14 @@ export interface ISort {
 // }
 
 export interface TEntry {
-    id: string,
-    name:string,
-    modified?: string,
-    created?: Date,
-    size?:number,
-    extension?:string,
-    isFolder: boolean,
-    fileType: FileType
+  id: string;
+  name: string;
+  modified?: string;
+  created?: Date;
+  size?: number;
+  extension?: string;
+  isFolder: boolean;
+  fileType: FileType;
 }
 
 // export  type TEntry = IFile | IBaseFolder

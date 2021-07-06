@@ -56,93 +56,127 @@
             @size-change='handleSizeChanged'
             @current-change='handlePageChanged'
         >
-        </el-pagination>
-    </div>
+          <slot :name="`header-${header}`" :header="header">
+            {{ header.displayName }}
+          </slot>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="data in dataList"
+        :key="data"
+        @click.prevent="$emit(Emits.RowClicked, data)"
+        class="h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100"
+        :class="rowClass"
+      >
+        <td
+          v-for="header in headers"
+          :data-name="`data-${String(header.key)}`"
+          :key="data[header.key]"
+          class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4"
+        >
+          <slot :name="`data-${String(header.key)}`" :data="data[header.key]" :row="data">
+            {{ header.formatter ? header.formatter(data) : data[header.key] }}
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="block" v-if="withPagination">
+    <el-pagination
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="currentPageSize"
+      :current-page="currentPage"
+      :total="!total && data ? data.length : total"
+      layout="total, sizes, prev, pager, next"
+      @size-change="handleSizeChanged"
+      @current-change="handlePageChanged"
+    >
+    </el-pagination>
+  </div>
 </template>
 
-<script lang='ts'>
-    import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
-    import { IHeader, ISort, TEntry } from '../infrastructure/types/FileManagerTypes';
-    import { orderBy } from '../infrastructure/utils/SortUtil';
+<script lang="ts">
+  import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
+  import { IHeader, ISort, TEntry } from '../infrastructure/types/FileManagerTypes';
+  import { orderBy } from '../infrastructure/utils/SortUtil';
+  import { ElPagination } from 'element-plus';
 
-    export enum Emits {
-        RowClicked = 'clickedRow',
-        SortChanged = 'sort-changed',
-        PageChanged = 'page-changed',
-        PageSizeChanged = 'page-size-changed',
-    }
+  export enum Emits {
+    RowClicked = 'clickedRow',
+    SortChanged = 'sort-changed',
+    PageChanged = 'page-changed',
+    PageSizeChanged = 'page-size-changed',
+  }
 
-    function defineGenericComponent<T>() {
-        return defineComponent({
-            name: 'TestTable',
-            props: {
-                data: { type: Array as PropType<Array<T>>, required: true },
-                headers: { type: Array as PropType<IHeader<T>[]>, required: true },
-                page: { type: Number, required: false, default: 1 },
-                pageSize: { type: Number, required: false, default: 10 },
-                total: { type: Number, required: false },
-                backendPaginationSorting: { type: Boolean, required: false, default: false },
-                withPagination: { type: Boolean, required: false, default: false },
-                defaultSort: { type: Object as PropType<ISort>, required: false },
-                rowClass: {type: String, required: false}
-            },
-            emits: Object.values(Emits),
-            setup(props, { emit }) {
-                const sort = ref<ISort | undefined>(props.defaultSort);
-                const currentPage = ref<number>(props.page);
-                const currentPageSize = ref<number>(props.pageSize);
-                const dataList = computed(() => {
-                    let tempData = props.data;
-                    if (props.backendPaginationSorting)
-                        return tempData;
+  export default defineComponent({
+    name: 'TestTable',
+    props: {
+      data: { type: Array as PropType<Array<any>>, required: true },
+      headers: { type: Array as PropType<IHeader<any>[]>, required: true },
+      page: { type: Number, required: false, default: 1 },
+      pageSize: { type: Number, required: false, default: 10 },
+      total: { type: Number, required: false },
+      backendPaginationSorting: { type: Boolean, required: false, default: false },
+      withPagination: { type: Boolean, required: false, default: false },
+      defaultSort: { type: Object as PropType<ISort>, required: false },
+      rowClass: { type: String, required: false },
+    },
+    components: { ElPagination },
 
-                    if (sort.value)
-                        tempData = orderBy(tempData, sort.value, props.headers);
+    emits: Object.values(Emits),
+    setup(props, { emit }) {
+      const sort = ref<ISort | undefined>(props.defaultSort);
+      const currentPage = ref<number>(props.page);
+      const currentPageSize = ref<number>(props.pageSize);
+      const dataList = computed(() => {
+        let tempData = props.data;
+        if (props.backendPaginationSorting) return tempData;
 
-                    if (props.withPagination)
-                        tempData = tempData.slice((currentPage.value - 1) * currentPageSize.value, (currentPage.value) * currentPageSize.value);
+        if (sort.value) tempData = orderBy(tempData, sort.value, props.headers);
 
-                    return tempData;
-                });
+        if (props.withPagination) tempData = tempData.slice((currentPage.value - 1) * currentPageSize.value, currentPage.value * currentPageSize.value);
 
-                const sortData = (header: string) => {
-                    if (sort && sort.value && sort.value.prop == header) {
-                        sort.value.order = sort.value.order === 'descending' ? 'ascending' : 'descending';
-                        return;
-                    }
-                    sort.value = {
-                        order: 'ascending',
-                        prop: header,
-                    };
-                };
+        return tempData;
+      });
 
-                const paginatedData = computed(() => {
-                    if (!props.withPagination) return props.data;
-                    return props.data.slice((currentPageSize.value - 1) * currentPageSize.value, currentPageSize.value * currentPageSize.value);
-                });
+      const sortData = (header: string) => {
+        if (sort && sort.value && sort.value.prop == header) {
+          sort.value.order = sort.value.order === 'descending' ? 'ascending' : 'descending';
+          return;
+        }
+        sort.value = {
+          order: 'ascending',
+          prop: header,
+        };
+      };
 
-                const handleSortChanged = (sortEvent: ISort) => {
-                    if (!props.backendPaginationSorting) return;
-                    emit(Emits.SortChanged, sortEvent);
-                };
+      const paginatedData = computed(() => {
+        if (!props.withPagination) return props.data;
+        return props.data.slice((currentPageSize.value - 1) * currentPageSize.value, currentPageSize.value * currentPageSize.value);
+      });
 
-                const handlePageChanged = (pageEvent: number) => {
-                    if (props.backendPaginationSorting) {
-                        emit(Emits.PageChanged, pageEvent);
-                        return;
-                    }
-                    currentPage.value = pageEvent;
-                };
+      const handleSortChanged = (sortEvent: ISort) => {
+        if (!props.backendPaginationSorting) return;
+        emit(Emits.SortChanged, sortEvent);
+      };
 
-                const handleSizeChanged = (sizeEvent: number) => {
-                    if (props.backendPaginationSorting) {
-                        emit(Emits.PageSizeChanged, sizeEvent);
-                        return;
-                    }
-                    currentPageSize.value = sizeEvent;
-                };
+      const handlePageChanged = (pageEvent: number) => {
+        if (props.backendPaginationSorting) {
+          emit(Emits.PageChanged, pageEvent);
+          return;
+        }
+        currentPage.value = pageEvent;
+      };
 
-
+      const handleSizeChanged = (sizeEvent: number) => {
+        if (props.backendPaginationSorting) {
+          emit(Emits.PageSizeChanged, sizeEvent);
+          return;
+        }
+        currentPageSize.value = sizeEvent;
+      };
             // @dragend='dragEnd' @dragstart='dragStart' @dragover='dragOver'>
 
                 const dragStart = (event: Event) => {
@@ -162,31 +196,25 @@
 
                 }
 
-                // function drag(ev) {
-                //   ev.dataTransfer.setData("text", ev.target.id);
-                // }
 
-                return {
-                    dataList,
-                    sort,
-                    sortData,
-                    paginatedData,
-                    handleSortChanged,
-                    handlePageChanged,
-                    handleSizeChanged,
-                    Emits,
-                    currentPage,
-                    currentPageSize,
+      return {
+        dataList,
+        sort,
+        sortData,
+        paginatedData,
+        handleSortChanged,
+        handlePageChanged,
+        handleSizeChanged,
+        Emits,
+        currentPage,
+        currentPageSize,
                     dragStart,
                     dragEnd,
                     dragEnter,
                     dragLeave,
-                };
-            },
-        });
-    }
-
-    export default defineGenericComponent();
+      };
+    },
+  });
 </script>
 
 <style>
