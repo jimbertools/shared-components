@@ -7,8 +7,7 @@
                 :class='{ width: header.width }'
                 v-for='header in headers'
                 @click='sortData(header.key)'
-                :key='header'
-            >
+                :key='header'>
                 <slot :name='`header-${header}`' :header='header'>
                     {{ header.displayName }}
                 </slot>
@@ -18,13 +17,17 @@
 
         <tbody>
         <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)"
-            class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'
-            draggable="true"
-            @dragstart='dragStart' @dragend='dragEnd' @dragenter='dragEnter' @dragleave='dragLeave'>
+            class='h-12 border-gray-300 border-t cursor-pointer'
+            
+            :class='{"border-t-2 border-b-2 border-green-300" : draggingOverId == data.id && data.isFolder ,
+                     "hover:bg-gray-100" : selectedIds.length <= 0 ,
+                     "bg-gray-100" : selectedIds.includes(data.id)
+            }'
+            :id='data.id'
+            draggable='true' @drop='dragDrop'
+            @dragstart='(e)=>dragStart(e, data.id)' @dragover='dragOver' @dragleave='dragLeave'>
             <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
-                class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'
-                draggable='false'
-                >
+                class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
                 <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
                     {{ header.formatter ? header.formatter(data) : data[header.key] }}
                 </slot>
@@ -47,6 +50,8 @@
 
     </table>
 
+    {{ draggingOverId }}
+
   <div class="block" v-if="withPagination">
     <el-pagination
       :page-sizes="[10, 20, 50, 100]"
@@ -63,7 +68,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
-  import { IHeader, ISort, TEntry } from '../infrastructure/types/FileManagerTypes';
+  import { IHeader, ISort, TEntry, IMoveItems } from '../infrastructure/types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
 
@@ -72,8 +77,9 @@
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
+    MoveItems = 'move-items',
   }
-
+  
   export default defineComponent({
     name: 'TestTable',
     props: {
@@ -141,28 +147,47 @@
         }
         currentPageSize.value = sizeEvent;
       };
-            // @dragend='dragEnd' @dragstart='dragStart' @dragover='dragOver'>
   
-      const dragStart = (event: Event) => {
-          (<HTMLElement> event.target).classList.add('selected');
+      const draggingOverId = ref<string>(null);
+      const selectedIds = ref<string[]>([]);
+
+      // const select
+
+      const dragStart = (event: DragEvent, id: string) => {
+        if (!selectedIds.value.includes(id)) {
+          selectedIds.value = [ id ];
+        }
+        event.dataTransfer.setData("text", id);
       }
   
-      const dragEnd = (event: Event) => {
-          (<HTMLElement> event.target).classList.remove('selected');
+      const dragOver = (event: DragEvent) => {
+        let target = (<HTMLElement> event.target)
+        while (target.localName != "tr") {
+          target = target.parentElement;
+        }
+        if (! target.classList.contains('selected')) {
+            draggingOverId.value = target.id;
+            console.log(draggingOverId);
+        }
+        // event.stopPropagation();
+        event.preventDefault();
       }
   
-      const dragEnter = (event: Event) => {
-        let parent = (<HTMLElement> event.target).parentElement;
-        if (parent != null) {
-          parent.classList.add('drag-over');
+      const dragLeave = (event: DragEvent) => {
+        let target = (<HTMLElement> event.target)
+        while (target.localName != "tr") {
+          target = target.parentElement;
         }
       }
   
-      const dragLeave = (event: Event) => {
-        let parent = (<HTMLElement> event.target).parentElement;
-        if (parent != null) {
-          parent.classList.remove('drag-over');
+      const dragDrop = (event: DragEvent) => {
+        event.preventDefault();
+        let target = (<HTMLElement> event.target)
+        while (target.localName != "tr") {
+          target = target.parentElement;
         }
+        // emit(Emits.MoveItems, <IMoveItems> {source: [], destination: })
+        draggingOverId.value = '';
       }
 
       return {
@@ -177,12 +202,15 @@
         currentPage,
         currentPageSize,
         dragStart,
-        dragEnd,
-        dragEnter,
+        dragOver,
         dragLeave,
+        dragDrop,
+        draggingOverId,
+        selectedIds,
       };
     },
   });
+
 </script>
 
 <style>

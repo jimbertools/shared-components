@@ -50,7 +50,7 @@
 
 <script lang="ts">
   import { defineComponent, onBeforeMount, ref } from 'vue';
-  import Table from '../components/Table.vue';
+  import Table from '../src/components/Table.vue';
   import ElementTable from './components/ElementTable.vue';
   import axios from 'axios';
   import FileManager, { Emits as FileManagerEmits } from '../src/components/FileManager.vue';
