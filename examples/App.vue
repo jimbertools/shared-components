@@ -17,7 +17,6 @@
       :data="data"
       :headers="headers"
       :sidebarData="sidebarData"
-      :icons="icons"
       withPagination
       withFiltering
       @[FileManagerEmits.SelectedChanged]="changeSelected"

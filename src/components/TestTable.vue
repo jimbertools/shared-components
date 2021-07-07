@@ -22,8 +22,8 @@
           class='h-12 border-gray-300 border-t cursor-pointer'
           :class='{
             "hover:bg-gray-100" : !isDragging ,
-            "bg-pink-100" : selectedIds.includes(data.id),
-            "border-t-2 border-b-2 border-green-300": data.isFolder
+            "bg-blue-100" : selectedIds.includes(data.id),
+            "border-t-2 border-b-2 border-yellow-400": data.isFolder
                 && draggingOverId == data.id
                 && !selectedIds.includes(data.id)}'
           @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
@@ -38,20 +38,6 @@
           </td>
       </tr>
     </tbody>
-
-    <!-- ### Original ### -->
-    <!-- <tbody> -->
-    <!-- <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)" -->
-    <!--     class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'> -->
-    <!--     <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]' -->
-    <!--         class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'> -->
-    <!--         <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'> -->
-    <!--             {{ header.formatter ? header.formatter(data) : data[header.key] }} -->
-    <!--         </slot> -->
-    <!--     </td> -->
-    <!-- </tr> -->
-    <!-- </tbody> -->
-
   </table>
 
   <div class="block" v-if="withPagination">
@@ -226,18 +212,10 @@
           emit(Emits.MoveItems, <IMoveItems> {
             source: selectedIds.value,
             destination: id})
-
-          // TODO : Erase
-          // console.log("------ Emit item drag data --------------");
-          // console.log("Source:");
-          // console.log(selectedIds);
-          // console.log("Destination:");
-          // console.log(id);
         }
 
         isDragging.value = false;
         draggingOverId.value = '';
-
       }
 
       return {
