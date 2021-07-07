@@ -17,7 +17,6 @@
       :data="data"
       :headers="headers"
       :sidebarData="sidebarData"
-      :icons="icons"
       withPagination
       withFiltering
       @[FileManagerEmits.SelectedChanged]="changeSelected"
@@ -50,7 +49,7 @@
 
 <script lang="ts">
   import { defineComponent, onBeforeMount, ref } from 'vue';
-  import Table from '../components/Table.vue';
+  import Table from '../src/components/Table.vue';
   import ElementTable from './components/ElementTable.vue';
   import axios from 'axios';
   import FileManager from '../src/components/FileManager.vue';

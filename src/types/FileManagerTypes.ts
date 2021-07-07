@@ -37,3 +37,7 @@ export enum FileManagerViews {
   List = 'list',
   Grid = 'grid',
 }
+export interface IMoveItems {
+    source: string[];
+    destination: string;
+}
