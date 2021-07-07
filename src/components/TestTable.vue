@@ -28,7 +28,7 @@
                 && !selectedIds.includes(data.id)}'
           @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
           @click.shift='(e)=>selectRange(e, data.id)'
-          draggable='true' @drop.prevent='dragDrop'
+          draggable='true' @drop.prevent='(e)=>dragDrop(data.id, data.isFolder)'
           @dragstart='(e)=>dragStart(e, data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
               class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
@@ -153,16 +153,14 @@
 
       // TODO : Remove all selected when sorting
       const draggingOverId = ref<string>(null);
+      const initRangeSelectionId = ref<string>(null);
       const isDragging = ref<boolean>(false);
       const selectedIds = ref<string[]>([]);
 
       const selectItem = (data: TEntry) => {
         selectedIds.value = [ data.id ];
+        initRangeSelectionId.value = data.id;
         emit(Emits.RowClicked, data);
-      }
-
-      const selectRange = (event: Event, id: string) => {
-        console.log(id);
       }
 
       const addItemToSelect = (id: string) => {
@@ -172,6 +170,21 @@
         } else {
           selectedIds.value.splice(position, 1);
         }
+        initRangeSelectionId.value = id;
+      }
+
+      const selectRange = (event: Event, id: string) => {
+        let initPosition = dataList.value.indexOf(initRangeSelectionId.value);
+        let endPosition = dataList.value.indexOf(id);
+        if (0 <= initPosition && 0 <= endPosition) {
+          let rangeSelectedDatas = [];
+          if (initPosition <= endPosition) {
+            rangeSelectedDatas = dataList.value.slice(initPosition, endPosition);
+          } else {
+            rangeSelectedDatas = dataList.value.slice(endPosition, initPosition);
+          }
+        }
+        console.log(id);
       }
 
       const dragStart = (event: DragEvent, id: string) => {
@@ -186,10 +199,23 @@
         draggingOverId.value = id;
       }
 
-      const dragDrop = (event: DragEvent) => {
-        // emit(Emits.MoveItems, <IMoveItems> {source: [], destination: })
+      const dragDrop = (id: string, isFolder: boolean) => {
+        if (isFolder && !selectedIds.value.includes(id)) {
+          emit(Emits.MoveItems, <IMoveItems> {
+            source: selectedIds.value,
+            destination: id})
+
+          // TODO : Erase
+          // console.log("------ Emit item drag data --------------");
+          // console.log("Source:");
+          // console.log(selectedIds);
+          // console.log("Destination:");
+          // console.log(id);
+        }
+
         isDragging.value = false;
         draggingOverId.value = '';
+
       }
 
       return {
