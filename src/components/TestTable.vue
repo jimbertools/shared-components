@@ -55,7 +55,7 @@
 <script lang="ts">
 
   import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
-  import { IHeader, ISort, TEntry, IMoveItems } from '../infrastructure/types/FileManagerTypes';
+  import { IHeader, ISort, TEntry } from '../types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
 

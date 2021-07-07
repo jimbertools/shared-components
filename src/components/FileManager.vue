@@ -124,7 +124,7 @@
   import { computed, defineComponent, PropType, ref } from 'vue';
   import TestTable, { Emits as TableEmits } from './TestTable.vue';
   import GridView, { Emits as GridViewEmits } from './GridView.vue';
-  import { IHeader, ISort, TEntry } from '../infrastructure/types/FileManagerTypes';
+  import { IHeader, ISort, TEntry } from '../types/FileManagerTypes';
   import { getIcon, getIconColor, getName } from '../infrastructure/utils/FileUtil';
   import { ElInput, ElDropdown, ElButton, ElTooltip } from 'element-plus';
 
