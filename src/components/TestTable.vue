@@ -16,8 +16,6 @@
     </thead>
 
     <tbody>
-      <!-- TODO : See if on click select the item -->
-      <!-- @click.exact="$emit('clickedRow', data)" -->
       <tr v-for='data in dataList' :key='data'
           class='h-12 border-gray-300 border-t cursor-pointer'
           :class='{
