@@ -44,11 +44,6 @@ export interface TEntry {
   fileType: FileType;
 }
 
-// export interface IMoveItems {
-//     source: TEntry[],
-//     destination: TEntry
-// }
-
 export interface IMoveItems {
     source: string[];
     destination: string;

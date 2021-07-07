@@ -27,7 +27,7 @@
           @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
           @click.shift='(e)=>selectRange(data.id)'
           draggable='true' @drop.prevent='(e)=>dragDrop(data.id, data.isFolder)'
-          @dragstart='(e)=>dragStart(e, data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
+          @dragstart='(e)=>dragStart(data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
               class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
             <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
@@ -55,7 +55,7 @@
 <script lang="ts">
 
   import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
-  import { IHeader, ISort, TEntry } from '../types/FileManagerTypes';
+  import { IHeader, ISort, TEntry, IMoveItems } from '../types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
 
@@ -151,14 +151,16 @@
 
       const addItemToSelect = (id: string) => {
         let position = selectedIds.value.indexOf(id);
-        if (position < 0) {
-          selectedIds.value.push(id);
-        } else {
-          selectedIds.value.splice(position, 1);
-        }
 
         initRangeSelectionId.value = id;
-        previousRangeSelectionIds.value = []
+        previousRangeSelectionIds.value = [];
+
+        if (position < 0) {
+          selectedIds.value.push(id);
+          return;
+        }
+
+        selectedIds.value.splice(position, 1);
       }
 
       const selectRange = (id: string) => {
@@ -193,11 +195,10 @@
         }
       }
 
-      const dragStart = (event: DragEvent, id: string) => {
+      const dragStart = (id: string) => {
         if (!selectedIds.value.includes(id)) {
           selectedIds.value = [ id ];
         }
-        event.dataTransfer.setData("text", id);
         isDragging.value = true;
       }
 
