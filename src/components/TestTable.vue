@@ -1,56 +1,58 @@
 <template>
-    <table class='min-w-full bg-white dark:bg-gray-800'>
-        <thead class='sticky top-0'>
-        <tr class='w-full h-16 border-gray-300 border-b py-8'>
-            <th
-                class='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400'
-                :class='{ width: header.width }'
-                v-for='header in headers'
-                @click='sortData(header.key)'
-                :key='header'>
-                <slot :name='`header-${header}`' :header='header'>
-                    {{ header.displayName }}
-                </slot>
-            </th>
-        </tr>
-        </thead>
+  <table class='min-w-full bg-white dark:bg-gray-800'>
+    <thead class='sticky top-0'>
+      <tr class='w-full h-16 border-gray-300 border-b py-8'>
+        <th
+          class='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400'
+          :class='{ width: header.width }'
+          v-for='header in headers'
+          @click='sortData(header.key)'
+          :key='header'>
+          <slot :name='`header-${header}`' :header='header'>
+          {{ header.displayName }}
+          </slot>
+        </th>
+      </tr>
+    </thead>
 
-        <tbody>
-        <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)"
-            class='h-12 border-gray-300 border-t cursor-pointer'
-            
-            :class='{"border-t-2 border-b-2 border-green-300" : draggingOverId == data.id && data.isFolder ,
-                     "hover:bg-gray-100" : selectedIds.length <= 0 ,
-                     "bg-gray-100" : selectedIds.includes(data.id)
-            }'
-            :id='data.id'
-            draggable='true' @drop='dragDrop'
-            @dragstart='(e)=>dragStart(e, data.id)' @dragover='dragOver' @dragleave='dragLeave'>
-            <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
-                class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
-                <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
-                    {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                </slot>
-            </td>
-        </tr>
-        </tbody>
+    <tbody>
+      <!-- TODO : See if on click select the item -->
+      <!-- @click.exact="$emit('clickedRow', data)" -->
+      <tr v-for='data in dataList' :key='data'
+          class='h-12 border-gray-300 border-t cursor-pointer'
+          :class='{
+            "hover:bg-gray-100" : !isDragging ,
+            "bg-pink-100" : selectedIds.includes(data.id),
+            "border-t-2 border-b-2 border-green-300": data.isFolder
+                && draggingOverId == data.id
+                && !selectedIds.includes(data.id)}'
+          @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
+          @click.shift='(e)=>selectRange(e, data.id)'
+          draggable='true' @drop.prevent='dragDrop'
+          @dragstart='(e)=>dragStart(e, data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
+          <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
+              class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
+            <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
+            {{ header.formatter ? header.formatter(data) : data[header.key] }}
+            </slot>
+          </td>
+      </tr>
+    </tbody>
 
-        <!-- ### Original ### -->
-        <!-- <tbody> -->
-        <!-- <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)" -->
-        <!--     class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'> -->
-        <!--     <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]' -->
-        <!--         class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'> -->
-        <!--         <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'> -->
-        <!--             {{ header.formatter ? header.formatter(data) : data[header.key] }} -->
-        <!--         </slot> -->
-        <!--     </td> -->
-        <!-- </tr> -->
-        <!-- </tbody> -->
+    <!-- ### Original ### -->
+    <!-- <tbody> -->
+    <!-- <tr v-for='data in dataList' :key='data' @click.prevent="$emit('clickedRow', data)" -->
+    <!--     class='h-12 border-gray-300 border-b cursor-pointer hover:bg-gray-100' :class='rowClass'> -->
+    <!--     <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]' -->
+    <!--         class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'> -->
+    <!--         <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'> -->
+    <!--             {{ header.formatter ? header.formatter(data) : data[header.key] }} -->
+    <!--         </slot> -->
+    <!--     </td> -->
+    <!-- </tr> -->
+    <!-- </tbody> -->
 
-    </table>
-
-    {{ draggingOverId }}
+  </table>
 
   <div class="block" v-if="withPagination">
     <el-pagination
@@ -61,12 +63,13 @@
       layout="total, sizes, prev, pager, next"
       @size-change="handleSizeChanged"
       @current-change="handlePageChanged"
-    >
+      >
     </el-pagination>
   </div>
 </template>
 
 <script lang="ts">
+
   import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
   import { IHeader, ISort, TEntry, IMoveItems } from '../infrastructure/types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
@@ -79,7 +82,7 @@
     PageSizeChanged = 'page-size-changed',
     MoveItems = 'move-items',
   }
-  
+
   export default defineComponent({
     name: 'TestTable',
     props: {
@@ -147,46 +150,45 @@
         }
         currentPageSize.value = sizeEvent;
       };
-  
+
+      // TODO : Remove all selected when sorting
       const draggingOverId = ref<string>(null);
+      const isDragging = ref<boolean>(false);
       const selectedIds = ref<string[]>([]);
 
-      // const select
+      const selectItem = (data: TEntry) => {
+        selectedIds.value = [ data.id ];
+        emit(Emits.RowClicked, data);
+      }
+
+      const selectRange = (event: Event, id: string) => {
+        console.log(id);
+      }
+
+      const addItemToSelect = (id: string) => {
+        let position = selectedIds.value.indexOf(id);
+        if (position < 0) {
+          selectedIds.value.push(id);
+        } else {
+          selectedIds.value.splice(position, 1);
+        }
+      }
 
       const dragStart = (event: DragEvent, id: string) => {
         if (!selectedIds.value.includes(id)) {
           selectedIds.value = [ id ];
         }
         event.dataTransfer.setData("text", id);
+        isDragging.value = true;
       }
-  
-      const dragOver = (event: DragEvent) => {
-        let target = (<HTMLElement> event.target)
-        while (target.localName != "tr") {
-          target = target.parentElement;
-        }
-        if (! target.classList.contains('selected')) {
-            draggingOverId.value = target.id;
-            console.log(draggingOverId);
-        }
-        // event.stopPropagation();
-        event.preventDefault();
+
+      const dragOver = (id: string) => {
+        draggingOverId.value = id;
       }
-  
-      const dragLeave = (event: DragEvent) => {
-        let target = (<HTMLElement> event.target)
-        while (target.localName != "tr") {
-          target = target.parentElement;
-        }
-      }
-  
+
       const dragDrop = (event: DragEvent) => {
-        event.preventDefault();
-        let target = (<HTMLElement> event.target)
-        while (target.localName != "tr") {
-          target = target.parentElement;
-        }
         // emit(Emits.MoveItems, <IMoveItems> {source: [], destination: })
+        isDragging.value = false;
         draggingOverId.value = '';
       }
 
@@ -201,12 +203,15 @@
         Emits,
         currentPage,
         currentPageSize,
+        draggingOverId,
+        isDragging,
+        selectedIds,
+        selectItem ,
+        selectRange,
+        addItemToSelect,
         dragStart,
         dragOver,
-        dragLeave,
         dragDrop,
-        draggingOverId,
-        selectedIds,
       };
     },
   });
@@ -214,11 +219,4 @@
 </script>
 
 <style>
-.selected {
-    border: solid 10px blue;
-}
-
-.drag-over {
-    border: dashed 3px red;
-}
 </style>
