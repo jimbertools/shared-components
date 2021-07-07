@@ -53,9 +53,9 @@
   import Table from '../components/Table.vue';
   import ElementTable from './components/ElementTable.vue';
   import axios from 'axios';
-  import FileManager, { Emits as FileManagerEmits } from '../src/components/FileManager.vue';
+  import FileManager from '../src/components/FileManager.vue';
   import jsonData from './data.json';
-  import { IHeader, ISort, TEntry } from '../src/infrastructure/types/FileManagerTypes';
+  import { IHeader, ISort, TEntry, FileManagerEmits } from "../src/types/FileManagerTypes"
   import { getFileType } from '../src/infrastructure/utils/FileUtil';
   import { getIcon, getIconColor, getName } from '../src/infrastructure/utils/FileUtil';
 

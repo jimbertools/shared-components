@@ -125,20 +125,9 @@
   import { computed, defineComponent, PropType, ref } from 'vue';
   import TestTable, { Emits as TableEmits } from './TestTable.vue';
   import GridView, { Emits as GridViewEmits } from './GridView.vue';
-  import { IHeader, ISort, TEntry } from '../types/FileManagerTypes';
+  import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
   import { getIcon, getIconColor, getName } from '../infrastructure/utils/FileUtil';
   import { ElInput, ElDropdown, ElButton, ElTooltip } from 'element-plus';
-
-  export enum Emits {
-    SearchChanged = 'search-changed',
-    SortChanged = 'sort-changed',
-    SelectedChanged = 'changeSelected',
-  }
-
-  export enum View {
-    List = 'list',
-    Grid = 'grid',
-  }
 
   const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
     if (!a.isFolder && b.isFolder) return 1;
