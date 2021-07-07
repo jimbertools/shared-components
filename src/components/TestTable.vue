@@ -27,7 +27,7 @@
                 && draggingOverId == data.id
                 && !selectedIds.includes(data.id)}'
           @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
-          @click.shift='(e)=>selectRange(e, data.id)'
+          @click.shift='(e)=>selectRange(data.id)'
           draggable='true' @drop.prevent='(e)=>dragDrop(data.id, data.isFolder)'
           @dragstart='(e)=>dragStart(e, data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
@@ -151,16 +151,18 @@
         currentPageSize.value = sizeEvent;
       };
 
-      // TODO : Remove all selected when sorting
       const draggingOverId = ref<string>(null);
       const initRangeSelectionId = ref<string>(null);
       const isDragging = ref<boolean>(false);
       const selectedIds = ref<string[]>([]);
+      const previousRangeSelectionIds = ref<string[]>([]);
 
       const selectItem = (data: TEntry) => {
-        selectedIds.value = [ data.id ];
-        initRangeSelectionId.value = data.id;
         emit(Emits.RowClicked, data);
+        selectedIds.value = [ data.id ];
+
+        initRangeSelectionId.value = data.id;
+        previousRangeSelectionIds.value = []
       }
 
       const addItemToSelect = (id: string) => {
@@ -170,21 +172,41 @@
         } else {
           selectedIds.value.splice(position, 1);
         }
+
         initRangeSelectionId.value = id;
+        previousRangeSelectionIds.value = []
       }
 
-      const selectRange = (event: Event, id: string) => {
-        let initPosition = dataList.value.indexOf(initRangeSelectionId.value);
-        let endPosition = dataList.value.indexOf(id);
+      const selectRange = (id: string) => {
+        let dataListIds = dataList.value.map(data => data.id)
+        let initPosition = dataListIds.indexOf(initRangeSelectionId.value);
+        let endPosition = dataListIds.indexOf(id);
+
         if (0 <= initPosition && 0 <= endPosition) {
-          let rangeSelectedDatas = [];
+          // Remove of all previously selected by range
+          previousRangeSelectionIds.value.forEach(currentId => {
+            let idPosition = selectedIds.value.indexOf(currentId);
+            if (0 <= idPosition) {
+              selectedIds.value.splice(idPosition, 1);
+            }
+          })
+
+          // Add newly selected
+          let rangeSelectedIds = [];
           if (initPosition <= endPosition) {
-            rangeSelectedDatas = dataList.value.slice(initPosition, endPosition);
+            rangeSelectedIds = dataListIds.slice(initPosition, endPosition + 1);
           } else {
-            rangeSelectedDatas = dataList.value.slice(endPosition, initPosition);
+            rangeSelectedIds = dataListIds.slice(endPosition, initPosition);
           }
+
+          rangeSelectedIds.forEach((id) => {
+            if (!selectedIds.value.includes(id)) {
+              selectedIds.value.push(id);
+            }
+          })
+
+          previousRangeSelectionIds.value = rangeSelectedIds;
         }
-        console.log(id);
       }
 
       const dragStart = (event: DragEvent, id: string) => {
@@ -231,6 +253,7 @@
         currentPageSize,
         draggingOverId,
         isDragging,
+        initRangeSelectionId,
         selectedIds,
         selectItem ,
         selectRange,
