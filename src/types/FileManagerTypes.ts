@@ -44,4 +44,10 @@ export interface TEntry {
   fileType: FileType;
 }
 
+export interface IMoveItems {
+    source: string[];
+    destination: string;
+}
+
+
 // export  type TEntry = IFile | IBaseFolder

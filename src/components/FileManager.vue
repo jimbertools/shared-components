@@ -56,7 +56,6 @@
                 <test-table
                   :withPagination="withPagination"
                   :backendPaginationSorting="backendPaginationSorting"
-                  class="table"
                   rowClass="bg-gray-50"
                   :data="dataList"
                   :headers="headers"
