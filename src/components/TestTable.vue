@@ -20,7 +20,7 @@
           class='h-12 border-gray-300 border-t cursor-pointer'
           :class='{
             "hover:bg-gray-100" : !isDragging ,
-            "bg-blue-100" : selectedIds.includes(data.id),
+            "bg-blue-100 hover:bg-blue-50" : selectedIds.includes(data.id),
             "border-t-2 border-b-2 border-yellow-400": data.isFolder
                 && draggingOverId == data.id
                 && !selectedIds.includes(data.id)}'
