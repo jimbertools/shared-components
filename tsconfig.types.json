@@ -12,9 +12,14 @@
       "declaration": true,
 
       "outDir": "dist",
-      "emitDeclarationOnly": true
+      "emitDeclarationOnly": true,
+      "paths": {
+        "@/*": [
+          "./src/*"
+        ]
+      },
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts"],
+    "include": ["types/**/*.ts", "types/**/*.d.ts"],
     "exclude": ["node_modules", "./node_modules", "./node_modules/*", "./node_modules/@types/node/index.d.ts"]
   }
   

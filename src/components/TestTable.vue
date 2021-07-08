@@ -135,8 +135,8 @@
         currentPageSize.value = sizeEvent;
       };
 
-      const draggingOverId = ref<string>(null);
-      const initRangeSelectionId = ref<string>(null);
+      const draggingOverId = ref<string>();
+      const initRangeSelectionId = ref<string>();
       const isDragging = ref<boolean>(false);
       const selectedIds = ref<string[]>([]);
       const previousRangeSelectionIds = ref<string[]>([]);

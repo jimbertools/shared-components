@@ -13,7 +13,7 @@
             <em class="fas fa-search"></em>
           </template>
         </el-input>
-        <div v-if="activeView === View.Grid && headers?.some(x => x.enableSorting)">
+        <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
           <ElDropdown>
             <ElButton type="default"> {{ sortDisplayName }}<i class="fas fa-chevron-down ml-2"></i> </ElButton>
             <template #dropdown>
@@ -36,13 +36,13 @@
           </ElButton>
         </div>
         <ElButtonGroup :key="activeView" class="ml-4">
-          <ElButton @click="activeView = View.List">
-            <div :class="{ 'active-view': activeView === View.List }">
+          <ElButton @click="activeView = 'list'">
+            <div :class="{ 'active-view': activeView === 'list' }">
               <em class="fas fa-bars"></em>
             </div>
           </ElButton>
-          <ElButton @click="activeView = View.Grid">
-            <div :class="{ 'active-view': activeView === View.Grid }">
+          <ElButton @click="activeView = 'grid'">
+            <div :class="{ 'active-view': activeView === 'grid' }">
               <em class="fas fa-th"></em>
             </div>
           </ElButton>
@@ -52,7 +52,7 @@
         <div class="overflow-x-auto">
           <div class="align-middle inline-block min-w-full">
             <div class="shadow overflow-hidden sm:rounded-lg">
-              <template v-if="activeView === View.List">
+              <template v-if="activeView === 'list'">
                 <test-table
                   :withPagination="withPagination"
                   :backendPaginationSorting="backendPaginationSorting"
@@ -75,7 +75,7 @@
                   </template>
                 </test-table>
               </template>
-              <template v-if="activeView === View.Grid">
+              <template v-if="activeView === 'grid'">
                 <grid-view
                   :withPagination="withPagination"
                   :backendPaginationSorting="backendPaginationSorting"
@@ -127,7 +127,6 @@
   import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
   import { getIcon, getIconColor, getName } from '../infrastructure/utils/FileUtil';
   import { ElInput, ElDropdown, ElButton, ElTooltip, ElDropdownMenu, ElDropdownItem, ElButtonGroup } from 'element-plus';
-  import 'element-plus/packages/theme-chalk/src/base.scss'
 
   const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
     if (!a.isFolder && b.isFolder) return 1;
@@ -158,8 +157,7 @@
     { displayName: 'Size', key: 'size', enableSorting: true },
   ] as IHeader<TEntry>[];
 
-  function defineGenericComponent<T extends Partial<TEntry>>() {
-    return defineComponent({
+  export default defineComponent({
       name: 'FileManager',
       components: {
         TestTable,
@@ -173,10 +171,10 @@
         ElButtonGroup
       },
       props: {
-        data: { type: Array as PropType<T[]>, required: true },
-        quickAccessData: { type: Array as PropType<T[]>, required: false },
+        data: { type: Array as PropType<any[]>, required: true },
+        quickAccessData: { type: Array as PropType<any[]>, required: false },
         sidebarData: { type: Object, required: false },
-        headers: { type: Array as PropType<IHeader<T>[]>, required: false },
+        headers: { type: Array as PropType<IHeader<any>[]>, required: false },
         page: { type: Number, required: false, default: 1 },
         pageSize: { type: Number, required: false, default: 10 },
         total: { type: Number, required: false },
@@ -290,9 +288,7 @@
         };
       },
     });
-  }
 
-  export default defineGenericComponent();
 </script>
 
 <style>
