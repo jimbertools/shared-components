@@ -14,39 +14,39 @@
           </template>
         </el-input>
         <div v-if="activeView === View.Grid && headers?.some(x => x.enableSorting)">
-          <el-dropdown>
-            <el-button type="default"> {{ sortDisplayName }}<i class="fas fa-chevron-down ml-2"></i> </el-button>
+          <ElDropdown>
+            <ElButton type="default"> {{ sortDisplayName }}<i class="fas fa-chevron-down ml-2"></i> </ElButton>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item v-for="header in headers.filter(x => x.enableSorting)" @click="sortHeader(header.key)" :key="header.key">
+              <ElDropdownMenu>
+                <ElDropdownItem v-for="header in headers.filter(x => x.enableSorting)" @click="sortHeader(header.key)" :key="header.key">
                   {{ header.displayName ?? header.key }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
+                </ElDropdownItem>
+              </ElDropdownMenu>
             </template>
-          </el-dropdown>
-          <el-button v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
+          </ElDropdown>
+          <ElButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
             <div>
               <em class="fas fa-sort-amount-down"></em>
             </div>
-          </el-button>
-          <el-button v-if="sort?.order !== 'descending'" @click="sortDirection('descending')">
+          </ElButton>
+          <ElButton v-if="sort?.order !== 'descending'" @click="sortDirection('descending')">
             <div>
               <em class="fas fa-sort-amount-up"></em>
             </div>
-          </el-button>
+          </ElButton>
         </div>
-        <el-button-group :key="activeView" class="ml-4">
-          <el-button @click="activeView = View.List">
+        <ElButtonGroup :key="activeView" class="ml-4">
+          <ElButton @click="activeView = View.List">
             <div :class="{ 'active-view': activeView === View.List }">
               <em class="fas fa-bars"></em>
             </div>
-          </el-button>
-          <el-button @click="activeView = View.Grid">
+          </ElButton>
+          <ElButton @click="activeView = View.Grid">
             <div :class="{ 'active-view': activeView === View.Grid }">
               <em class="fas fa-th"></em>
             </div>
-          </el-button>
-        </el-button-group>
+          </ElButton>
+        </ElButtonGroup>
       </div>
       <div class="flex flex-col">
         <div class="overflow-x-auto">
@@ -126,7 +126,8 @@
   import GridView, { Emits as GridViewEmits } from './GridView.vue';
   import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
   import { getIcon, getIconColor, getName } from '../infrastructure/utils/FileUtil';
-  import { ElInput, ElDropdown, ElButton, ElTooltip } from 'element-plus';
+  import { ElInput, ElDropdown, ElButton, ElTooltip, ElDropdownMenu, ElDropdownItem, ElButtonGroup } from 'element-plus';
+  import 'element-plus/packages/theme-chalk/src/base.scss'
 
   const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
     if (!a.isFolder && b.isFolder) return 1;
@@ -167,6 +168,9 @@
         ElDropdown,
         ElButton,
         ElTooltip,
+        ElDropdownMenu,
+        ElDropdownItem,
+        ElButtonGroup
       },
       props: {
         data: { type: Array as PropType<T[]>, required: true },

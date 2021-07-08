@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from '../examples/App.vue'
 import './index.css';
-import installElementPlus from './plugins/element'
+// import installElementPlus from './plugins/element'
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 
@@ -16,5 +16,5 @@ export const Table = TableComponent
 export const TestTable = TestTableComponent
 
 const app = createApp(App)
-installElementPlus(app)
+// installElementPlus(app)
 app.mount('#app')
