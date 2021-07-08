@@ -1,7 +1,8 @@
 import { FileType } from '../infrastructure/utils/FileUtil';
 
 export interface IHeader<T extends Record<string, any>> {
-  key: keyof T;
+  key: string;
+  // key: keyof T;
   displayName?: string;
   enableSorting?: boolean;
   // sortValue?: (t: T) => any;

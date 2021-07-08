@@ -6,8 +6,8 @@
           class='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400'
           :class='{ width: header.width }'
           v-for='header in headers'
-          @click='sortData(header.key)'
-          :key='header'>
+          @click='sortData(String(header.key))'
+          :key='header.key'>
           <slot :name='`header-${header}`' :header='header'>
           {{ header.displayName }}
           </slot>
@@ -70,8 +70,8 @@
   export default defineComponent({
     name: 'TestTable',
     props: {
-      data: { type: Array as PropType<Array<any>>, required: true },
-      headers: { type: Array as PropType<IHeader<any>[]>, required: true },
+      data: { type: Array as () => any[], required: true },
+      headers: { type: Object as () => IHeader<any>[], required: true },
       page: { type: Number, required: false, default: 1 },
       pageSize: { type: Number, required: false, default: 10 },
       total: { type: Number, required: false },
