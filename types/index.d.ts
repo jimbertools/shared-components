@@ -1,5 +1,5 @@
 import {ComponentPublicInstance} from "vue"
-declare module "testtesttobias"
+declare module "@jimber/shared-components"
 
 
 export const Button : ComponentPublicInstance

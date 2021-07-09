@@ -1,5 +1,4 @@
-# testtest
-
+# @jimber/shared-components
 ## Project setup
 ```
 yarn install

@@ -1,21 +1,22 @@
 {
-  "name": "testtesttobias",
-  "version": "0.1.13",
+  "name": "@jimber/shared-components",
+  "version": "0.0.13",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "postbuild": "tsc -p ./tsconfig.types.json",
-    "build-lib": "vue-cli-service build --target lib --name testtesttobias ./src/index.ts && tsc -p ./tsconfig.types.json && yarn build:postcss",
     "build:postcss": "postcss src/assets/css/**/*.css --base src/assets/css --dir dist",
-    "prepublish": "vue-cli-service build --target lib --name testtesttobias ./src/index.ts",
+    "build-lib": "vue-cli-service build --target lib --name jimber-shared-components ./src/index.ts && tsc -p ./tsconfig.types.json && yarn build:postcss",
+    "prepublish": "vue-cli-service build --target lib --name jimber-shared-components ./src/index.ts",
     "lint": "vue-cli-service lint"
   },
-  "main": "./dist/testtesttobias.common.js",
+  "main": "./dist/jimber-shared-components.common.js",
   "files": [
     "dist/*",
     "types/*",
-    "src/types/*"
+    "src/types/*",
+    "src/infrastructure/utils/*"
   ],
   "types": "./types/index.d.ts",
   "dependencies": {
@@ -23,6 +24,9 @@
     "@tailwindcss/postcss7-compat": "^2.2.4",
     "core-js": "^3.6.5",
     "element-plus": "^1.0.2-beta.54",
+    "global": "^4.4.0",
+    "postcss": "^8.3.5",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-cli-plugin-element-plus": "~0.0.13"
@@ -40,9 +44,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
-    "postcss": "^8.3.5",
     "prettier": "^2.2.1",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "~4.1.5"
   }
 }
