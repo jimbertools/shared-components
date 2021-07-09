@@ -1,6 +1,6 @@
 {
-  "name": "testtesttobias",
-  "version": "0.1.13",
+  "name": "@jimber/shared-components",
+  "version": "0.0.9",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
