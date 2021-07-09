@@ -32,6 +32,7 @@ export enum FileManagerEmits {
   SearchChanged = 'search-changed',
   SortChanged = 'sort-changed',
   SelectedChanged = 'changeSelected',
+  OpenItem = 'open-item',
 }
 
 export enum FileManagerViews {
