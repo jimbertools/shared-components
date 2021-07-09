@@ -26,7 +26,7 @@
                 && !selectedDatas.includes(data)}'
           @click.ctrl='(e)=>addItemToSelect(data)' @click.exact='(e)=>selectItem(data)'
           @click.shift='(e)=>selectRange(data)'
-          @dblclick='(e)=>openItem'
+          @dblclick='(e)=>openItem(data)'
           draggable='true' @drop.prevent='(e)=>dragDrop(data)'
           @dragstart='(e)=>dragStart(data)' @dragover.prevent='(e)=>dragOver(data)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
@@ -225,15 +225,13 @@
       }
 
       const openItem = (data: TEntry) => {
-        if (data.isFolder) {
-          draggingOverData.value = undefined;
-          initRangeSelectionData.value = undefined;
-          isDragging.value = false;
-          selectedDatas.value = [];
-          previousRangeSelectionData.value = [];
+        draggingOverData.value = undefined;
+        initRangeSelectionData.value = undefined;
+        isDragging.value = false;
+        selectedDatas.value = [];
+        previousRangeSelectionData.value = [];
 
-          emit(Emits.OpenItem, data);
-        }
+        emit(Emits.OpenItem, data);
       }
         
       return {
