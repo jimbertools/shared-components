@@ -9,7 +9,10 @@
     "build-lib": "vue-cli-service build --target lib --name testtesttobias ./src/index.ts && tsc -p ./tsconfig.types.json && yarn build:postcss",
     "build:postcss": "postcss src/assets/css/**/*.css --base src/assets/css --dir dist",
     "prepublish": "vue-cli-service build --target lib --name testtesttobias ./src/index.ts",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "sb": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "main": "./dist/testtesttobias.common.js",
   "files": [
@@ -28,6 +31,11 @@
     "vue-cli-plugin-element-plus": "~0.0.13"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/vue3": "^6.3.4",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -37,12 +45,14 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "autoprefixer": "^9",
+    "babel-loader": "^8.2.2",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
     "postcss": "^8.3.5",
     "prettier": "^2.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "vue-loader": "^16.3.0"
   }
 }
