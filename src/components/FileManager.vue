@@ -38,7 +38,7 @@
         <ElButtonGroup :key="activeView" class="ml-4">
           <ElButton @click="activeView = 'list'">
             <div :class="{ 'active-view': activeView === 'list' }">
-              <em class="fas fa-bars"></em>
+              <em class="fas fa-th-list"></em>
             </div>
           </ElButton>
           <ElButton @click="activeView = 'grid'">
