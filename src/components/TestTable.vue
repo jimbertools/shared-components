@@ -26,7 +26,8 @@
                 && !selectedDatas.includes(data)}'
           @click.ctrl='(e)=>addItemToSelect(data)' @click.exact='(e)=>selectItem(data)'
           @click.shift='(e)=>selectRange(data)'
-          draggable='true' @drop.prevent='(e)=>dragDrop(data, data.isFolder)'
+          @dblclick='(e)=>openItem'
+          draggable='true' @drop.prevent='(e)=>dragDrop(data)'
           @dragstart='(e)=>dragStart(data)' @dragover.prevent='(e)=>dragOver(data)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
               class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
@@ -54,7 +55,7 @@
 
 <script lang="ts">
 
-  import { computed, defineComponent, onMounted, PropType, ref } from 'vue';
+  import { computed, defineComponent, PropType, ref } from 'vue';
   import { IHeader, ISort, TEntry, IMoveItems } from '../types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
@@ -66,6 +67,7 @@
     PageSizeChanged = 'page-size-changed',
     MoveItems = 'move-items',
     SelectedItems = 'selected-items',
+    OpenItem = 'open-item',
   }
 
   export default defineComponent({
@@ -211,8 +213,8 @@
         draggingOverData.value = data;
       }
 
-      const dragDrop = (data: TEntry, isFolder: boolean) => {
-        if (isFolder && !selectedDatas.value.includes(data)) {
+      const dragDrop = (data: TEntry) => {
+        if (data.isFolder && !selectedDatas.value.includes(data)) {
           emit(Emits.MoveItems, <IMoveItems> {
             source: selectedDatas.value,
             destination: data});
@@ -220,6 +222,12 @@
 
         isDragging.value = false;
         draggingOverData.value = undefined;
+      }
+
+      const openItem = (data: TEntry) => {
+        if (data.isFolder) {
+          emit(Emits.OpenItem, data);
+        }
       }
         
       return {
@@ -243,6 +251,7 @@
         dragStart,
         dragOver,
         dragDrop,
+        openItem,
       };
     },
   });
