@@ -20,14 +20,14 @@
           class='h-12 border-gray-300 border-t cursor-pointer'
           :class='{
             "hover:bg-gray-100" : !isDragging ,
-            "bg-blue-100 hover:bg-blue-50" : selectedIds.includes(data.id),
+            "bg-blue-100 hover:bg-blue-50" : selectedDatas.includes(data),
             "border-t-2 border-b-2 border-yellow-400": data.isFolder
-                && draggingOverId == data.id
-                && !selectedIds.includes(data.id)}'
-          @click.ctrl='(e)=>addItemToSelect(data.id)' @click.exact='(e)=>selectItem(data)'
-          @click.shift='(e)=>selectRange(data.id)'
-          draggable='true' @drop.prevent='(e)=>dragDrop(data.id, data.isFolder)'
-          @dragstart='(e)=>dragStart(data.id)' @dragover.prevent='(e)=>dragOver(data.id)'>
+                && draggingOverData == data
+                && !selectedDatas.includes(data)}'
+          @click.ctrl='(e)=>addItemToSelect(data)' @click.exact='(e)=>selectItem(data)'
+          @click.shift='(e)=>selectRange(data)'
+          draggable='true' @drop.prevent='(e)=>dragDrop(data, data.isFolder)'
+          @dragstart='(e)=>dragStart(data)' @dragover.prevent='(e)=>dragOver(data)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
               class='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
             <slot :name='`data-${header.key}`' :data='data[header.key]' :row='data'>
@@ -135,88 +135,96 @@
         currentPageSize.value = sizeEvent;
       };
 
-      const draggingOverId = ref<string>();
-      const initRangeSelectionId = ref<string>();
+      const draggingOverData = ref<TEntry>();
+      const initRangeSelectionData = ref<TEntry>();
       const isDragging = ref<boolean>(false);
-      const selectedIds = ref<string[]>([]);
-      const previousRangeSelectionIds = ref<string[]>([]);
+      const selectedDatas = ref<TEntry[]>([]);
+      const previousRangeSelectionData = ref<TEntry[]>([]);
+
+      const getIdsFromDatas = (datas: TEntry[]) => {
+        return datas.map(data => data.id);
+      }
 
       const selectItem = (data: TEntry) => {
         emit(Emits.RowClicked, data);
-        selectedIds.value = [ data.id ];
+        selectedDatas.value = [ data ];
 
-        initRangeSelectionId.value = data.id;
-        previousRangeSelectionIds.value = []
+        initRangeSelectionData.value = data;
+        previousRangeSelectionData.value = []
+        // @todo : emit selection
       }
 
-      const addItemToSelect = (id: string) => {
-        let position = selectedIds.value.indexOf(id);
+      const addItemToSelect = (data: TEntry) => {
+        let position = selectedDatas.value.indexOf(data);
 
-        initRangeSelectionId.value = id;
-        previousRangeSelectionIds.value = [];
+        initRangeSelectionData.value = data;
+        previousRangeSelectionData.value = [];
+        // @todo : emit selection
 
         if (position < 0) {
-          selectedIds.value.push(id);
+          selectedDatas.value.push(data);
           return;
         }
 
-        selectedIds.value.splice(position, 1);
+        selectedDatas.value.splice(position, 1);
       }
 
-      const selectRange = (id: string) => {
-        let dataListIds = dataList.value.map(data => data.id)
-        let initPosition = dataListIds.indexOf(initRangeSelectionId.value);
-        let endPosition = dataListIds.indexOf(id);
+      const selectRange = (data: TEntry) => {
+        // let dataList = dataList.value.map(data => data);
+        let initPosition = dataList.value.indexOf(initRangeSelectionData.value);
+        let endPosition = dataList.value.indexOf(data);
+        // @todo : emit selection
 
         if (0 <= initPosition && 0 <= endPosition) {
+
           // Remove of all previously selected by range
-          previousRangeSelectionIds.value.forEach(currentId => {
-            let idPosition = selectedIds.value.indexOf(currentId);
-            if (0 <= idPosition) {
-              selectedIds.value.splice(idPosition, 1);
+          previousRangeSelectionData.value.forEach(data => {
+            let position = selectedDatas.value.indexOf(data);
+            if (0 <= position) {
+              selectedDatas.value.splice(position, 1);
             }
-          })
+          });
 
           // Add newly selected
-          let rangeSelectedIds = [];
+          let rangeSelectedDatas = [];
           if (initPosition <= endPosition) {
-            rangeSelectedIds = dataListIds.slice(initPosition, endPosition + 1);
+            rangeSelectedDatas = dataList.value.slice(initPosition, endPosition + 1);
           } else {
-            rangeSelectedIds = dataListIds.slice(endPosition, initPosition);
+            rangeSelectedDatas = dataList.value.slice(endPosition, initPosition + 1);
           }
 
-          rangeSelectedIds.forEach((id) => {
-            if (!selectedIds.value.includes(id)) {
-              selectedIds.value.push(id);
+          rangeSelectedDatas.forEach(data => {
+            if (!selectedDatas.value.includes(data)) {
+              selectedDatas.value.push(data);
             }
           })
 
-          previousRangeSelectionIds.value = rangeSelectedIds;
+          previousRangeSelectionData.value = rangeSelectedDatas;
         }
       }
 
-      const dragStart = (id: string) => {
-        if (!selectedIds.value.includes(id)) {
-          selectedIds.value = [ id ];
+      const dragStart = (data: TEntry) => {
+        if (!selectedDatas.value.includes(data)) {
+          selectedDatas.value = [ data ];
         }
         isDragging.value = true;
       }
 
-      const dragOver = (id: string) => {
-        draggingOverId.value = id;
+      const dragOver = (data: TEntry) => {
+        draggingOverData.value = data;
       }
 
-      const dragDrop = (id: string, isFolder: boolean) => {
-        if (isFolder && !selectedIds.value.includes(id)) {
+      const dragDrop = (data: TEntry, isFolder: boolean) => {
+        if (isFolder && !selectedDatas.value.includes(data)) {
           emit(Emits.MoveItems, <IMoveItems> {
-            source: selectedIds.value,
-            destination: id})
+            source: selectedDatas.value,
+            destination: data});
         }
 
         isDragging.value = false;
-        draggingOverId.value = '';
+        draggingOverData.value = undefined;
       }
-
+        
       return {
         dataList,
         sort,
@@ -228,10 +236,10 @@
         Emits,
         currentPage,
         currentPageSize,
-        draggingOverId,
+        draggingOverData,
         isDragging,
-        initRangeSelectionId,
-        selectedIds,
+        initRangeSelectionData,
+        selectedDatas,
         selectItem ,
         selectRange,
         addItemToSelect,
