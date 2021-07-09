@@ -150,7 +150,7 @@
         emit(Emits.SelectedItems, selectedDatas.value);
 
         initRangeSelectionData.value = data;
-        previousRangeSelectionData.value = []
+        previousRangeSelectionData.value = [];
       }
 
       const addItemToSelect = (data: TEntry) => {
@@ -226,6 +226,12 @@
 
       const openItem = (data: TEntry) => {
         if (data.isFolder) {
+          draggingOverData.value = undefined;
+          initRangeSelectionData.value = undefined;
+          isDragging.value = false;
+          selectedDatas.value = [];
+          previousRangeSelectionData.value = [];
+
           emit(Emits.OpenItem, data);
         }
       }
