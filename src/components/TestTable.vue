@@ -65,6 +65,7 @@
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
     MoveItems = 'move-items',
+    SelectedItems = 'selected-items',
   }
 
   export default defineComponent({
@@ -141,17 +142,13 @@
       const selectedDatas = ref<TEntry[]>([]);
       const previousRangeSelectionData = ref<TEntry[]>([]);
 
-      const getIdsFromDatas = (datas: TEntry[]) => {
-        return datas.map(data => data.id);
-      }
-
       const selectItem = (data: TEntry) => {
         emit(Emits.RowClicked, data);
         selectedDatas.value = [ data ];
+        emit(Emits.SelectedItems, selectedDatas.value);
 
         initRangeSelectionData.value = data;
         previousRangeSelectionData.value = []
-        // @todo : emit selection
       }
 
       const addItemToSelect = (data: TEntry) => {
@@ -159,21 +156,19 @@
 
         initRangeSelectionData.value = data;
         previousRangeSelectionData.value = [];
-        // @todo : emit selection
 
         if (position < 0) {
           selectedDatas.value.push(data);
-          return;
+        } else {
+          selectedDatas.value.splice(position, 1);
         }
 
-        selectedDatas.value.splice(position, 1);
+        emit(Emits.SelectedItems, selectedDatas.value);
       }
 
       const selectRange = (data: TEntry) => {
-        // let dataList = dataList.value.map(data => data);
         let initPosition = dataList.value.indexOf(initRangeSelectionData.value);
         let endPosition = dataList.value.indexOf(data);
-        // @todo : emit selection
 
         if (0 <= initPosition && 0 <= endPosition) {
 
@@ -201,6 +196,8 @@
 
           previousRangeSelectionData.value = rangeSelectedDatas;
         }
+
+        emit(Emits.SelectedItems, selectedDatas.value);
       }
 
       const dragStart = (data: TEntry) => {
