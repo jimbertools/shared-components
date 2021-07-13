@@ -31,7 +31,7 @@ export interface TEntry {
 export enum FileManagerEmits {
   SearchChanged = 'search-changed',
   SortChanged = 'sort-changed',
-  SelectedChanged = 'changeSelected',
+  SelectedChanged = 'selected-changed',
   OpenItem = 'open-item',
 }
 

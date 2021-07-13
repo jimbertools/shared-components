@@ -65,7 +65,7 @@
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
     MoveItems = 'move-items',
-    SelectedItems = 'selected-items',
+    SelectedChanged = 'selected-changed',
     OpenItem = 'open-item',
   }
 
@@ -150,12 +150,10 @@
           selectedDatas.value = [ data ];
         }
 
-        emit(Emits.SelectedItems, <ISelectedChange> {
+        emit(Emits.SelectedChanged, <ISelectedChange> {
           selectedItems: selectedDatas.value,
           selectionAction: SelectionAction.SIMPLE_SELECTION
         });
-
-        console.log()
 
         initRangeSelectionData.value = data;
         previousRangeSelectionData.value = [];
@@ -173,7 +171,7 @@
           selectedDatas.value.splice(position, 1);
         }
 
-        emit(Emits.SelectedItems, <ISelectedChange> {
+        emit(Emits.SelectedChanged, <ISelectedChange> {
           selectedItems: selectedDatas.value,
           selectionAction: SelectionAction.ADDING_SELECTION
         });
@@ -210,7 +208,7 @@
           previousRangeSelectionData.value = rangeSelectedDatas;
         }
 
-        emit(Emits.SelectedItems, <ISelectedChange> {
+        emit(Emits.SelectedChanged, <ISelectedChange> {
           selectedItems: selectedDatas.value,
           selectionAction: SelectionAction.RANGE_SELECTION
         });
