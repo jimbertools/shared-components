@@ -33,6 +33,7 @@ export enum FileManagerEmits {
   SortChanged = 'sort-changed',
   SelectedChanged = 'selected-changed',
   OpenItem = 'open-item',
+  DoSearch = 'do-search'
 }
 
 export interface ISelectedChange {

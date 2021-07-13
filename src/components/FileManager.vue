@@ -2,10 +2,16 @@
   <div class="flex flex-row w-full max-w-full">
     <div class="flex flex-col flex-1 border-r-2 border-grey-100">
       <div class="flex flex-row justify-end mb-4">
-        <el-input class="mr-auto max-w-xs" v-if="withFiltering" v-model="searchValue" placeholder="Search..." @input="debounceSearch">
-          <template #prefix>
-            <em class="fas fa-search"></em>
-          </template>
+        <el-input class="mr-auto max-w-xs" v-if="withFiltering" v-model="searchValue" placeholder="Search..." @input="debounceSearch" @keydown.enter="doSearch">
+            <template #suffix>
+              <i class="el-icon-close el-input__icon" @click="searchValue = ''">
+              </i>
+            </template>
+            <template #append>
+              <div  @click="doSearch">
+                <em class="fas fa-search"></em>
+              </div>
+            </template>
         </el-input>
         <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
           <ElDropdown>
@@ -269,6 +275,12 @@
           }, 300);
         };
 
+        const doSearch = () => {
+          if(searchValue.value && searchValue.value !== "")
+          console.log("emitting", searchValue.value)
+          emit(Emits.DoSearch, searchValue.value)
+        }
+
         return {
           dataList,
           headers,
@@ -289,6 +301,7 @@
           totalValue,
           pageValue,
           searchValue,
+          doSearch
         };
       },
     });
