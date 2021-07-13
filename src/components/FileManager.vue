@@ -1,12 +1,6 @@
 <template>
   <div class="flex flex-row w-full max-w-full">
     <div class="flex flex-col flex-1 border-r-2 border-grey-100">
-      <div>
-        <slot name="quickAccess">
-          Quick folder access
-          {{ quickAccessData }}
-        </slot>
-      </div>
       <div class="flex flex-row justify-end mb-4">
         <el-input class="mr-auto max-w-xs" v-if="withFiltering" v-model="searchValue" placeholder="Search..." @input="debounceSearch">
           <template #prefix>
@@ -47,6 +41,16 @@
             </div>
           </ElButton>
         </ElButtonGroup>
+      </div>
+      <div>
+        <slot name="quickAccess">
+          {{ quickAccessData }}
+        </slot>
+      </div>
+      <div>
+        <slot name="breadcrumb">
+          {{ breadcrumb }}
+        </slot>
       </div>
       <div class="flex flex-col">
         <div class="overflow-x-auto">
