@@ -64,7 +64,6 @@
                   :total="totalValue"
                   :defaultSort="sort"
                   @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
-                  @[TableEmits.RowClicked]="data => $emit(Emits.SelectedChanged, data)"
                   @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                 >
                   <template v-if="!hasSlot('data-name')" #data-name="rowData">

@@ -27,7 +27,6 @@
   import { ElPagination } from 'element-plus';
 
   export enum Emits {
-    RowClicked = 'clickedRow',
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',

@@ -56,12 +56,11 @@
 <script lang="ts">
 
   import { computed, defineComponent, PropType, ref } from 'vue';
-  import { IHeader, ISort, TEntry, IMoveItems } from '../types/FileManagerTypes';
+  import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../types/FileManagerTypes';
   import { orderBy } from '../infrastructure/utils/SortUtil';
   import { ElPagination } from 'element-plus';
 
   export enum Emits {
-    RowClicked = 'clickedRow',
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
@@ -145,9 +144,18 @@
       const previousRangeSelectionData = ref<TEntry[]>([]);
 
       const selectItem = (data: TEntry) => {
-        emit(Emits.RowClicked, data);
-        selectedDatas.value = [ data ];
-        emit(Emits.SelectedItems, selectedDatas.value);
+        if (selectedDatas.value.length == 1 && selectedDatas.value[0] == data) {
+          selectedDatas.value = [];
+        } else {
+          selectedDatas.value = [ data ];
+        }
+
+        emit(Emits.SelectedItems, <ISelectedChange> {
+          selectedItems: selectedDatas.value,
+          selectionAction: SelectionAction.SIMPLE_SELECTION
+        });
+
+        console.log()
 
         initRangeSelectionData.value = data;
         previousRangeSelectionData.value = [];
@@ -165,7 +173,10 @@
           selectedDatas.value.splice(position, 1);
         }
 
-        emit(Emits.SelectedItems, selectedDatas.value);
+        emit(Emits.SelectedItems, <ISelectedChange> {
+          selectedItems: selectedDatas.value,
+          selectionAction: SelectionAction.ADDING_SELECTION
+        });
       }
 
       const selectRange = (data: TEntry) => {
@@ -199,7 +210,10 @@
           previousRangeSelectionData.value = rangeSelectedDatas;
         }
 
-        emit(Emits.SelectedItems, selectedDatas.value);
+        emit(Emits.SelectedItems, <ISelectedChange> {
+          selectedItems: selectedDatas.value,
+          selectionAction: SelectionAction.RANGE_SELECTION
+        });
       }
 
       const dragStart = (data: TEntry) => {

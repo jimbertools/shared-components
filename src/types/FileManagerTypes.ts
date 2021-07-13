@@ -35,12 +35,23 @@ export enum FileManagerEmits {
   OpenItem = 'open-item',
 }
 
+export interface ISelectedChange {
+  selectedItems: TEntry[];
+  selectionAction: SelectionAction;
+}
+
+export enum SelectionAction {
+  SIMPLE_SELECTION,
+  ADDING_SELECTION,
+  RANGE_SELECTION,
+}
+
 export enum FileManagerViews {
   List = 'list',
   Grid = 'grid',
 }
 
 export interface IMoveItems {
-    source: TEntry[];
-    destination: TEntry;
+  source: TEntry[];
+  destination: TEntry;
 }
