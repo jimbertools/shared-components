@@ -1,18 +1,18 @@
 <template>
   <div class="flex flex-row w-full max-w-full">
     <div class="flex flex-col flex-1 border-r-2 border-grey-100">
-      <div class="flex flex-row justify-end mb-4">
-        <el-input class="mr-auto max-w-xs" v-if="withFiltering" v-model="searchValue" placeholder="Search..." @input="debounceSearch" @keydown.enter="doSearch">
-            <template #suffix>
-              <i class="el-icon-close el-input__icon" @click="searchValue = ''">
-              </i>
-            </template>
-            <template #append>
-              <div  @click="doSearch">
-                <em class="fas fa-search"></em>
-              </div>
-            </template>
-        </el-input>
+      <div class="flex flex-row justify-between mb-4">
+        <div>
+          <div class="flex flex-row border-gray-300 border-solid border-2 rounded"> 
+            <input class="mr-auto max-w-xs items-center justify-items-center  focus:outline-none" v-if="withFiltering" v-model="searchValue" placeholder="Search..." @input="debounceSearch" @keydown.enter="doSearch" />
+            <div class="px-2 flex flex-row items-center justify-center"  @click="searchValue = ''">
+                  <em class="fas fa-times text-xs text-gray-300" @click="searchValue = ''"></em>
+            </div>
+            <div class="p-2 bg-gray-100 flex flex-row items-center justify-center" @click="doSearch">
+                <em class="fas fa-search text-gray-500"></em>
+            </div>
+          </div>
+        </div>
         <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
           <ElDropdown>
             <ElButton type="default"> {{ sortDisplayName }}<i class="fas fa-chevron-down ml-2"></i> </ElButton>
