@@ -65,7 +65,7 @@
                   :defaultSort="sort"
                   @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                   @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                  @[TableEmits.SelectedItems]="e => $emit(Emits.SelectedItems, e)"
+                  @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
                 >
                   <template v-if="!hasSlot('data-name')" #data-name="rowData">
                     <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
