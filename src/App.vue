@@ -1,5 +1,6 @@
 <template>
   <div class="debug-screens w-full h-full">
+    <IconButton> blas</IconButton>
     <!-- <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
             <template v-slot:header-name="{ header }">
                 <h2 class="inline">{{ header }} custom header</h2>
@@ -54,6 +55,7 @@
 // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"
 
   import jsonData from './data.json';
+  import IconButton from "@/components/Buttons/IconButton/IconButton.vue";
 
   const getEverything = async () => {
     //@ts-ignore
@@ -77,7 +79,8 @@
   export default defineComponent({
     name: 'App',
     components: {
-      FileManager
+      FileManager,
+      IconButton
     },
     setup() {
       onBeforeMount(async () => {

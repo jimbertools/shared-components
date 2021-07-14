@@ -3,49 +3,20 @@
     <div class="flex flex-col flex-1 border-r-2 border-grey-100">
       <div class="flex flex-row justify-between mb-4">
         <div>
-          <div
-            class="flex flex-row border-gray-300 border-solid border-2 rounded"
-          >
-            <input
-              class="
-                mr-auto
-                max-w-xs
-                items-center
-                justify-items-center
-                focus:outline-none
-                border-0
-                my-0
-                py-0
-              "
-              v-if="withFiltering"
-              v-model="searchValue"
-              placeholder="Search..."
-              @input="debounceSearch"
-              @keydown.enter="doSearch"
-            />
-            <div
-              class="px-2 flex flex-row items-center justify-center"
-              @click="searchValue = ''"
-            >
-              <em
-                class="fas fa-times text-xs text-gray-300"
-                @click="searchValue = ''"
-              ></em>
-            </div>
-            <div
-              class="p-2 bg-gray-100 flex flex-row items-center justify-center"
-              @click="doSearch"
-            >
-              <em class="fas fa-search text-gray-500"></em>
-            </div>
-          </div>
+          <Input
+            clearable
+            with-button
+            placeholder="Search..."
+            @[InputEmits.TextChanged]="searchChanged"
+            @[InputEmits.ButtonClicked]="search"
+          />
         </div>
         <div class="flex flex-row">
-         <slot name="topRight"></slot>
+          <slot name="topRight"></slot>
         </div>
       </div>
       <div>
-        <slot name="quickAccess"> {{ quickAccessData }} </slot>
+        <slot name="quickAccess"> {{ quickAccessData }}</slot>
       </div>
       <div class="flex flex-row my-4">
         <div class="flex flex-grow overflow-ellipsis items-center">
@@ -53,57 +24,56 @@
             {{ breadcrumb }}
           </slot>
         </div>
-        <div class="flex flex-row items-center">
+        <div class="flex flex-row items-center h-10">
           <div
             v-if="
               activeView === 'grid' && headers?.some((x) => x.enableSorting)
             "
           >
-            <ElDropdown>
-              <ElButton type="default">
-                {{ sortDisplayName }}<i class="fas fa-chevron-down ml-2"></i>
-              </ElButton>
-              <template #dropdown>
-                <ElDropdownMenu>
-                  <ElDropdownItem
-                    v-for="header in headers.filter((x) => x.enableSorting)"
-                    @click="sortHeader(header.key)"
-                    :key="header.key"
-                  >
-                    {{ header.displayName ?? header.key }}
-                  </ElDropdownItem>
-                </ElDropdownMenu>
-              </template>
-            </ElDropdown>
-            <ElButton
+            <Dropdown
+              :options="
+                headers.map((x) => ({ label: x.displayName, value: x.key }))
+              "
+              @[DropdownEmits.Changed]="sortHeader"
+              default-option="name"
+            />
+            <IconButton
               v-if="sort?.order !== 'ascending'"
               @click="sortDirection('ascending')"
             >
               <div>
                 <em class="fas fa-sort-amount-down"></em>
               </div>
-            </ElButton>
-            <ElButton
+            </IconButton>
+            <IconButton
               v-if="sort?.order !== 'descending'"
               @click="sortDirection('descending')"
             >
               <div>
                 <em class="fas fa-sort-amount-up"></em>
               </div>
-            </ElButton>
+            </IconButton>
           </div>
-          <ElButtonGroup :key="activeView" class="ml-4">
-            <ElButton @click="activeView = 'list'">
-              <div :class="{ 'active-view': activeView === 'list' }">
+          <div :key="activeView" class="ml-4">
+            <IconButton
+              class="rounded-tr-none rounded-br-none border-r-0"
+              @click="activeView = 'list'"
+              :isActive="activeView === 'list'"
+            >
+              <div>
                 <em class="fas fa-th-list"></em>
               </div>
-            </ElButton>
-            <ElButton @click="activeView = 'grid'">
-              <div :class="{ 'active-view': activeView === 'grid' }">
+            </IconButton>
+            <IconButton
+              class="rounded-tl-none rounded-bl-none"
+              @click="activeView = 'grid'"
+              :isActive="activeView === 'grid'"
+            >
+              <div>
                 <em class="fas fa-th"></em>
               </div>
-            </ElButton>
-          </ElButtonGroup>
+            </IconButton>
+          </div>
         </div>
       </div>
       <div class="flex flex-col">
@@ -233,7 +203,7 @@ import {
   getIcon,
   getIconColor,
   getName,
-} from "../infrastructure/utils/FileUtil";
+} from "@/infrastructure/utils/FileUtil";
 import {
   ElInput,
   ElDropdown,
@@ -243,6 +213,12 @@ import {
   ElDropdownItem,
   ElButtonGroup,
 } from "element-plus";
+import Input, { Emits as InputEmits } from "@/components/Input/Input.vue";
+import Dropdown, {
+  Emits as DropdownEmits,
+  IOption,
+} from "@/components/Dropdown/Dropdown.vue";
+import IconButton from "@/components/Buttons/IconButton/IconButton.vue";
 
 const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
   if (!a.isFolder && b.isFolder) return 1;
@@ -276,6 +252,8 @@ const defaultHeaders = [
 export default defineComponent({
   name: "FileManager",
   components: {
+    IconButton,
+    Input,
     TestTable,
     GridView,
     ElInput,
@@ -285,6 +263,7 @@ export default defineComponent({
     ElDropdownMenu,
     ElDropdownItem,
     ElButtonGroup,
+    Dropdown,
   },
   props: {
     data: { type: Array as PropType<any[]>, required: true },
@@ -312,7 +291,6 @@ export default defineComponent({
       props.defaultSort ?? { prop: "name", order: "ascending" }
     );
     const searchValue = ref<string>();
-    const debouncedSearchValue = ref<string>();
     const pageValue = ref(props.page);
 
     const headers = computed(() => {
@@ -340,9 +318,9 @@ export default defineComponent({
       const getData = () => {
         if (props.backendFiltering) return props.data;
 
-        if (props.withFiltering && nameHeader && debouncedSearchValue.value)
+        if (props.withFiltering && nameHeader && searchValue.value)
           return props.data.filter((x) =>
-            x.name?.toLowerCase().includes(<string>debouncedSearchValue.value)
+            x.name?.toLowerCase().includes(<string>searchValue.value)
           );
 
         return props.data;
@@ -356,9 +334,9 @@ export default defineComponent({
       emit(Emits.SortChanged, sort.value);
     };
 
-    const sortHeader = (header: string) => {
+    const sortHeader = (option: IOption) => {
       sort.value = {
-        prop: header,
+        prop: option.value,
         order: sort.value?.order === "descending" ? "ascending" : "descending",
       } as ISort;
       sortChanged();
@@ -385,20 +363,14 @@ export default defineComponent({
       };
     });
 
-    let debounce: NodeJS.Timeout;
-    const debounceSearch = (input: string) => {
-      clearTimeout(debounce);
-      debounce = setTimeout(() => {
-        if (props.backendFiltering) emit(Emits.SearchChanged, input);
-
-        debouncedSearchValue.value = input;
-        pageValue.value = 1;
-      }, 300);
+    const searchChanged = (input: string | undefined) => {
+      if (props.backendFiltering) emit(Emits.SearchChanged, input);
+      console.log("bla", input);
+      searchValue.value = input;
+      pageValue.value = 1;
     };
 
-    const doSearch = () => {
-      if (searchValue.value && searchValue.value !== "")
-        console.log("emitting", searchValue.value);
+    const search = () => {
       emit(Emits.DoSearch, searchValue.value);
     };
 
@@ -407,6 +379,8 @@ export default defineComponent({
       headers,
       TableEmits,
       GridViewEmits,
+      InputEmits,
+      DropdownEmits,
       sort,
       sortDirection,
       sortHeader,
@@ -418,11 +392,11 @@ export default defineComponent({
       activeView,
       View,
       sortDisplayName,
-      debounceSearch,
       totalValue,
       pageValue,
       searchValue,
-      doSearch,
+      search,
+      searchChanged,
     };
   },
 });
