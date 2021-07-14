@@ -14,6 +14,8 @@
                 justify-items-center
                 focus:outline-none
                 border-0
+                my-0
+                py-0
               "
               v-if="withFiltering"
               v-model="searchValue"
@@ -45,13 +47,13 @@
       <div>
         <slot name="quickAccess"> {{ quickAccessData }} </slot>
       </div>
-      <div class="flex flex-row">
+      <div class="flex flex-row my-4">
         <div class="flex flex-grow overflow-ellipsis items-center">
           <slot name="breadcrumb">
             {{ breadcrumb }}
           </slot>
         </div>
-        <div class="flex flex-row">
+        <div class="flex flex-row items-center">
           <div
             v-if="
               activeView === 'grid' && headers?.some((x) => x.enableSorting)
