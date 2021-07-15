@@ -26,13 +26,11 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@tailwindcss/postcss7-compat": "^2.2.4",
     "core-js": "^3.6.5",
-    "element-plus": "^1.0.2-beta.54",
     "global": "^4.4.0",
     "postcss": "^8.3.5",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue": "^3.0.0",
-    "vue-class-component": "^8.0.0-0",
-    "vue-cli-plugin-element-plus": "~0.0.13"
+    "vue-class-component": "^8.0.0-0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
