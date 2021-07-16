@@ -62,6 +62,7 @@
         MoveItems = 'move-items',
         SelectedChanged = 'selected-changed',
         OpenItem = 'open-item',
+        DropItems = 'drop-items',
     }
 
     export default defineComponent({
@@ -163,8 +164,6 @@
                 } else {
                     selectedDatas.value.splice(position, 1);
                 }
-
-                console.log('-- Table', selectedDatas);
 
                 emit(Emits.SelectedChanged, <ISelectedChange>{
                     selectedItems: selectedDatas.value,
