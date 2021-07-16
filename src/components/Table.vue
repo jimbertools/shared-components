@@ -164,6 +164,8 @@
                     selectedDatas.value.splice(position, 1);
                 }
 
+                console.log('-- Table', selectedDatas);
+
                 emit(Emits.SelectedChanged, <ISelectedChange>{
                     selectedItems: selectedDatas.value,
                     selectionAction: SelectionAction.ADDING_SELECTION,

@@ -63,8 +63,9 @@
                                     :defaultSort="sort"
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                                    @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
+                                    @[TableEmits.SelectedChanged]="e => test(e)"
                                 >
+                                    <!-- @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)" -->
                                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
                                         {{ getName(rowData.row) }}
@@ -268,6 +269,10 @@
                 emit(Emits.DoSearch, searchValue.value);
             };
 
+          const test = (e: any) => {
+            console.log(e);
+          };
+
             return {
                 dataList,
                 headers,
@@ -291,6 +296,7 @@
                 searchValue,
                 search,
                 searchChanged,
+              test,
             };
         },
     });
