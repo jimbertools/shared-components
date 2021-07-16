@@ -222,10 +222,10 @@
                         source: selectedDatas.value,
                         destination: data,
                     });
-                }
 
-                isDragging.value = false;
-                draggingOverData.value = undefined;
+                    isDragging.value = false;
+                    draggingOverData.value = undefined;
+                }
             };
 
             const openItem = (data: TEntry) => {

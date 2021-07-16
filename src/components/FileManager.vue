@@ -14,9 +14,7 @@
             </div>
             <div class="flex flex-row my-4">
                 <div class="flex flex-grow overflow-ellipsis items-center">
-                    <slot name="breadcrumb">
-                        {{ breadcrumb }}
-                    </slot>
+                    <slot name="breadcrumb"></slot>
                 </div>
                 <div class="flex flex-row items-center h-10">
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
@@ -97,11 +95,11 @@
                                                 <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
                                             </div>
 
-                                            <el-tooltip class="item" effect="dark" :content="getName(gridData.item)" placement="bottom-start">
-                                                <span class="block truncate whitespace-normal">
-                                                    {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
-                                                </span>
-                                            </el-tooltip>
+                                            <!-- <el-tooltip class="item" effect="dark" :content="getName(gridData.item)" placement="bottom-start"> -->
+                                            <!--     <span class="block truncate whitespace-normal"> -->
+                                            <!--         {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }} -->
+                                            <!--     </span> -->
+                                            <!-- </el-tooltip> -->
                                         </div>
                                     </template>
                                 </grid-view>
