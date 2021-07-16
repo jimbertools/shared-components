@@ -26,9 +26,9 @@
                     'bg-blue-100 hover:bg-blue-50': selectedDatas.includes(data),
                     'border-t-2 border-b-2 border-yellow-400': data.isFolder && draggingOverData == data && !selectedDatas.includes(data),
                 }"
-                @click.ctrl="e => addItemToSelect(data)"
+                @click.ctrl.exact="e => addItemToSelect(data)"
                 @click.exact="e => selectItem(data)"
-                @click.shift="e => selectRange(data)"
+                @click.shift.exact="e => selectRange(data)"
                 @dblclick="e => openItem(data)"
                 draggable="true"
                 @drop.prevent="e => dragDrop(data)"
@@ -173,9 +173,8 @@
             };
 
             const selectRange = (data: TEntry) => {
-                let initPosition = dataList.value.indexOf(initRangeSelectionData.value);
-                let endPosition = dataList.value.indexOf(data);
-
+                let initPosition = dataList.value.findIndex( dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
+                let endPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == data.id);
                 if (0 <= initPosition && 0 <= endPosition) {
                     // Remove of all previously selected by range
                     previousRangeSelectionData.value.forEach(data => {
@@ -201,7 +200,6 @@
 
                     previousRangeSelectionData.value = rangeSelectedDatas;
                 }
-
                 emit(Emits.SelectedChanged, <ISelectedChange>{
                     selectedItems: selectedDatas.value,
                     selectionAction: SelectionAction.RANGE_SELECTION,
