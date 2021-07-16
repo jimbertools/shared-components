@@ -20,12 +20,11 @@
             <tr
                 v-for="data in dataList"
                 :key="data"
-                class="h-12 border-gray-300 border-t cursor-pointer"
-                :class="{
-                    'hover:bg-gray-100': !isDragging,
-                    'bg-blue-100 hover:bg-blue-50': selectedDatas.includes(data),
-                    'border-t-2 border-b-2 border-yellow-400': data.isFolder && draggingOverData == data && !selectedDatas.includes(data),
-                }"
+                class="h-12 border-gray-300 cursor-pointer"
+                :class ="[(data.isFolder && draggingOverData == data && !selectedDatas.includes(data)) ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
+                          !isDragging ? 'hover:bg-gray-100': '',
+                          selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
+                ]"
                 @click.ctrl.exact="e => addItemToSelect(data)"
                 @click.exact="e => selectItem(data)"
                 @click.shift.exact="e => selectRange(data)"
