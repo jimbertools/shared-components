@@ -260,7 +260,6 @@
 
             const searchChanged = (input: string | undefined) => {
                 if (props.backendFiltering) emit(Emits.SearchChanged, input);
-                console.log('bla', input);
                 searchValue.value = input;
                 pageValue.value = 1;
             };
@@ -268,10 +267,6 @@
             const search = () => {
                 emit(Emits.DoSearch, searchValue.value);
             };
-
-          const test = (e: any) => {
-            console.log(e);
-          };
 
             return {
                 dataList,
@@ -296,7 +291,6 @@
                 searchValue,
                 search,
                 searchChanged,
-              test,
             };
         },
     });
