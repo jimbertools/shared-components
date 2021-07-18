@@ -238,6 +238,7 @@
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
+    import { PaginationEmits as Emits } from './'
 
     const range = (start: number, end: number) => {
         const arr = [];
@@ -246,10 +247,6 @@
         }
         return arr;
     };
-
-    export enum Emits {
-        PageChanged = 'PageChanged',
-    }
 
     export default defineComponent({
         name: 'Pagination',

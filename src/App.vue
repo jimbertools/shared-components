@@ -45,7 +45,7 @@
 
 <script lang="ts">
     import { defineComponent, onBeforeMount, ref } from 'vue';
-    import FileManager from './components/FileManager.vue';
+    import FileManager from './components/FileManager/FileManager.vue';
     //  import { FileManager, FileManagerEmits, TEntry, IHeader, ISort,  }  from "@jimber/shared-components"
     // import FileManager from "@jimber/shared-components/src/components/FileManager.vue"
     // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"

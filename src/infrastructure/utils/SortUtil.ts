@@ -1,4 +1,4 @@
-import { ISort } from '../../types/FileManagerTypes';
+import { ISort } from '../types/FileManagerTypes';
 
 export const orderBy = <T extends Record<string, any>>(array: T[], sortKey: ISort, headers: any[]): T[] => {
   const i = sortKey.order === 'descending' ? -1 : 1;

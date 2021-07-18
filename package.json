@@ -1,6 +1,6 @@
 {
   "name": "@jimber/shared-components",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,7 +8,7 @@
     "postbuild": "tsc -p ./tsconfig.types.json",
     "build:postcss": "postcss src/assets/css/**/*.css --base src/assets/css --dir dist",
     "build-lib": "vue-cli-service build --target lib --name jimber-shared-components ./src/index.ts && tsc -p ./tsconfig.types.json && yarn build:postcss",
-    "prepublish": "vue-cli-service build --target lib --name jimber-shared-components ./src/index.ts",
+    "prepublish": "vue-cli-service build --target lib --name jimber-shared-components ./src/index.ts && tsc -p ./tsconfig.types.json  && yarn build:postcss",
     "lint": "vue-cli-service lint",
     "sb": "start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
@@ -18,7 +18,7 @@
   "files": [
     "dist/*",
     "types/*",
-    "src/types/*",
+    "src/infrastructure/types/*",
     "src/infrastructure/utils/*"
   ],
   "types": "./types/index.d.ts",

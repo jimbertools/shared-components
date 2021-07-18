@@ -1,4 +1,4 @@
-import { TEntry } from '../../types/FileManagerTypes';
+import { TEntry } from '../types/FileManagerTypes';
 
 export enum FileType {
   Unknown,

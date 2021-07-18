@@ -17,11 +17,7 @@
 </template>
 <script lang="ts">
     import { defineComponent, ref } from 'vue';
-
-    export enum Emits {
-        ButtonClicked = 'ButtonClicked',
-        TextChanged = 'TextChanged',
-    }
+    import { InputEmits as Emits} from './';
 
     export default defineComponent({
         name: 'Input',

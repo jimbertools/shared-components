@@ -10,13 +10,9 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import { IHeader, ISort } from '../types/FileManagerTypes';
-    import { orderBy } from '../infrastructure/utils/SortUtil';
-    export enum Emits {
-        SortChanged = 'sort-changed',
-        PageChanged = 'page-changed',
-        PageSizeChanged = 'page-size-changed',
-    }
+    import { IHeader, ISort } from '@/infrastructure/types/FileManagerTypes';
+    import { orderBy } from '@/infrastructure/utils/SortUtil';
+    import { GridViewEmits as Emits} from './';
 
     function defineGenericComponent<T>() {
         return defineComponent({

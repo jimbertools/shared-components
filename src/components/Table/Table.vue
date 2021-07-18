@@ -52,17 +52,9 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../types/FileManagerTypes';
+    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from "@/infrastructure/types/FileManagerTypes";
     import { orderBy } from '@/infrastructure/utils/SortUtil';
-
-    export enum Emits {
-        SortChanged = 'sort-changed',
-        PageChanged = 'page-changed',
-        PageSizeChanged = 'page-size-changed',
-        MoveItems = 'move-items',
-        SelectedChanged = 'selected-changed',
-        OpenItem = 'open-item',
-    }
+    import { TableEmits as Emits } from './'
 
     export default defineComponent({
         name: 'Table',

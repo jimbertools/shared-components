@@ -47,15 +47,7 @@
 
 <script lang="ts">
     import { defineComponent, PropType, ref } from 'vue';
-
-    export interface IOption {
-        label: string;
-        value: string;
-    }
-
-    export enum Emits {
-        Changed = 'Changed',
-    }
+    import { DropdownEmits as Emits, IOption } from './';
 
     export default defineComponent({
         name: 'Dropdown',

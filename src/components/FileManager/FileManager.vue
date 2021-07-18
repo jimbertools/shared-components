@@ -124,13 +124,14 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import Table, { Emits as TableEmits } from './Table.vue';
-    import GridView, { Emits as GridViewEmits } from './GridView.vue';
-    import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
+    import Table, { TableEmits } from '@/components/Table';
+    import GridView, { GridViewEmits } from '@/components/GridView';
+    import { IHeader, ISort, TEntry } from '@/infrastructure/types/FileManagerTypes';
     import { getIcon, getIconColor, getName } from '@/infrastructure/utils/FileUtil';
-    import Input, { Emits as InputEmits } from '@/components/Input/Input.vue';
-    import Dropdown, { Emits as DropdownEmits, IOption } from '@/components/Dropdown/Dropdown.vue';
-    import IconButton from '@/components/Buttons/IconButton/IconButton.vue';
+    import Input, { InputEmits } from '@/components/Input';
+    import Dropdown, { DropdownEmits, IOption } from '@/components/Dropdown';
+    import IconButton from '@/components/Buttons/IconButton';
+    import { FileManagerEmits as Emits, FileManagerView as View } from './';
 
     const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
         if (!a.isFolder && b.isFolder) return 1;
@@ -168,7 +169,7 @@
             Dropdown,
             Input,
             GridView,
-            IconButton
+            IconButton,
         },
         props: {
             data: { type: Array as PropType<any[]>, required: true },
