@@ -126,17 +126,12 @@
     import Table, { Emits as TableEmits } from './Table.vue';
     import GridView, { Emits as GridViewEmits } from './GridView.vue';
     import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
-    import { getIcon, getIconColor, getName } from '@/infrastructure/utils/FileUtil';
+    import { getIcon, getIconColor, getName, comparerFunction } from '@/infrastructure/utils/FileUtil';
     import Input, { Emits as InputEmits } from '@/components/Input/Input.vue';
     import Dropdown, { Emits as DropdownEmits, IOption } from '@/components/Dropdown/Dropdown.vue';
     import IconButton from '@/components/Buttons/IconButton/IconButton.vue';
 
-    const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
-        if (!a.isFolder && b.isFolder) return 1;
-        if (a.isFolder && !b.isFolder) return -1;
 
-        return a.name.localeCompare(b.name) * i;
-    };
 
     const defaultHeaders = [
         { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true },
