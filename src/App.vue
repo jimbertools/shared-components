@@ -50,6 +50,7 @@
     // import FileManager from "@jimber/shared-components/src/components/FileManager.vue"
     // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"
 
+    import { getFileType } from './infrastructure/utils/FileUtil';
     import jsonData from './data.json';
     import IconButton from './components/Buttons/IconButton/IconButton.vue';
 
@@ -57,7 +58,7 @@
         //@ts-ignore
         const dataToReturn = jsonData.map(dataItem => {
             //@ts-ignore
-            // const type = getFileType(dataItem.isFolder ? 'dir' : dataItem.extension);
+            const type = getFileType(dataItem.isFolder ? 'dir' : dataItem.extension);
             return { ...dataItem };
         });
         console.log(dataToReturn);
@@ -83,13 +84,13 @@
                 data.value = await getEverything();
                 console.log(data.value);
             });
-            // const headers: IHeader<TEntry>[] = [];
+            //const headers: IHeader<TEntry>[] = [];
 
-            // const changeSelected = (clickedItem: any) => {
-            //   //@todo actually fetch the data
-            //   console.log('here');
-            //   sidebarData.value = clickedItem;
-            // };
+            //const changeSelected = (clickedItem: any) => {
+            //  //@todo actually fetch the data
+            //  console.log('here');
+            //  sidebarData.value = clickedItem;
+            //};
 
             onBeforeMount(() => {});
 

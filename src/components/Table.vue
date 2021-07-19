@@ -21,7 +21,7 @@
                 v-for="data in dataList"
                 :key="data"
                 class="h-12 border-gray-300 cursor-pointer"
-                :class ="[(data.isFolder && draggingOverData == data && !selectedDatas.includes(data)) ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
+                :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id == data.id && selectedDatas.findIndex(selected => selected.id == data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
                           !isDragging ? 'hover:bg-gray-100': '',
                           selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
                 ]"
