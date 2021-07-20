@@ -1,5 +1,5 @@
 <template>
-    <table class="min-w-full bg-white dark:bg-gray-800">
+    <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
         <thead class="sticky top-0">
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
@@ -31,7 +31,7 @@
                 @dblclick="e => openItem(data)"
                 draggable="true"
                 @drop.prevent="e => dragDrop(data)"
-                @dragstart="e => dragStart(data)"
+                @dragstart="e => dragStart(e, data)"
                 @dragover.prevent="e => dragOver(data)"
             >
                 <td
@@ -206,7 +206,8 @@
                 });
             };
 
-            const dragStart = (data: TEntry) => {
+            const dragStart = (e:any, data: TEntry) => {
+                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
                 if (!selectedDatas.value.includes(data)) {
                     selectedDatas.value = [data];
                 }
@@ -217,6 +218,10 @@
             const dragOver = (data: TEntry) => {
                 draggingOverData.value = data;
             };
+
+            const dragLeave = () => {
+                draggingOverData.value = undefined
+            }
 
             const dragDrop = (data: TEntry) => {
                 if (data.isFolder && !selectedDatas.value.includes(data)) {
@@ -261,6 +266,7 @@
                 dragStart,
                 dragOver,
                 dragDrop,
+                dragLeave,
                 openItem,
             };
         },

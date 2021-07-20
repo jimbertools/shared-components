@@ -13,10 +13,10 @@
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row my-4">
-                <div class="flex flex-grow overflow-ellipsis items-center">
+                <div class="flex flex-grow flex-wrap items-center">
                     <slot name="breadcrumb"></slot>
                 </div>
-                <div class="flex flex-row items-center h-10">
+                <div class="flex flex-row items-center h-10 justify-center">
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
