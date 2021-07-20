@@ -207,10 +207,10 @@
             };
 
             const dragStart = (e:any, data: TEntry) => {
-                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
-                if (!selectedDatas.value.includes(data)) {
+                if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
                     selectedDatas.value = [data];
                 }
+                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
                 isDragging.value = true;
                 emit(Emits.StartDragging)
             };
