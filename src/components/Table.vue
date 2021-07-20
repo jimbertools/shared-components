@@ -137,7 +137,7 @@
             const previousRangeSelectionData = ref<TEntry[]>([]);
 
             const selectItem = (data: TEntry) => {
-                if (selectedDatas.value.length == 1 && selectedDatas.value[0] == data) {
+                if (selectedDatas.value.length == 1 && selectedDatas.value[0].id == data.id) {
                     selectedDatas.value = [];
                 } else {
                     selectedDatas.value = [data];
