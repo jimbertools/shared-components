@@ -26,6 +26,7 @@ export interface TEntry {
   extension?: string;
   isFolder: boolean;
   fileType: FileType;
+  deleted: boolean;
 }
 
 export enum FileManagerEmits {
@@ -35,6 +36,8 @@ export enum FileManagerEmits {
   OpenItem = 'open-item',
   DoSearch = 'do-search',
   MoveItems = 'move-items',
+  StartInternalDrag = 'start-internal-drag',
+  StopInternalDrag = 'stop-internal-drag'
 }
 
 export interface ISelectedChange {

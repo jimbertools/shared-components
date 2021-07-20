@@ -63,6 +63,8 @@
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                                     @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
                                     @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
+                                    @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
+                                    @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
                                 >
                                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
@@ -153,6 +155,7 @@
         },
         { displayName: 'Created', key: 'created', enableSorting: true },
         { displayName: 'Size', key: 'size', enableSorting: true },
+        { displayName: 'Deleted', key: 'deleted', enableSorting: true },
     ] as IHeader<TEntry>[];
 
     export default defineComponent({

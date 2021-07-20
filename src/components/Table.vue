@@ -62,6 +62,8 @@
         SelectedChanged = 'selected-changed',
         OpenItem = 'open-item',
         DropItems = 'drop-items',
+        StartDragging = 'start-dragging',
+        StopDragging = 'stop-dragging',
     }
 
     export default defineComponent({
@@ -209,6 +211,7 @@
                     selectedDatas.value = [data];
                 }
                 isDragging.value = true;
+                emit(Emits.StartDragging)
             };
 
             const dragOver = (data: TEntry) => {
@@ -221,10 +224,10 @@
                         source: selectedDatas.value,
                         destination: data,
                     });
-
                     isDragging.value = false;
                     draggingOverData.value = undefined;
                 }
+                emit(Emits.StopDragging)
             };
 
             const openItem = (data: TEntry) => {
