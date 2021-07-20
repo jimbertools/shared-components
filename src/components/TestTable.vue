@@ -25,8 +25,8 @@
                 && draggingOverData == data
                 && !selectedDatas.includes(data)}'
           @click.ctrl='(e)=>addItemToSelect(data)' @click.exact='(e)=>selectItem(data)'
-          @click.shift='(e)=>selectRange(data)'
-          @dblclick='(e)=>openItem(data)'
+          @click.shift='(e)=> selectRange(data)'
+          @dblclick.stop='(e)=>openItem(data)'
           draggable='true' @drop.prevent='(e)=>dragDrop(data)'
           @dragstart='(e)=>dragStart(data)' @dragover.prevent='(e)=>dragOver(data)'>
           <td v-for='header in headers' :data-name='`data-${header.key}`' :key='data[header.key]'
