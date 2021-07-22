@@ -16,7 +16,7 @@
                 <div class="flex flex-grow flex-wrap items-center">
                     <slot name="breadcrumb"></slot>
                 </div>
-                <div class="flex flex-row items-center h-10 justify-center">
+                <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
@@ -59,6 +59,7 @@
                                     :page="pageValue"
                                     :total="totalValue"
                                     :defaultSort="sort"
+                                    :drag-and-drop='dragAndDrop'
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                                     @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
@@ -133,8 +134,6 @@
     import Dropdown, { Emits as DropdownEmits, IOption } from '@/components/Dropdown/Dropdown.vue';
     import IconButton from '@/components/Buttons/IconButton/IconButton.vue';
 
-
-
     const defaultHeaders = [
         { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true },
         {
@@ -180,6 +179,12 @@
                 required: false,
                 default: false,
             },
+            showViewTypes: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            dragAndDrop: { type: Boolean, required: false, default: false },
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },

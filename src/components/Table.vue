@@ -15,7 +15,6 @@
                 </th>
             </tr>
         </thead>
-
         <tbody>
             <tr
                 v-for="data in dataList"
@@ -29,7 +28,7 @@
                 @click.exact="e => selectItem(data)"
                 @click.shift.exact="e => selectRange(data)"
                 @dblclick="e => openItem(data)"
-                draggable="true"
+                :draggable="dragAndDrop ? 'true' : 'false'"
                 @drop.prevent="e => dragDrop(data)"
                 @dragstart="e => dragStart(e, data)"
                 @dragover.prevent="e => dragOver(data)"
@@ -79,6 +78,7 @@
             withPagination: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             rowClass: { type: String, required: false },
+            dragAndDrop: { type: Boolean, required: false, default: false }
         },
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
