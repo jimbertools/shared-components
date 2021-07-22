@@ -27,7 +27,7 @@
                 @click.ctrl.exact="e => addItemToSelect(data)"
                 @click.exact="e => selectItem(data)"
                 @click.shift.exact="e => selectRange(data)"
-                @dblclick="e => openItem(data)"
+                @dblclick.stop='(e)=>openItem(data)'
                 :draggable="dragAndDrop ? 'true' : 'false'"
                 @drop.prevent="e => dragDrop(data)"
                 @dragstart="e => dragStart(e, data)"
