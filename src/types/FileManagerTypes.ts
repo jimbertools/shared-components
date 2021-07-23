@@ -9,7 +9,7 @@ export interface IHeader<T extends Record<string, any>> {
   comparer?: (t1: T, t2: T, i: number) => any;
   formatter?: (dataToFormat: T) => string;
   customTemplate?: boolean;
-  width?: number;
+  width?: string;
 }
 
 export interface ISort {
@@ -26,6 +26,7 @@ export interface TEntry {
   extension?: string;
   isFolder: boolean;
   fileType: FileType;
+  deleted: boolean;
 }
 
 export enum FileManagerEmits {
@@ -35,6 +36,8 @@ export enum FileManagerEmits {
   OpenItem = 'open-item',
   DoSearch = 'do-search',
   MoveItems = 'move-items',
+  StartInternalDrag = 'start-internal-drag',
+  StopInternalDrag = 'stop-internal-drag'
 }
 
 export interface ISelectedChange {

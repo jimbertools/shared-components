@@ -15,7 +15,7 @@
 //         // console.log("--- Debug : Loading TestTable");
 //         return { args };
 //     },
-//     template: '<test-table v-bind="args" />',
+//     template: '<Table v-bind="args" />',
 // });
 //
 // const data = jsonData.map(dataItem => {

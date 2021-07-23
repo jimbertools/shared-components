@@ -13,10 +13,10 @@
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row my-4">
-                <div class="flex flex-grow overflow-ellipsis items-center">
+                <div class="flex flex-grow flex-wrap items-center">
                     <slot name="breadcrumb"></slot>
                 </div>
-                <div class="flex flex-row items-center h-10">
+                <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
@@ -59,10 +59,15 @@
                                     :page="pageValue"
                                     :total="totalValue"
                                     :defaultSort="sort"
+                                    :drag-and-drop='dragAndDrop'
+                                    selectable
+                                    multi-select
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                                     @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
                                     @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
+                                    @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
+                                    @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
                                 >
                                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
@@ -118,17 +123,10 @@
     import Table, { Emits as TableEmits } from './Table.vue';
     import GridView, { Emits as GridViewEmits } from './GridView.vue';
     import { IHeader, ISort, TEntry, FileManagerEmits as Emits, FileManagerViews as View } from '../types/FileManagerTypes';
-    import { getIcon, getIconColor, getName } from '@/infrastructure/utils/FileUtil';
+    import { getIcon, getIconColor, getName, comparerFunction } from '@/infrastructure/utils/FileUtil';
     import Input, { Emits as InputEmits } from '@/components/Input/Input.vue';
     import Dropdown, { Emits as DropdownEmits, IOption } from '@/components/Dropdown/Dropdown.vue';
     import IconButton from '@/components/Buttons/IconButton/IconButton.vue';
-
-    const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
-        if (!a.isFolder && b.isFolder) return 1;
-        if (a.isFolder && !b.isFolder) return -1;
-
-        return a.name.localeCompare(b.name) * i;
-    };
 
     const defaultHeaders = [
         { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true },
@@ -150,6 +148,7 @@
         },
         { displayName: 'Created', key: 'created', enableSorting: true },
         { displayName: 'Size', key: 'size', enableSorting: true },
+        { displayName: 'Deleted', key: 'deleted', enableSorting: true },
     ] as IHeader<TEntry>[];
 
     export default defineComponent({
@@ -174,6 +173,12 @@
                 required: false,
                 default: false,
             },
+            showViewTypes: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            dragAndDrop: { type: Boolean, required: false, default: false },
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },
