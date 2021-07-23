@@ -60,6 +60,8 @@
                                     :total="totalValue"
                                     :defaultSort="sort"
                                     :drag-and-drop='dragAndDrop'
+                                    selectable
+                                    multi-select
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                                     @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
