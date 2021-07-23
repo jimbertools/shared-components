@@ -1,7 +1,7 @@
 <template>
     <div class="debug-screens w-full h-full">
         <IconButton> blas</IconButton>
-        <!-- <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
+        <!-- <Table :data="data" :headers="headers" :page-size="20" :page-index="0">
                 <template v-slot:header-name="{ header }">
                     <h2 class="inline">{{ header }} custom header</h2>
                 </template>
@@ -12,7 +12,7 @@
                         <h2 class="inline">{{ data.last }}</h2>
                     </td>
                 </template>
-            </test-table> -->
+            </Table> -->
 
         <file-manager :data="data" withFiltering>
             <!-- <template #sideBar v-if="sidebarData">
