@@ -109,15 +109,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-1/4 flex-shrink-0" v-if="sidebarData">
-            <slot name="sideBar">
-                <div v-for="key of Object.keys(sidebarData)" :key="key">
-                    <span class="font-bold"> {{ key }} </span>
-                    <span class="italic">{{ sidebarData[key] }}</span
-                    ><br />
-                </div>
-            </slot>
-        </div>
+          <slot name="sideBar" v-if="displaySidebar"></slot>
     </div>
 </template>
 
@@ -170,9 +162,9 @@
             IconButton
         },
         props: {
+            displaySidebar: { type: Boolean, required: true },
             data: { type: Array as PropType<any[]>, required: true },
             quickAccessData: { type: Array as PropType<any[]>, required: false },
-            sidebarData: { type: Object, required: false },
             headers: { type: Array as PropType<IHeader<any>[]>, required: false },
             page: { type: Number, required: false, default: 1 },
             pageSize: { type: Number, required: false, default: 10 },
