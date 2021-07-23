@@ -4,7 +4,7 @@
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
                     class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
-                    :class="{ width: header.width }"
+                    :class="`w-${header.width}`"
                     v-for="header in headers"
                     @click="sortData(String(header.key))"
                     :key="header.key"
