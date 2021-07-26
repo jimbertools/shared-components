@@ -17,11 +17,10 @@
 </template>
 <script lang="ts">
     import { defineComponent, ref } from 'vue';
-    import { InputEmits as Emits} from './';
+    import { InputEmits as Emits} from './index';
 
     export default defineComponent({
         name: 'Input',
-        emits: Object.values(Emits),
         props: {
             defaultValue: { type: String },
             placeholder: { type: String },

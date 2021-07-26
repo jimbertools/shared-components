@@ -9,4 +9,4 @@ interface IOption {
     value: string;
 }
 
-export { Dropdown as default, DropdownEmits, IOption };
+export { Dropdown, DropdownEmits, IOption };

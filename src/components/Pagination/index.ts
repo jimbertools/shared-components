@@ -4,4 +4,4 @@ enum PaginationEmits {
     PageChanged = 'PageChanged',
 }
 
-export { Pagination as default, PaginationEmits };
+export { Pagination, PaginationEmits };

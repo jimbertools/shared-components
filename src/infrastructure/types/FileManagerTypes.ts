@@ -1,4 +1,12 @@
-import { FileType } from "@/infrastructure/utils/FileUtil";
+import { FileType } from '../utils/FileUtil';
+
+export enum ScreenWidth {
+    All = 0,
+    Mobile = 320,
+    Tablet = 481,
+    Screen = 769,
+    Desktop = 1025
+}
 
 export interface IHeader<T extends Record<string, any>> {
     key: string;
@@ -10,6 +18,7 @@ export interface IHeader<T extends Record<string, any>> {
     formatter?: (dataToFormat: T) => string;
     customTemplate?: boolean;
     width?: number;
+    displayWidth?: ScreenWidth;
 }
 
 export interface ISort {
@@ -38,7 +47,6 @@ export enum SelectionAction {
     ADDING_SELECTION,
     RANGE_SELECTION,
 }
-
 
 export interface IMoveItems {
     source: TEntry[];

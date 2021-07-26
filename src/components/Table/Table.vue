@@ -4,7 +4,7 @@
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
                     class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
-                    :class="{ width: header.width }"
+                    :class="{ width: header.width, hidden: header?.displayWidth >= windowWidth }"
                     v-for="header in headers"
                     @click="sortData(String(header.key))"
                     :key="header.key"
@@ -40,6 +40,7 @@
                     :data-name="`data-${header.key}`"
                     :key="data[header.key]"
                     class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4"
+                    :class="{ hidden: header?.displayWidth >= windowWidth }"
                 >
                     <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
                         {{ header.formatter ? header.formatter(data) : data[header.key] }}
@@ -51,14 +52,13 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, PropType, ref } from 'vue';
-    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from "@/infrastructure/types/FileManagerTypes";
-    import { orderBy } from '@/infrastructure/utils/SortUtil';
-    import { TableEmits as Emits } from './'
+    import { computed, defineComponent, PropType, ref, onMounted, onUnmounted } from 'vue';
+    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../../infrastructure/types/FileManagerTypes';
+    import { orderBy } from '../../infrastructure/utils/SortUtil';
+    import { TableEmits as Emits } from './index';
 
     export default defineComponent({
         name: 'Table',
-        emits: Object.values(Emits),
         props: {
             data: { type: Array as () => any[], required: true },
             headers: { type: Object as () => IHeader<any>[], required: true },
@@ -74,6 +74,8 @@
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
             const currentPageSize = ref<number>(props.pageSize);
+            let windowWidth = ref(window?.innerWidth);
+
             const dataList = computed(() => {
                 let tempData = props.data;
                 if (props.backendPaginationSorting) return tempData;
@@ -84,6 +86,15 @@
 
                 return tempData;
             });
+
+            const onWidthChange = () => (windowWidth.value = window.innerWidth);
+            onMounted(() => window.addEventListener('resize', onWidthChange));
+            onUnmounted(() => window.removeEventListener('resize', onWidthChange));
+
+            const displayColumn = (col: IHeader<any>): boolean => {
+                if (!col.displayWidth) return false;
+                return window.innerWidth >= col.displayWidth;
+            };
 
             const sortData = (header: string) => {
                 if (sort && sort.value && sort.value.prop == header) {
@@ -253,6 +264,8 @@
                 dragOver,
                 dragDrop,
                 openItem,
+                displayColumn,
+                windowWidth,
             };
         },
     });

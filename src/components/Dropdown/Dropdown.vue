@@ -47,11 +47,10 @@
 
 <script lang="ts">
     import { defineComponent, PropType, ref } from 'vue';
-    import { DropdownEmits as Emits, IOption } from './';
+    import { DropdownEmits as Emits, IOption } from './index';
 
     export default defineComponent({
         name: 'Dropdown',
-        emits: Object.values(Emits),
         props: {
             options: { type: Array as PropType<IOption[]> },
             defaultOption: { type: String },

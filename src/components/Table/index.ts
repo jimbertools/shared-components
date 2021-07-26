@@ -9,4 +9,4 @@ enum TableEmits {
     OpenItem = 'open-item',
 }
 
-export { Table as default, TableEmits };
+export { Table, TableEmits };

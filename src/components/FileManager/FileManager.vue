@@ -124,14 +124,14 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import Table, { TableEmits } from '@/components/Table';
-    import GridView, { GridViewEmits } from '@/components/GridView';
-    import { IHeader, ISort, TEntry } from '@/infrastructure/types/FileManagerTypes';
-    import { getIcon, getIconColor, getName } from '@/infrastructure/utils/FileUtil';
-    import Input, { InputEmits } from '@/components/Input';
-    import Dropdown, { DropdownEmits, IOption } from '@/components/Dropdown';
-    import IconButton from '@/components/Buttons/IconButton';
-    import { FileManagerEmits as Emits, FileManagerView as View } from './';
+    import {Table, TableEmits } from '../Table';
+    import {GridView, GridViewEmits } from '../GridView';
+    import { IHeader, ISort, ScreenWidth, TEntry } from '../../infrastructure/types/FileManagerTypes';
+    import { getIcon, getIconColor, getName } from '../../infrastructure/utils/FileUtil';
+    import {Input, InputEmits } from '../Input';
+    import {Dropdown, DropdownEmits, IOption } from '../Dropdown';
+    import { IconButton } from '../Buttons/IconButton';
+    import { FileManagerEmits as Emits, FileManagerView as View } from './index';
 
     const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
         if (!a.isFolder && b.isFolder) return 1;
@@ -141,10 +141,11 @@
     };
 
     const defaultHeaders = [
-        { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true },
+        { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true, displayWidth: ScreenWidth.Screen },
         {
             displayName: 'Name',
             key: 'name',
+            displayWidth: ScreenWidth.All,
             enableSorting: true,
             comparer: (entry1, entry2, i) => comparerFunction(entry1, entry2, i),
         },
@@ -152,14 +153,15 @@
             displayName: 'Modified',
             key: 'modified',
             enableSorting: true,
+            displayWidth: ScreenWidth.Screen,
             formatter: entry => {
                 if (entry.isFolder) return;
                 const date = new Date(<string>entry.modified);
                 return date.toDateString();
             },
         },
-        { displayName: 'Created', key: 'created', enableSorting: true },
-        { displayName: 'Size', key: 'size', enableSorting: true },
+        { displayName: 'Created', key: 'created', enableSorting: true, displayWidth: ScreenWidth.Screen },
+        { displayName: 'Size', key: 'size', enableSorting: true, displayWidth: ScreenWidth.Screen },
     ] as IHeader<TEntry>[];
 
     export default defineComponent({
@@ -190,7 +192,6 @@
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
         },
-        emits: Object.values(Emits),
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
             const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });

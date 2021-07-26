@@ -13,4 +13,4 @@ enum FileManagerView {
     Grid = 'grid',
 }
 
-export { FileManager as default, FileManagerEmits, FileManagerView };
+export { FileManager, FileManagerEmits, FileManagerView };

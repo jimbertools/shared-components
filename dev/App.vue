@@ -1,5 +1,5 @@
 <template>
-    <div class="debug-screens w-full h-full">
+    <div class="debug-screens w-full h-full" id="app">
         <IconButton> blas</IconButton>
         <!-- <test-table :data="data" :headers="headers" :page-size="20" :page-index="0">
                 <template v-slot:header-name="{ header }">
@@ -45,13 +45,12 @@
 
 <script lang="ts">
     import { defineComponent, onBeforeMount, ref } from 'vue';
-    import FileManager from './components/FileManager/FileManager.vue';
     //  import { FileManager, FileManagerEmits, TEntry, IHeader, ISort,  }  from "@jimber/shared-components"
     // import FileManager from "@jimber/shared-components/src/components/FileManager.vue"
     // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"
 
     import jsonData from './data.json';
-    import IconButton from './components/Buttons/IconButton/IconButton.vue';
+    import {IconButton, FileManager} from '@/entry.esm';
 
     const getEverything = async () => {
         //@ts-ignore

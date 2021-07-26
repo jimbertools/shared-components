@@ -10,9 +10,9 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import { IHeader, ISort } from '@/infrastructure/types/FileManagerTypes';
-    import { orderBy } from '@/infrastructure/utils/SortUtil';
-    import { GridViewEmits as Emits} from './';
+    import { IHeader, ISort } from '../../infrastructure/types/FileManagerTypes';
+    import { orderBy } from '../../infrastructure/utils/SortUtil';
+    import { GridViewEmits as Emits} from './index';
 
     function defineGenericComponent<T>() {
         return defineComponent({
@@ -28,7 +28,6 @@
                 defaultSort: { type: Object as PropType<ISort>, required: false },
                 gridClass: { type: String, required: false },
             },
-            emits: Object.values(Emits),
             setup(props, { emit }) {
                 const currentPage = ref<number>(props.page);
                 const currentPageSize = ref<number>(props.pageSize);

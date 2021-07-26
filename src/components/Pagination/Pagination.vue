@@ -238,7 +238,7 @@
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
-    import { PaginationEmits as Emits } from './'
+    import { PaginationEmits as Emits } from './index'
 
     const range = (start: number, end: number) => {
         const arr = [];
@@ -250,7 +250,6 @@
 
     export default defineComponent({
         name: 'Pagination',
-        emits: Object.values(Emits),
         props: {
             pageSize: { type: Number },
             currentPage: { type: Number },
@@ -273,11 +272,11 @@
                 emit(Emits.PageChanged, page);
             };
 
-            const next = (page: number) => {
+            const next = () => {
                 goToPage(props.currentPage ?? +1);
             };
 
-            const previous = (page: number) => {
+            const previous = () => {
                 goToPage(props.currentPage ?? -1);
             };
 

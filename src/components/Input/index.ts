@@ -5,4 +5,4 @@ enum InputEmits {
     TextChanged = 'TextChanged',
 }
 
-export { Input as default, InputEmits };
+export { Input, InputEmits };

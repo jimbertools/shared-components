@@ -6,4 +6,4 @@ enum GridViewEmits {
     PageSizeChanged = 'page-size-changed',
 }
 
-export { GridView as default, GridViewEmits };
+export { GridView, GridViewEmits };
