@@ -13,12 +13,10 @@
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row my-4">
-                <div class="flex flex-grow overflow-ellipsis items-center">
-                    <slot name="breadcrumb">
-                        {{ breadcrumb }}
-                    </slot>
+                <div class="flex flex-grow flex-wrap items-center">
+                    <slot name="breadcrumb"></slot>
                 </div>
-                <div class="flex flex-row items-center h-10">
+                <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
@@ -61,9 +59,15 @@
                                     :page="pageValue"
                                     :total="totalValue"
                                     :defaultSort="sort"
+                                    :drag-and-drop='dragAndDrop'
+                                    selectable
+                                    multi-select
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
                                     @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                                     @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
+                                    @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
+                                    @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
+                                    @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
                                 >
                                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
@@ -108,15 +112,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-1/4 flex-shrink-0" v-if="sidebarData">
-            <slot name="sideBar">
-                <div v-for="key of Object.keys(sidebarData)" :key="key">
-                    <span class="font-bold"> {{ key }} </span>
-                    <span class="italic">{{ sidebarData[key] }}</span
-                    ><br />
-                </div>
-            </slot>
-        </div>
+          <slot name="sideBar" v-if="displaySidebar"></slot>
     </div>
 </template>
 
@@ -153,6 +149,7 @@
         },
         { displayName: 'Created', key: 'created', enableSorting: true, displayWidth: ScreenWidth.Screen },
         { displayName: 'Size', key: 'size', enableSorting: true, displayWidth: ScreenWidth.Screen },
+        { displayName: 'Deleted', key: 'deleted', enableSorting: true },
     ] as IHeader<TEntry>[];
 
     export default defineComponent({
@@ -165,9 +162,9 @@
             IconButton,
         },
         props: {
+            displaySidebar: { type: Boolean, required: true },
             data: { type: Array as PropType<any[]>, required: true },
             quickAccessData: { type: Array as PropType<any[]>, required: false },
-            sidebarData: { type: Object, required: false },
             headers: { type: Array as PropType<IHeader<any>[]>, required: false },
             page: { type: Number, required: false, default: 1 },
             pageSize: { type: Number, required: false, default: 10 },
@@ -177,6 +174,12 @@
                 required: false,
                 default: false,
             },
+            showViewTypes: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            dragAndDrop: { type: Boolean, required: false, default: false },
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },

@@ -1,5 +1,5 @@
 <template>
-    <table class="min-w-full bg-white dark:bg-gray-800">
+    <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
         <thead class="sticky top-0">
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
@@ -15,24 +15,22 @@
                 </th>
             </tr>
         </thead>
-
         <tbody>
             <tr
                 v-for="data in dataList"
                 :key="data"
-                class="h-12 border-gray-300 border-t cursor-pointer"
-                :class="{
-                    'hover:bg-gray-100': !isDragging,
-                    'bg-blue-100 hover:bg-blue-50': selectedDatas.includes(data),
-                    'border-t-2 border-b-2 border-yellow-400': data.isFolder && draggingOverData == data && !selectedDatas.includes(data),
-                }"
-                @click.ctrl="e => addItemToSelect(data)"
+                class="h-12 border-gray-300 cursor-pointer"
+                :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
+                          !isDragging ? 'hover:bg-gray-100': '',
+                          selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
+                ]"
+                @click.ctrl.exact="e => addItemToSelect(data)"
                 @click.exact="e => selectItem(data)"
-                @click.shift="e => selectRange(data)"
-                @dblclick="e => openItem(data)"
-                draggable="true"
+                @click.shift.exact="e => selectRange(data)"
+                @dblclick.stop='(e)=>openItem(data)'
+                :draggable="dragAndDrop ? 'true' : 'false'"
                 @drop.prevent="e => dragDrop(data)"
-                @dragstart="e => dragStart(data)"
+                @dragstart="e => dragStart(e, data)"
                 @dragover.prevent="e => dragOver(data)"
             >
                 <td
@@ -69,6 +67,9 @@
             withPagination: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             rowClass: { type: String, required: false },
+            dragAndDrop: { type: Boolean, required: false, default: false },
+            selectable: { type: Boolean, required: false, default: false },
+            multiSelect: { type: Boolean, required: false, default: false }
         },
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
@@ -140,7 +141,10 @@
             const previousRangeSelectionData = ref<TEntry[]>([]);
 
             const selectItem = (data: TEntry) => {
-                if (selectedDatas.value.length == 1 && selectedDatas.value[0] == data) {
+                if (!props.selectable) {
+                    return;
+                }
+                if (selectedDatas.value.length == 1 && selectedDatas.value[0].id == data.id) {
                     selectedDatas.value = [];
                 } else {
                     selectedDatas.value = [data];
@@ -174,9 +178,11 @@
             };
 
             const selectRange = (data: TEntry) => {
-                let initPosition = dataList.value.indexOf(initRangeSelectionData.value);
-                let endPosition = dataList.value.indexOf(data);
-
+                if (!props.multiSelect) {
+                    return;
+                }
+                let initPosition = dataList.value.findIndex( dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
+                let endPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == data.id);
                 if (0 <= initPosition && 0 <= endPosition) {
                     // Remove of all previously selected by range
                     previousRangeSelectionData.value.forEach(data => {
@@ -209,16 +215,22 @@
                 });
             };
 
-            const dragStart = (data: TEntry) => {
-                if (!selectedDatas.value.includes(data)) {
+            const dragStart = (e:any, data: TEntry) => {
+                if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
                     selectedDatas.value = [data];
                 }
+                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
                 isDragging.value = true;
+                emit(Emits.StartDragging)
             };
 
             const dragOver = (data: TEntry) => {
                 draggingOverData.value = data;
             };
+
+            const dragLeave = () => {
+                draggingOverData.value = undefined
+            }
 
             const dragDrop = (data: TEntry) => {
                 if (data.isFolder && !selectedDatas.value.includes(data)) {
@@ -226,10 +238,10 @@
                         source: selectedDatas.value,
                         destination: data,
                     });
+                    isDragging.value = false;
+                    draggingOverData.value = undefined;
                 }
-
-                isDragging.value = false;
-                draggingOverData.value = undefined;
+                emit(Emits.StopDragging)
             };
 
             const openItem = (data: TEntry) => {
@@ -263,6 +275,7 @@
                 dragStart,
                 dragOver,
                 dragDrop,
+                dragLeave,
                 openItem,
                 displayColumn,
                 windowWidth,
