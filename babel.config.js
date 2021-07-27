@@ -5,12 +5,11 @@ const buildPresets = [
         // Config for @babel/preset-env
         {
             // Example: Always transpile optional chaining/nullish coalescing
-            // include: [
-            //   /(optional-chaining|nullish-coalescing)/
-            // ],
+            include: [/(optional-chaining|nullish-coalescing)/],
         },
     ],
     '@babel/preset-typescript',
+    'vue',
 ];
 module.exports = {
     presets: process.env.NODE_ENV === 'development' ? devPresets : buildPresets,
