@@ -7,7 +7,6 @@ export const orderBy = <T extends Record<string, any>>(array: T[], sortKey: ISor
     if (comparer) return comparer(a, b, i);
     const aValue = a[sortKey.prop];
     const bValue = b[sortKey.prop];
-    console.log('daha', aValue, bValue)
     if (!aValue) return -1*i;
     if (!bValue) return i;
     return (

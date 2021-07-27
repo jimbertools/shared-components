@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row border-gray-100 border-solid border-2 rounded">
         <input
-            class="mr-auto max-w-xs items-center justify-items-center focus:outline-none border-0 my-0 py-0"
+            class="pl-2 mr-auto max-w-xs items-center justify-items-center focus:outline-none border-0 my-0 py-0"
             v-model="text"
             :placeholder="placeholder"
             @input="debounce"
