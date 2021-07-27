@@ -96,11 +96,9 @@
                                                 <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
                                             </div>
 
-                                            <el-tooltip class="item" effect="dark" :content="getName(gridData.item)" placement="bottom-start">
-                                                <span class="block truncate whitespace-normal">
-                                                    {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
-                                                </span>
-                                            </el-tooltip>
+                                            <span class="block truncate whitespace-normal">
+                                                {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
+                                            </span>
                                         </div>
                                     </template>
                                 </grid-view>
@@ -124,21 +122,14 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import {Table, TableEmits } from '../Table';
-    import {GridView, GridViewEmits } from '../GridView';
+    import { Table, TableEmits } from '../Table';
+    import { GridView, GridViewEmits } from '../GridView';
     import { IHeader, ISort, ScreenWidth, TEntry } from '../../infrastructure/types/FileManagerTypes';
-    import { getIcon, getIconColor, getName } from '../../infrastructure/utils/FileUtil';
-    import {Input, InputEmits } from '../Input';
-    import {Dropdown, DropdownEmits, IOption } from '../Dropdown';
+    import { fileComparer, getIcon, getIconColor, getName } from '../../infrastructure/utils/FileUtil';
+    import { Input, InputEmits } from '../Input';
+    import { Dropdown, DropdownEmits, IOption } from '../Dropdown';
     import { IconButton } from '../Buttons/IconButton';
     import { FileManagerEmits as Emits, FileManagerView as View } from './index';
-
-    const comparerFunction = (a: TEntry, b: TEntry, i: number) => {
-        if (!a.isFolder && b.isFolder) return 1;
-        if (a.isFolder && !b.isFolder) return -1;
-
-        return a.name.localeCompare(b.name) * i;
-    };
 
     const defaultHeaders = [
         { displayName: 'Id', key: 'id', enableSorting: true, customTemplate: true, displayWidth: ScreenWidth.Screen },
@@ -147,7 +138,7 @@
             key: 'name',
             displayWidth: ScreenWidth.All,
             enableSorting: true,
-            comparer: (entry1, entry2, i) => comparerFunction(entry1, entry2, i),
+            comparer: (entry1, entry2, i) => fileComparer(entry1, entry2, i),
         },
         {
             displayName: 'Modified',

@@ -142,3 +142,10 @@ export const getName = (item: TEntry) => {
   }
   return `${item.name}.${item.extension}`;
 };
+
+export const fileComparer = (a: TEntry, b: TEntry, i: number) => {
+  if (!a.isFolder && b.isFolder) return 1;
+  if (a.isFolder && !b.isFolder) return -1;
+
+  return a.name.localeCompare(b.name) * i;
+}
