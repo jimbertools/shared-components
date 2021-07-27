@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row w-full max-w-full">
+    <div class="flex flex-row w-full max-w-full overflow-x-hidden">
         <div class="flex flex-col flex-1 border-r-2 border-grey-100 overflow-x-hidden">
             <div class="flex flex-row justify-around items-center mb-4 flex-wrap md:flex-nowrap md:justify-between">
                 <div>
@@ -12,7 +12,7 @@
             <div>
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
-            <div class="flex flex-row my-4">
+            <div class="flex flex-row my-4 overflow-x-auto">
                 <div class="">
                     <slot name="breadcrumb"></slot>
                 </div>
