@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row w-full max-w-full">
-        <div class="flex flex-col flex-1 border-r-2 border-grey-100">
+        <div class="flex flex-col flex-1 border-r-2 border-grey-100 overflow-x-hidden">
             <div class="flex flex-row items-center mb-4 flex-wrap md:flex-nowrap md:justify-between">
                 <div>
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
