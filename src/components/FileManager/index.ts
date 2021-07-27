@@ -5,7 +5,10 @@ enum FileManagerEmits {
     SortChanged = 'sort-changed',
     SelectedChanged = 'selected-changed',
     OpenItem = 'open-item',
-    DoSearch = 'do-search'
+    DoSearch = 'do-search',
+    MoveItems= 'move-items',
+    StartInternalDrag = 'start-internal-drag',
+    StopInternalDrag = 'stop-internal-drag'
 }
 
 enum FileManagerView {
