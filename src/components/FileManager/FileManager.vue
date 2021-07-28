@@ -112,7 +112,9 @@
                 </div>
             </div>
         </div>
-          <slot name="sideBar" v-if="displaySidebar"></slot>
+        <div  v-if="displaySidebar" class="w-full sm:w-1/4 ">
+            <slot name="sideBar"></slot>
+        </div>
     </div>
 </template>
 
