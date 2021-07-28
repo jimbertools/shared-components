@@ -12,7 +12,7 @@
             <div>
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
-            <div class="flex flex-row my-4 overflow-x-auto">
+            <div class="flex flex-row md:my-4 overflow-x-auto">
                 <div class="flex flex-grow flex-wrap items-center overflow-x-auto">
                     <slot name="breadcrumb"></slot>
                 </div>
