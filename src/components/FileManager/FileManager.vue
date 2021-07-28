@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-row w-full max-w-full overflow-x-hidden">
         <div class="flex flex-col flex-1 border-r-2 border-grey-100 overflow-x-hidden">
-            <div class="flex flex-row justify-around items-center mb-4 flex-wrap md:flex-nowrap md:justify-between">
+            <div class="flex flex-row items-center mb-4 flex-wrap md:flex-nowrap md:justify-between">
                 <div>
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
-                <div class="flex flex-row pt-2 md:pt-0">
+                <div class="flex flex-row pl-2 md:pl-0">
                     <slot name="topRight"></slot>
                 </div>
             </div>
@@ -13,10 +13,10 @@
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row my-4 overflow-x-auto">
-                <div class="">
+                <div class="flex flex-grow flex-wrap items-center overflow-x-auto">
                     <slot name="breadcrumb"></slot>
                 </div>
-                <div class="flex flex-row items-center h-10 justify-center" v-if="showViewTypes">
+                <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
@@ -59,7 +59,7 @@
                                     :page="pageValue"
                                     :total="totalValue"
                                     :defaultSort="sort"
-                                    :drag-and-drop="dragAndDrop"
+                                    :drag-and-drop='dragAndDrop'
                                     selectable
                                     multi-select
                                     @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <slot name="sideBar" v-if="displaySidebar"></slot>
+          <slot name="sideBar" v-if="displaySidebar"></slot>
     </div>
 </template>
 
