@@ -1,5 +1,6 @@
 <template>
-    <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
+<div class="w-full overflow-x-auto overflow-y-auto">
+    <table class="bg-white dark:bg-gray-800" @dragleave="dragLeave">
         <thead class="sticky top-0">
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
@@ -37,7 +38,7 @@
                     v-for="header in headers"
                     :data-name="`data-${header.key}`"
                     :key="data[header.key]"
-                    class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4"
+                    class="text-sm pr-6 overflow-ellepsis text-gray-800 dark:text-gray-100 tracking-normal leading-4"
                     :class="{ hidden: header?.displayWidth >= windowWidth }"
                 >
                     <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
@@ -47,6 +48,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
 </template>
 
 <script lang="ts">
