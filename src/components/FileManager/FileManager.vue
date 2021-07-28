@@ -5,7 +5,7 @@
                 <div>
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
-                <div class="flex flex-row pl-2 md:pl-0">
+                <div class="flex flex-row flex-grow pl-2 md:pl-0">
                     <slot name="topRight"></slot>
                 </div>
             </div>
