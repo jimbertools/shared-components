@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-row w-full max-w-full overflow-x-hidden">
-        <div class="flex flex-col flex-1 md:border-r-2 border-grey-100 overflow-x-hidden">
+    <div class="flex flex-row w-full overflow-x-hidden">
+        <div class="flex flex-col flex-grow flex-shrink-0 md:border-r-2 border-grey-100 overflow-x-hidden" :class="{'hidden md:w-3/4':displaySidebar}">
             <div class="flex flex-row items-center mb-4 md:justify-between">
                 <div>
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <div  v-if="displaySidebar" class="w-full md:w-1/4 ">
+        <div  v-if="displaySidebar" class="w-full md:w-1/4">
             <slot name="sideBar"></slot>
         </div>
     </div>
