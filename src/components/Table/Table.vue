@@ -1,6 +1,6 @@
 <template>
 <div class="w-full overflow-x-auto overflow-y-auto">
-    <table class="bg-white dark:bg-gray-800" @dragleave="dragLeave">
+    <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
         <thead class="sticky top-0">
             <tr class="w-full h-16 border-gray-300 border-b py-8">
                 <th
