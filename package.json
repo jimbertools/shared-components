@@ -1,6 +1,6 @@
 {
   "name": "@jimber/shared-components",
-  "version": "0.0.79",
+  "version": "0.0.81",
   "private": false,
   "description": "",
   "main": "dist/jimber-shared-components.ssr.js",
