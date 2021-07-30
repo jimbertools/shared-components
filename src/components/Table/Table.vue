@@ -49,7 +49,7 @@
             </tbody>
         </table>
     </div>
-    <div id="dragImage" class="absolute  -ml-96">
+    <div id="dragImage" class="absolute" style="z-index: -100;">
         <div class="pl-1 pt-1">
             <em class="fas fa-copy" />
         </div>
