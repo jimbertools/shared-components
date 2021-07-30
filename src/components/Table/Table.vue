@@ -1,53 +1,55 @@
 <template>
-<div class="w-full overflow-x-auto overflow-y-auto">
-    <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
-        <thead class="sticky top-0">
-            <tr class="w-full h-16 border-gray-300 border-b py-8">
-                <th
-                    class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
-                    :class="{ width: header.width, hidden: header?.displayWidth >= windowWidth }"
-                    v-for="header in headers"
-                    @click="sortData(String(header.key))"
-                    :key="header.key"
+<div class="h-full overflow-hidden">
+    <div class="w-full overflow-x-auto h-full overflow-y-auto">
+        <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
+            <thead class="sticky top-0">
+                <tr class="w-full h-16 border-gray-300 border-b py-8">
+                    <th
+                        class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
+                        :class="{ width: header.width, hidden: header?.displayWidth >= windowWidth }"
+                        v-for="header in headers"
+                        @click="sortData(String(header.key))"
+                        :key="header.key"
+                    >
+                        <slot :name="`header-${header}`" :header="header">
+                            {{ header.displayName }}
+                        </slot>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    v-for="data in dataList"
+                    :key="data"
+                    class="h-8 md:h-12 border-gray-300 cursor-pointer"
+                    :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
+                            !isDragging ? 'hover:bg-gray-100': '',
+                            selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
+                    ]"
+                    @click.ctrl.exact="e => addItemToSelect(data)"
+                    @click.exact="e => selectItem(data)"
+                    @click.shift.exact="e => selectRange(data)"
+                    @dblclick.stop='(e)=>openItem(data)'
+                    :draggable="dragAndDrop ? 'true' : 'false'"
+                    @drop.prevent="e => dragDrop(data)"
+                    @dragstart="e => dragStart(e, data)"
+                    @dragover.prevent="e => dragOver(data)"
                 >
-                    <slot :name="`header-${header}`" :header="header">
-                        {{ header.displayName }}
-                    </slot>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr
-                v-for="data in dataList"
-                :key="data"
-                class="h-8 md:h-12 border-gray-300 cursor-pointer"
-                :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
-                          !isDragging ? 'hover:bg-gray-100': '',
-                          selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
-                ]"
-                @click.ctrl.exact="e => addItemToSelect(data)"
-                @click.exact="e => selectItem(data)"
-                @click.shift.exact="e => selectRange(data)"
-                @dblclick.stop='(e)=>openItem(data)'
-                :draggable="dragAndDrop ? 'true' : 'false'"
-                @drop.prevent="e => dragDrop(data)"
-                @dragstart="e => dragStart(e, data)"
-                @dragover.prevent="e => dragOver(data)"
-            >
-                <td
-                    v-for="header in headers"
-                    :data-name="`data-${header.key}`"
-                    :key="data[header.key]"
-                    class="text-sm pr-6 overflow-ellepsis text-gray-800 dark:text-gray-100 tracking-normal leading-4"
-                    :class="{ hidden: header?.displayWidth >= windowWidth }"
-                >
-                    <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
-                        {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                    </slot>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td
+                        v-for="header in headers"
+                        :data-name="`data-${header.key}`"
+                        :key="data[header.key]"
+                        class="text-sm pr-6 overflow-ellepsis text-gray-800 dark:text-gray-100 tracking-normal leading-4"
+                        :class="{ hidden: header?.displayWidth >= windowWidth }"
+                    >
+                        <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
+                            {{ header.formatter ? header.formatter(data) : data[header.key] }}
+                        </slot>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
     </div>
 </template>
 
