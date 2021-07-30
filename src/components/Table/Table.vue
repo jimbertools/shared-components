@@ -1,6 +1,6 @@
 <template>
-    <div class='h-full overflow-scroll'>
-        <table class="w-full bg-white dark:bg-gray-800 overflow-scroll select-none" @dragleave="dragLeave">
+    <div class='h-full overflow-y-auto'>
+        <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
             <thead>
                 <tr>
                     <th
