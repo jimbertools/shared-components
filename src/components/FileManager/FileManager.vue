@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-row w-full overflow-x-hidden">
-        <div class="flex flex-col flex-1 md:border-r-2 border-grey-100 overflow-x-hidden">
+    <div class="flex flex-row w-full h-full">
+        <div class="flex flex-col flex-1 md:border-r-2 border-grey-100 h-full">
             <div class="flex flex-row items-center mb-4 md:justify-between">
                 <div>
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
@@ -12,8 +12,8 @@
             <div>
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
-            <div class="flex flex-row md:my-4 overflow-x-auto">
-                <div class="flex flex-grow flex-wrap items-center overflow-x-auto">
+            <div class="flex flex-row md:my-4">
+                <div class="flex flex-grow flex-wrap items-center">
                     <slot name="breadcrumb"></slot>
                 </div>
                 <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
@@ -44,74 +44,66 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col">
-                <div class="overflow-x-auto">
-                    <div class="align-middle inline-block min-w-full">
-                        <div class="shadow overflow-hidden sm:rounded-lg">
-                            <template v-if="activeView === 'list'">
-                                <Table
-                                    :withPagination="withPagination"
-                                    :backendPaginationSorting="backendPaginationSorting"
-                                    rowClass="bg-gray-50"
-                                    :data="dataList"
-                                    :headers="headers"
-                                    :pageSize="pageSize"
-                                    :page="pageValue"
-                                    :total="totalValue"
-                                    :defaultSort="sort"
-                                    :drag-and-drop='dragAndDrop'
-                                    selectable
-                                    multi-select
-                                    @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
-                                    @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                                    @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
-                                    @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
-                                    @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
-                                    @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
-                                >
-                                    <template v-if="!hasSlot('data-name')" #data-name="rowData">
-                                        <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
-                                        {{ getName(rowData.row) }}
-                                    </template>
-                                    <template v-for="(_, slot) of $slots" v-slot:[slot]="props">
-                                        <slot :name="slot" v-bind="props"></slot>
-                                    </template>
-                                </Table>
-                            </template>
-                            <template v-if="activeView === 'grid'">
-                                <grid-view
-                                    :withPagination="withPagination"
-                                    :backendPaginationSorting="backendPaginationSorting"
-                                    gridClass="bg-gray-50"
-                                    :data="dataList"
-                                    :headers="headers"
-                                    :pageSize="pageSize"
-                                    :page="pageValue"
-                                    :total="totalValue"
-                                    :defaultSort="sort"
-                                    @[GridViewEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                                >
-                                    <template #grid-item="gridData" class="">
-                                        <div
-                                            class="flex-col items-center justify-center text-center w-28 break-word p-2 hover:bg-gray-100 cursor-pointer"
-                                            :key="getName(gridData.item)"
-                                        >
-                                            <div class="flex justify-center">
-                                                <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
-                                            </div>
+                <template v-if="activeView === 'list'">
+                    <Table
+                        :withPagination="withPagination"
+                        :backendPaginationSorting="backendPaginationSorting"
+                        rowClass="bg-gray-50"
+                        :data="dataList"
+                        :headers="headers"
+                        :pageSize="pageSize"
+                        :page="pageValue"
+                        :total="totalValue"
+                        :defaultSort="sort"
+                        :drag-and-drop='dragAndDrop'
+                        selectable
+                        multi-select
+                        @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
+                        @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
+                        @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
+                        @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
+                        @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
+                        @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
+                    >
+                        <template v-if="!hasSlot('data-name')" #data-name="rowData">
+                            <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
+                            {{ getName(rowData.row) }}
+                        </template>
+                        <template v-for="(_, slot) of $slots" v-slot:[slot]="props">
+                            <slot :name="slot" v-bind="props"></slot>
+                        </template>
+                    </Table>
+                </template>
+                <template v-if="activeView === 'grid'">
+                    <grid-view
+                        :withPagination="withPagination"
+                        :backendPaginationSorting="backendPaginationSorting"
+                        gridClass="bg-gray-50"
+                        :data="dataList"
+                        :headers="headers"
+                        :pageSize="pageSize"
+                        :page="pageValue"
+                        :total="totalValue"
+                        :defaultSort="sort"
+                        @[GridViewEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
+                    >
+                        <template #grid-item="gridData" class="">
+                            <div
+                                class="flex-col items-center justify-center text-center w-28 break-word p-2 hover:bg-gray-100 cursor-pointer"
+                                :key="getName(gridData.item)"
+                            >
+                                <div class="flex justify-center">
+                                    <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
+                                </div>
 
-                                            <span class="block truncate whitespace-normal">
-                                                {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
-                                            </span>
-                                        </div>
-                                    </template>
-                                </grid-view>
-                            </template>
-                        </div>
-                    </div>
-                </div>
+                                <span class="block truncate whitespace-normal">
+                                    {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
+                                </span>
+                            </div>
+                        </template>
+                    </grid-view>
+                </template>
             </div>
-        </div>
         <slot name="sideBar"></slot>
     </div>
 </template>
@@ -147,8 +139,7 @@
                 return date.toDateString();
             },
         },
-        { displayName: 'Created', key: 'created', enableSorting: true, displayWidth: ScreenWidth.Screen },
-        { displayName: 'Size', key: 'size', enableSorting: true, displayWidth: ScreenWidth.Screen },
+
         { displayName: 'Deleted', key: 'deleted', enableSorting: true },
     ] as IHeader<TEntry>[];
 

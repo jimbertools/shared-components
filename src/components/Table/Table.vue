@@ -1,12 +1,11 @@
 <template>
-<div class="h-full overflow-hidden">
-    <div class="w-full overflow-x-auto h-full overflow-y-auto">
-        <table class="min-w-full bg-white dark:bg-gray-800" @dragleave="dragLeave">
-            <thead class="sticky top-0">
-                <tr class="w-full h-16 border-gray-300 border-b py-8">
+    <div class='h-full overflow-scroll'>
+        <table class="w-full bg-white dark:bg-gray-800 overflow-scroll select-none" @dragleave="dragLeave">
+            <thead>
+                <tr>
                     <th
-                        class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 cursor-pointer hover:text-gray-400"
-                        :class="{ width: header.width, hidden: header?.displayWidth >= windowWidth }"
+                        class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm cursor-pointer hover:text-gray-400"
+                        :class="{ hidden: header?.displayWidth >= windowWidth }"
                         v-for="header in headers"
                         @click="sortData(String(header.key))"
                         :key="header.key"
@@ -19,9 +18,9 @@
             </thead>
             <tbody>
                 <tr
+                    class='h-8 md:h-12 border-gray-300 cursor-pointer'
                     v-for="data in dataList"
                     :key="data"
-                    class="h-8 md:h-12 border-gray-300 cursor-pointer"
                     :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
                             !isDragging ? 'hover:bg-gray-100': '',
                             selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
@@ -39,7 +38,7 @@
                         v-for="header in headers"
                         :data-name="`data-${header.key}`"
                         :key="data[header.key]"
-                        class="text-sm pr-6 overflow-ellepsis text-gray-800 dark:text-gray-100 tracking-normal leading-4"
+                        class="text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4"
                         :class="{ hidden: header?.displayWidth >= windowWidth }"
                     >
                         <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
@@ -49,7 +48,6 @@
                 </tr>
             </tbody>
         </table>
-        </div>
     </div>
     <div id="dragImage" class="absolute  -ml-96">
         <div class="pl-1 pt-1">
