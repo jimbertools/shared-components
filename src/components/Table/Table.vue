@@ -31,6 +31,7 @@
                     @dblclick.stop='(e)=>openItem(data)'
                     :draggable="dragAndDrop ? 'true' : 'false'"
                     @drop.prevent="e => dragDrop(data)"
+                    @dragend.prevent="$emit(Emits.StopDragging)"
                     @dragstart="e => dragStart(e, data)"
                     @dragover.prevent="e => dragOver(data)"
                 >
