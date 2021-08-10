@@ -62,8 +62,8 @@
                         @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
                         @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
                         @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
-                        @[TableEmits.StartDragging]="e => $emit(Emits.StartInternalDrag, e)"
-                        @[TableEmits.StopDragging]="e => $emit(Emits.StopInternalDrag, e)"
+                        @[TableEmits.StartDragging]="startDragging"
+                        @[TableEmits.StopDragging]="stopDragging"
                     >
                         <template v-if="!hasSlot('data-name')" #data-name="rowData">
                             <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
@@ -105,6 +105,17 @@
                 </template>
             </div>
         <slot name="sideBar"></slot>
+
+        <!-- Dragging indicator (replicate onedrive)-->
+        <div class="absolute pointer-events-none z-0 inset-0">
+            <div v-if="dragging" :style="draggingIndicatorStyle">
+                <slot name="dragging-indicator">
+                    <div class="max-w-max p-1 border-2 border-black bg-white" >
+                        Dragging
+                    </div>
+                </slot>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -170,7 +181,7 @@
                 required: false,
                 default: false,
             },
-            dragAndDrop: { type: Boolean, required: false, default: false },
+            dragAndDrop: { type: Boolean, required: false, default: true },
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },
@@ -182,6 +193,9 @@
             const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });
             const searchValue = ref<string>();
             const pageValue = ref(props.page);
+            const mouseDraggingX = ref<number>(0);
+            const mouseDraggingY = ref<number>(0);
+            const dragging = ref<Boolean>(false);
 
             const headers = computed(() => {
                 if (!props.headers || !(props.headers.length > 0)) return defaultHeaders;
@@ -246,13 +260,27 @@
 
             const searchChanged = (input: string | undefined) => {
                 if (props.backendFiltering) emit(Emits.SearchChanged, input);
-                console.log('bla', input);
                 searchValue.value = input;
                 pageValue.value = 1;
             };
 
             const search = () => {
                 emit(Emits.DoSearch, searchValue.value);
+            };
+
+            const startDragging = (e: DragEvent) => {
+                dragging.value = true;
+                emit(Emits.StartInternalDrag, e);
+            };
+
+            const stopDragging = (e: DragEvent) => {
+                dragging.value = false;
+                emit(Emits.StopInternalDrag, e);
+            };
+
+            ondragover = async event => {
+                mouseDraggingX.value = event.clientX;
+                mouseDraggingY.value = event.clientY;
             };
 
             return {
@@ -278,8 +306,20 @@
                 searchValue,
                 search,
                 searchChanged,
+                dragging,
+                startDragging,
+                stopDragging,
+                mouseDraggingX,
+                mouseDraggingY,
             };
         },
+        computed: {
+            draggingIndicatorStyle(): {[key: string]: string} {
+                return {
+                    transform: `translate(${this.mouseDraggingX}px,${this.mouseDraggingY}px)`,
+                };
+            },
+        }
     });
 </script>
 
