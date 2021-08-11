@@ -108,7 +108,7 @@
 
         <!-- Dragging indicator (replicate onedrive)-->
         <div class="absolute pointer-events-none z-0 inset-0">
-            <div v-if="dragging" :style="draggingIndicatorStyle">
+            <div v-if="dragging" :style="draggingIndicatorStyle" class="absolute overflow-hidden">
                 <slot name="dragging-indicator">
                     <div class="max-w-max p-1 border-2 border-black bg-white" >
                         Dragging
@@ -181,7 +181,7 @@
                 required: false,
                 default: false,
             },
-            dragAndDrop: { type: Boolean, required: false, default: true },
+            dragAndDrop: { type: Boolean, required: false, default: false },
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },
