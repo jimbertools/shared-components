@@ -50,11 +50,6 @@
             </tbody>
         </table>
     </div>
-    <div id="dragImage" class="absolute" style="z-index: -100;">
-        <div class="pl-1 pt-1">
-            <em class="fas fa-copy" />
-        </div>
-    </div>
 </template>
 
 <script lang="ts">
@@ -228,7 +223,6 @@
                     selectedDatas.value = [data];
                 }
                 e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
-                e.dataTransfer.setDragImage(document.getElementById('dragImage'),2,2)
                 isDragging.value = true;
                 emit(Emits.StartDragging)
             };
