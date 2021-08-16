@@ -28,6 +28,7 @@
                 defaultSort: { type: Object as PropType<ISort>, required: false },
                 gridClass: { type: String, required: false },
             },
+            emits: Object.values(Emits),
             setup(props, { emit }) {
                 const currentPage = ref<number>(props.page);
                 const currentPageSize = ref<number>(props.pageSize);
