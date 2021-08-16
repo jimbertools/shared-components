@@ -188,7 +188,7 @@
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
         },
-        emits: Object.values(Emits),
+        emits: [ "search-changed", "sort-changed", "selected-changed", "open-item", "do-search", "move-items", "start-internal-drag", "stop-internal-drag" ],
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
             const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });

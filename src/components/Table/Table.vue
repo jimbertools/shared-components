@@ -74,7 +74,7 @@
             selectable: { type: Boolean, required: false, default: false },
             multiSelect: { type: Boolean, required: false, default: false }
         },
-        emits: Object.values(Emits),
+        emits: [ "sort-changed", "page-changed", "page-size-changed", "move-items", "selected-changed", "open-item", "drop-items", "start-dragging", "stop-dragging" ],
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
