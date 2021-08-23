@@ -1,5 +1,5 @@
 <template>
-    <div class='h-full overflow-y-auto'>
+    <div class="h-full overflow-y-auto" ref="tableDiv">
         <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
             <thead>
                 <tr>
@@ -31,8 +31,9 @@
                     @dblclick.stop='(e)=>openItem(data)'
                     :draggable="dragAndDrop ? 'true' : 'false'"
                     @drop.prevent="e => dragDrop(data)"
-                    @dragend.prevent="$emit(Emits.StopDragging)"
+                    @dragend.prevent="e => dragEnd(data)"
                     @dragstart="e => dragStart(e, data)"
+                    @drag="e => drag(e, data)"
                     @dragover.prevent="e => dragOver(data)"
                 >
                     <td
@@ -70,15 +71,17 @@
             withPagination: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             rowClass: { type: String, required: false },
-            dragAndDrop: { type: Boolean, required: false, default: false },
+            dragAndDrop: { type: Boolean, required: false, default: true },
             selectable: { type: Boolean, required: false, default: false },
-            multiSelect: { type: Boolean, required: false, default: false }
+            multiSelect: { type: Boolean, required: false, default: false },
+            scrollingOffset: { type: Number, required: false, default: 50 },
         },
         emits: [ "sort-changed", "page-changed", "page-size-changed", "move-items", "selected-changed", "open-item", "drop-items", "start-dragging", "stop-dragging" ],
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
             const currentPageSize = ref<number>(props.pageSize);
+
             let windowWidth = ref(window?.innerWidth);
 
             const dataList = computed(() => {
@@ -219,6 +222,48 @@
                 });
             };
 
+            const tableDiv = ref(null);
+            const scrolling = ref<boolean>(false);
+            const scrollingDirection = ref({
+                up: 0,
+                down: 0,
+            });
+            const scrollingBound = ref({
+                top : () => {try {return tableDiv.value.offsetTop + props.scrollingOffset} catch {return 0}},   // <== Error tableDiv.value : object is possibly null
+                bottom : () => {try {return tableDiv.value.offsetTop + tableDiv.value.scrollHeight - props.scrollingOffset} catch {return 0}},
+            });
+
+            console.log("dire + bound", scrollingDirection, scrollingBound)
+
+            const scroll = () => {
+                let scrolled = false;
+                console.log("scrooooll", scrolled)
+                if (scrollingDirection.value.down > 0) {
+                    tableDiv.value.scrollTop = tableDiv.value.scrollTop + (scrollingDirection.value.down >> 1);
+                    scrolled = true;
+                }
+                if (scrollingDirection.value.up > 0) {
+                    tableDiv.value.scrollTop = tableDiv.value.scrollTop - (scrollingDirection.value.up >> 1);
+                    scrolled = true;
+                }
+
+                // if (scrolled) {
+                //     setTimeout(scroll, 100);
+                // }
+            };
+
+            const drag = (e:any) => {
+                  scrollingDirection.value.up = scrollingBound.value.top - e.clientY;
+                  scrollingDirection.value.down = e.clientY - scrollingBound.value.bottom;
+
+                if ((scrollingDirection.value.up > 0 || scrollingDirection.value.down > 0) && !scrolling.value) {
+                    scroll();
+                    scrolling.value = true;
+                } else {
+                    scrolling.value = false;
+                }
+            };
+
             const dragStart = (e:any, data: TEntry) => {
                 if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
                     selectedDatas.value = [data];
@@ -247,6 +292,11 @@
                 }
                 emit(Emits.StopDragging)
             };
+
+            const dragEnd = () => {
+                emit(Emits.StopDragging);
+                
+            }
 
             const openItem = (data: TEntry) => {
                 draggingOverData.value = undefined;
@@ -277,12 +327,19 @@
                 selectRange,
                 addItemToSelect,
                 dragStart,
+                drag,
                 dragOver,
                 dragDrop,
+                dragEnd,
                 dragLeave,
                 openItem,
                 displayColumn,
                 windowWidth,
+                tableDiv,
+                scrollingBound,
+                scrollingDirection,
+                scrolling,
+                scroll,
             };
         },
     });
