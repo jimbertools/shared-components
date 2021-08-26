@@ -222,7 +222,7 @@
                 });
             };
 
-            const tableDiv = ref(null);
+            const tableDiv = ref<HTMLDivElement>();
             const scrolling = ref<boolean>(false);
             const scrollingDirection = ref({
                 up: 0,
