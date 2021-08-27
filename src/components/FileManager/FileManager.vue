@@ -44,7 +44,10 @@
                     </div>
                 </div>
             </div>
-                <template v-if="activeView === 'list'">
+                <slot name="searchNotFound" v-if="!dataList.length && searchValue">
+                    <span>Not found</span>
+                </slot>
+                <template v-else-if="activeView === 'list'">
                     <Table
                         :withPagination="withPagination"
                         :backendPaginationSorting="backendPaginationSorting"
@@ -74,7 +77,7 @@
                         </template>
                     </Table>
                 </template>
-                <template v-if="activeView === 'grid'">
+                <template v-else-if="activeView === 'grid'">
                     <grid-view
                         :withPagination="withPagination"
                         :backendPaginationSorting="backendPaginationSorting"
