@@ -13,8 +13,8 @@
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row md:my-4">
-                <div class="flex flex-grow flex-wrap items-center">
-                    <slot name="breadcrumb"></slot>
+                <div class="flex flex-grow flex-wrap items-center w-full">
+                    <slot name="breadcrumb" />
                 </div>
                 <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
