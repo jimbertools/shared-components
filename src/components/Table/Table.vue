@@ -5,19 +5,24 @@
                 <tr>
                     <th
                         class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm cursor-pointer hover:text-gray-400"
-                        :class="{ hidden: header?.displayWidth >= windowWidth }"
+                        :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting}"
                         v-for="header in headers"
-                        @click="sortData(String(header.key))"
-                        :key="header.key"
+                        @click="sortData(header)"
+                        :key="`${header.key}_${sort.prop}_${sort.order}`"
                     >
-                        <slot :name="`header-${header}`" :header="header">
-                            {{ header.displayName }}
-                        </slot>
+                        <div class='flex flex-row items-center'>
+                            <slot :name="`header-${header}`" :header="header">
+                                {{ header.displayName }}
+                            </slot>
+                            <div class='flex flex-col ml-1' v-if='header.enableSorting'>
+                                <em class="fas fa-caret-up text-gray-400"  :class="{ 'text-primary': sort.prop === header.key && sort.order === 'descending' }"></em>
+                                <em class="fas fa-caret-down text-gray-400"  :class="{ 'text-primary': sort.prop === header.key && sort.order === 'ascending' }"></em>
+                            </div>
+                        </div>
                     </th>
                 </tr>
             </thead>
             <tbody>
-
                 <tr
                     class='h-8 md:h-12 border-gray-300 cursor-pointer'
                     v-for="data in dataList"
@@ -108,14 +113,18 @@
                 return window.innerWidth >= col.displayWidth;
             };
 
-            const sortData = (header: string) => {
-                if (sort && sort.value && sort.value.prop == header) {
+            const sortData = (header: IHeader<any>) => {
+                if (!header.enableSorting) {
+                    return;
+                }
+                const key = String(header.key);
+                if (sort && sort.value && sort.value.prop == key) {
                     sort.value.order = sort.value.order === 'descending' ? 'ascending' : 'descending';
                     return;
                 }
                 sort.value = {
                     order: 'ascending',
-                    prop: header,
+                    prop: key,
                 };
             };
 
