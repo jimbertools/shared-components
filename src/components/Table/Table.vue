@@ -17,6 +17,7 @@
                 </tr>
             </thead>
             <tbody>
+
                 <tr
                     class='h-8 md:h-12 border-gray-300 cursor-pointer'
                     v-for="data in dataList"
@@ -28,7 +29,7 @@
                     @click.ctrl.exact="e => addItemToSelect(data)"
                     @click.exact="e => selectItem(data)"
                     @click.shift.exact="e => selectRange(data)"
-                    @dblclick.stop='(e)=>openItem(data)'
+                    @dblclick.stop='e => openItem(data)'
                     :draggable="dragAndDrop ? 'true' : 'false'"
                     @drop.prevent="e => dragDrop(data)"
                     @dragend.prevent="$emit(Emits.StopDragging)"
@@ -49,6 +50,11 @@
                 </tr>
             </tbody>
         </table>
+        <div  v-if='data.length <= 0' class='w-full flex flex-row justify-center items-center'>
+            <slot name='emptyMessage'>
+                {{ emptyMessage }}
+            </slot>
+        </div>
     </div>
 </template>
 
@@ -62,6 +68,7 @@
         name: 'Table',
         props: {
             data: { type: Array as () => any[], required: true },
+            emptyMessage: { type: String, required: false, default: 'No items found' },
             headers: { type: Object as () => IHeader<any>[], required: true },
             page: { type: Number, required: false, default: 1 },
             pageSize: { type: Number, required: false, default: 10 },

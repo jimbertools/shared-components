@@ -44,10 +44,7 @@
                     </div>
                 </div>
             </div>
-                <slot name="searchNotFound" v-if="!dataList.length && searchValue">
-                    <span>Not found</span>
-                </slot>
-                <template v-else-if="activeView === 'list'">
+                <template v-if="activeView === 'list'">
                     <Table
                         :withPagination="withPagination"
                         :backendPaginationSorting="backendPaginationSorting"
@@ -190,6 +187,7 @@
             withFiltering: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
+            emptyMessage: { type: String, required: false },
         },
         emits: [ "search-changed", "sort-changed", "selected-changed", "open-item", "do-search", "move-items", "start-internal-drag", "stop-internal-drag" ],
         setup(props, { slots, emit }) {
