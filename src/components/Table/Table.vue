@@ -8,15 +8,15 @@
                         :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting}"
                         v-for="header in headers"
                         @click="sortData(header)"
-                        :key="`${header.key}_${sort.prop}_${sort.order}`"
+                        :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
                     >
                         <div class='flex flex-row items-center'>
                             <slot :name="`header-${header}`" :header="header">
                                 {{ header.displayName }}
                             </slot>
                             <div class='flex flex-col ml-1' v-if='header.enableSorting'>
-                                <em class="fas fa-caret-up text-gray-400"  :class="{ 'text-primary': sort.prop === header.key && sort.order === 'descending' }"></em>
-                                <em class="fas fa-caret-down text-gray-400"  :class="{ 'text-primary': sort.prop === header.key && sort.order === 'ascending' }"></em>
+                                <em class="fas fa-caret-up text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
+                                <em class="fas fa-caret-down text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
                             </div>
                         </div>
                     </th>
