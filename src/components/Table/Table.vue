@@ -4,8 +4,8 @@
             <thead>
                 <tr>
                     <th
-                        class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm cursor-pointer hover:text-gray-400"
-                        :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting}"
+                        class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm"
+                        :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting, 'cursor-pointer hover:text-gray-400': header.enableSorting}"
                         v-for="header in headers"
                         @click="sortData(header)"
                         :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
