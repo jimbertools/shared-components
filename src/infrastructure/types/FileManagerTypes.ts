@@ -1,4 +1,4 @@
-import { FileType } from '../utils/FileUtil';
+import { FileType } from '@/infrastructure/utils/FileUtil';
 
 export enum ScreenWidth {
     All = 0,

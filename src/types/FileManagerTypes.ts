@@ -24,9 +24,9 @@ export interface TEntry {
   created?: Date;
   size?: number;
   extension?: string;
+  deleted?: boolean;
   isFolder: boolean;
   fileType: FileType;
-  deleted: boolean;
 }
 
 export enum FileManagerEmits {
