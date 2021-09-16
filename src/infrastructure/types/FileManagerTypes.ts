@@ -35,6 +35,7 @@ export interface TEntry {
     extension?: string;
     isFolder: boolean;
     fileType: FileType;
+    deleted?: boolean
 }
 
 export interface ISelectedChange {
