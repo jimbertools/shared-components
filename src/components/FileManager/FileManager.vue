@@ -65,6 +65,7 @@
                         @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
                         @[TableEmits.StartDragging]="startDragging"
                         @[TableEmits.StopDragging]="stopDragging"
+                        :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
                     >
                         <template v-if="!hasSlot('data-name')" #data-name="rowData">
                             <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
@@ -189,6 +190,7 @@
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
             emptyMessage: { type: String, required: false },
+            emptySearchMessage: { type: String, required: false },
         },
         emits: [ "search-changed", "sort-changed", "selected-changed", "open-item", "do-search", "move-items", "start-internal-drag", "stop-internal-drag" ],
         setup(props, { slots, emit }) {
@@ -267,6 +269,8 @@
                 pageValue.value = 1;
             };
 
+            const isSearching = computed(() => searchValue.value && searchValue.value?.trim() !== '');
+
             const search = () => {
                 emit(Emits.DoSearch, searchValue.value);
             };
@@ -289,31 +293,32 @@
             return {
                 dataList,
                 headers,
-                TableEmits,
-                GridViewEmits,
-                InputEmits,
-                DropdownEmits,
                 sort,
-                sortDirection,
-                sortHeader,
-                Emits,
-                hasSlot,
-                getIcon,
-                getIconColor,
-                getName,
                 activeView,
-                View,
                 sortDisplayName,
                 totalValue,
                 pageValue,
                 searchValue,
-                search,
-                searchChanged,
-                dragging,
-                startDragging,
-                stopDragging,
+                isSearching,
                 mouseDraggingX,
                 mouseDraggingY,
+                dragging,
+                hasSlot,
+                sortDirection,
+                sortHeader,
+                getIcon,
+                getIconColor,
+                getName,
+                search,
+                searchChanged,
+                startDragging,
+                stopDragging,
+                TableEmits,
+                GridViewEmits,
+                InputEmits,
+                DropdownEmits,
+                View,
+                Emits,
             };
         },
         computed: {
