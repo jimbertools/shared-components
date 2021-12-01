@@ -1,22 +1,26 @@
 <template>
-    <div class='h-full overflow-y-auto'>
+    <div class="h-full overflow-y-auto">
         <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
             <thead>
                 <tr>
                     <th
                         class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm"
-                        :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting, 'cursor-pointer hover:text-gray-400': header.enableSorting}"
+                        :class="{
+                            hidden: header?.displayWidth >= windowWidth,
+                            'cursor-default': !header.enableSorting,
+                            'cursor-pointer hover:text-gray-400': header.enableSorting,
+                        }"
                         v-for="header in headers"
                         @click="sortData(header)"
                         :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
                     >
-                        <div class='flex flex-row items-center'>
+                        <div class="flex flex-row items-center">
                             <slot :name="`header-${header}`" :header="header">
                                 {{ header.displayName }}
                             </slot>
-                            <div class='flex flex-col ml-1' v-if='header.enableSorting'>
-                                <em class="fas fa-caret-up text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
-                                <em class="fas fa-caret-down text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
+                            <div class="flex flex-col ml-1" v-if="header.enableSorting">
+                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
+                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
                             </div>
                         </div>
                     </th>
@@ -24,17 +28,20 @@
             </thead>
             <tbody>
                 <tr
-                    class='h-8 md:h-12 border-gray-300 cursor-pointer'
+                    class="h-8 md:h-12 border-gray-300 cursor-pointer"
                     v-for="data in dataList"
                     :key="data"
-                    :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
-                            !isDragging ? 'hover:bg-gray-100': '',
-                            selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
+                    :class="[
+                        (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
+                            ? 'border-t-2 border-b-2 border-yellow-400'
+                            : 'border-t',
+                        !isDragging ? 'hover:bg-gray-100' : '',
+                        selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                     ]"
                     @click.ctrl.exact="e => addItemToSelect(data)"
                     @click.exact="e => selectItem(data)"
                     @click.shift.exact="e => selectRange(data)"
-                    @dblclick.stop='e => openItem(data)'
+                    @dblclick.stop="e => openItem(data)"
                     :draggable="dragAndDrop ? 'true' : 'false'"
                     @drop.prevent="e => dragDrop(data)"
                     @dragend.prevent="$emit(Emits.StopDragging)"
@@ -55,8 +62,8 @@
                 </tr>
             </tbody>
         </table>
-        <div  v-if='data.length <= 0' class='w-full flex flex-row justify-center items-center'>
-            <slot name='emptyMessage'>
+        <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
+            <slot name="emptyMessage">
                 {{ emptyMessage }}
             </slot>
         </div>
@@ -64,244 +71,245 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, PropType, ref, onMounted, onUnmounted } from 'vue';
-    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../../infrastructure/types/FileManagerTypes';
-    import { orderBy } from '../../infrastructure/utils/SortUtil';
-    import { TableEmits as Emits } from './index';
+import { computed, defineComponent, PropType, ref, onMounted, onUnmounted } from 'vue';
+import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../../infrastructure/types/FileManagerTypes';
+import { orderBy } from '../../infrastructure/utils/SortUtil';
+import { TableEmits as Emits } from './index';
 
-    export default defineComponent({
-        name: 'Table',
-        props: {
-            data: { type: Array as () => any[], required: true },
-            emptyMessage: { type: String, required: false, default: 'No items found' },
-            headers: { type: Object as () => IHeader<any>[], required: true },
-            page: { type: Number, required: false, default: 1 },
-            pageSize: { type: Number, required: false, default: 10 },
-            total: { type: Number, required: false },
-            backendPaginationSorting: { type: Boolean, required: false, default: false },
-            withPagination: { type: Boolean, required: false, default: false },
-            defaultSort: { type: Object as PropType<ISort>, required: false },
-            rowClass: { type: String, required: false },
-            dragAndDrop: { type: Boolean, required: false, default: false },
-            selectable: { type: Boolean, required: false, default: false },
-            multiSelect: { type: Boolean, required: false, default: false }
-        },
-        emits: [ "sort-changed", "page-changed", "page-size-changed", "move-items", "selected-changed", "open-item", "drop-items", "start-dragging", "stop-dragging" ],
-        setup(props, { emit }) {
-            const sort = ref<ISort | undefined>(props.defaultSort);
-            const currentPage = ref<number>(props.page);
-            const currentPageSize = ref<number>(props.pageSize);
-            let windowWidth = ref(window?.innerWidth);
+export default defineComponent({
+    name: 'Table',
+    props: {
+        data: { type: Array as () => any[], required: true },
+        emptyMessage: { type: String, required: false, default: 'No items found' },
+        headers: { type: Object as () => IHeader<any>[], required: true },
+        page: { type: Number, required: false, default: 1 },
+        pageSize: { type: Number, required: false, default: 10 },
+        total: { type: Number, required: false },
+        backendPaginationSorting: { type: Boolean, required: false, default: false },
+        withPagination: { type: Boolean, required: false, default: false },
+        defaultSort: { type: Object as PropType<ISort>, required: false },
+        rowClass: { type: String, required: false },
+        dragAndDrop: { type: Boolean, required: false, default: false },
+        selectable: { type: Boolean, required: false, default: false },
+        multiSelect: { type: Boolean, required: false, default: false },
+    },
+    emits: ['sort-changed', 'page-changed', 'page-size-changed', 'move-items', 'selected-changed', 'open-item', 'drop-items', 'start-dragging', 'stop-dragging'],
+    setup(props, { emit }) {
+        const sort = ref<ISort | undefined>(props.defaultSort);
+        const currentPage = ref<number>(props.page);
+        const currentPageSize = ref<number>(props.pageSize);
+        let windowWidth = ref(window?.innerWidth);
 
-            const dataList = computed(() => {
-                let tempData = props.data;
-                if (props.backendPaginationSorting) return tempData;
+        const dataList = computed(() => {
+            let tempData = props.data;
+            if (props.backendPaginationSorting) return tempData;
 
-                if (sort.value) tempData = orderBy(tempData, sort.value, props.headers);
+            if (sort.value) tempData = orderBy(tempData, sort.value, props.headers);
 
-                if (props.withPagination) tempData = tempData.slice((currentPage.value - 1) * currentPageSize.value, currentPage.value * currentPageSize.value);
+            if (props.withPagination) tempData = tempData.slice((currentPage.value - 1) * currentPageSize.value, currentPage.value * currentPageSize.value);
 
-                return tempData;
-            });
+            return tempData;
+        });
 
-            const onWidthChange = () => (windowWidth.value = window.innerWidth);
-            onMounted(() => window.addEventListener('resize', onWidthChange));
-            onUnmounted(() => window.removeEventListener('resize', onWidthChange));
+        const onWidthChange = () => (windowWidth.value = window.innerWidth);
+        onMounted(() => window.addEventListener('resize', onWidthChange));
+        onUnmounted(() => window.removeEventListener('resize', onWidthChange));
 
-            const displayColumn = (col: IHeader<any>): boolean => {
-                if (!col.displayWidth) return false;
-                return window.innerWidth >= col.displayWidth;
+        const displayColumn = (col: IHeader<any>): boolean => {
+            if (!col.displayWidth) return false;
+            return window.innerWidth >= col.displayWidth;
+        };
+
+        const sortData = (header: IHeader<any>) => {
+            if (!header.enableSorting) {
+                return;
+            }
+            const key = String(header.key);
+            if (sort && sort.value && sort.value.prop == key) {
+                sort.value.order = sort.value.order === 'descending' ? 'ascending' : 'descending';
+                return;
+            }
+            sort.value = {
+                order: 'ascending',
+                prop: key,
             };
+        };
 
-            const sortData = (header: IHeader<any>) => {
-                if (!header.enableSorting) {
-                    return;
-                }
-                const key = String(header.key);
-                if (sort && sort.value && sort.value.prop == key) {
-                    sort.value.order = sort.value.order === 'descending' ? 'ascending' : 'descending';
-                    return;
-                }
-                sort.value = {
-                    order: 'ascending',
-                    prop: key,
-                };
-            };
+        const paginatedData = computed(() => {
+            if (!props.withPagination) return props.data;
+            return props.data.slice((currentPageSize.value - 1) * currentPageSize.value, currentPageSize.value * currentPageSize.value);
+        });
 
-            const paginatedData = computed(() => {
-                if (!props.withPagination) return props.data;
-                return props.data.slice((currentPageSize.value - 1) * currentPageSize.value, currentPageSize.value * currentPageSize.value);
-            });
+        const handleSortChanged = (sortEvent: ISort) => {
+            if (!props.backendPaginationSorting) return;
+            emit(Emits.SortChanged, sortEvent);
+        };
 
-            const handleSortChanged = (sortEvent: ISort) => {
-                if (!props.backendPaginationSorting) return;
-                emit(Emits.SortChanged, sortEvent);
-            };
+        const handlePageChanged = (pageEvent: number) => {
+            if (props.backendPaginationSorting) {
+                emit(Emits.PageChanged, pageEvent);
+                return;
+            }
+            currentPage.value = pageEvent;
+        };
 
-            const handlePageChanged = (pageEvent: number) => {
-                if (props.backendPaginationSorting) {
-                    emit(Emits.PageChanged, pageEvent);
-                    return;
-                }
-                currentPage.value = pageEvent;
-            };
+        const handleSizeChanged = (sizeEvent: number) => {
+            if (props.backendPaginationSorting) {
+                emit(Emits.PageSizeChanged, sizeEvent);
+                return;
+            }
+            currentPageSize.value = sizeEvent;
+        };
 
-            const handleSizeChanged = (sizeEvent: number) => {
-                if (props.backendPaginationSorting) {
-                    emit(Emits.PageSizeChanged, sizeEvent);
-                    return;
-                }
-                currentPageSize.value = sizeEvent;
-            };
+        const draggingOverData = ref<TEntry>();
+        const initRangeSelectionData = ref<TEntry>();
+        const isDragging = ref<boolean>(false);
+        const selectedDatas = ref<TEntry[]>([]);
+        const previousRangeSelectionData = ref<TEntry[]>([]);
 
-            const draggingOverData = ref<TEntry>();
-            const initRangeSelectionData = ref<TEntry>();
-            const isDragging = ref<boolean>(false);
-            const selectedDatas = ref<TEntry[]>([]);
-            const previousRangeSelectionData = ref<TEntry[]>([]);
-
-            const selectItem = (data: TEntry) => {
-                if (!props.selectable) {
-                    return;
-                }
-                if (selectedDatas.value.length == 1 && selectedDatas.value[0].id == data.id) {
-                    selectedDatas.value = [];
-                } else {
-                    selectedDatas.value = [data];
-                }
-
-                emit(Emits.SelectedChanged, <ISelectedChange>{
-                    selectedItems: selectedDatas.value,
-                    selectionAction: SelectionAction.SIMPLE_SELECTION,
-                });
-
-                initRangeSelectionData.value = data;
-                previousRangeSelectionData.value = [];
-            };
-
-            const addItemToSelect = (data: TEntry) => {
-                let position = selectedDatas.value.indexOf(data);
-
-                initRangeSelectionData.value = data;
-                previousRangeSelectionData.value = [];
-
-                if (position < 0) {
-                    selectedDatas.value.push(data);
-                } else {
-                    selectedDatas.value.splice(position, 1);
-                }
-
-                emit(Emits.SelectedChanged, <ISelectedChange>{
-                    selectedItems: selectedDatas.value,
-                    selectionAction: SelectionAction.ADDING_SELECTION,
-                });
-            };
-
-            const selectRange = (data: TEntry) => {
-                if (!props.multiSelect) {
-                    return;
-                }
-                let initPosition = dataList.value.findIndex( dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
-                let endPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == data.id);
-                if (0 <= initPosition && 0 <= endPosition) {
-                    // Remove of all previously selected by range
-                    previousRangeSelectionData.value.forEach(data => {
-                        let position = selectedDatas.value.indexOf(data);
-                        if (0 <= position) {
-                            selectedDatas.value.splice(position, 1);
-                        }
-                    });
-
-                    // Add newly selected
-                    let rangeSelectedDatas = [];
-                    if (initPosition <= endPosition) {
-                        rangeSelectedDatas = dataList.value.slice(initPosition, endPosition + 1);
-                    } else {
-                        rangeSelectedDatas = dataList.value.slice(endPosition, initPosition + 1);
-                    }
-
-                    rangeSelectedDatas.forEach(data => {
-                        if (!selectedDatas.value.includes(data)) {
-                            selectedDatas.value.push(data);
-                        }
-                    });
-
-                    previousRangeSelectionData.value = rangeSelectedDatas;
-                }
-
-                emit(Emits.SelectedChanged, <ISelectedChange>{
-                    selectedItems: selectedDatas.value,
-                    selectionAction: SelectionAction.RANGE_SELECTION,
-                });
-            };
-
-            const dragStart = (e:any, data: TEntry) => {
-                if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
-                    selectedDatas.value = [data];
-                }
-                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
-                isDragging.value = true;
-                emit(Emits.StartDragging)
-            };
-
-            const dragOver = (data: TEntry) => {
-                draggingOverData.value = data;
-            };
-
-            const dragLeave = () => {
-                draggingOverData.value = undefined
+        const selectItem = (data: TEntry) => {
+            if (!props.selectable) {
+                return;
+            }
+            if (selectedDatas.value.length == 1 && selectedDatas.value[0].id == data.id) {
+                selectedDatas.value = [];
+            } else {
+                selectedDatas.value = [data];
             }
 
-            const dragDrop = (data: TEntry) => {
-                if (data.isFolder && !selectedDatas.value.includes(data)) {
-                    emit(Emits.MoveItems, <IMoveItems>{
-                        source: selectedDatas.value,
-                        destination: data,
-                    });
-                    isDragging.value = false;
-                    draggingOverData.value = undefined;
+            emit(Emits.SelectedChanged, <ISelectedChange>{
+                selectedItems: selectedDatas.value,
+                selectionAction: SelectionAction.SIMPLE_SELECTION,
+            });
+
+            initRangeSelectionData.value = data;
+            previousRangeSelectionData.value = [];
+        };
+
+        const addItemToSelect = (data: TEntry) => {
+            let position = selectedDatas.value.indexOf(data);
+
+            initRangeSelectionData.value = data;
+            previousRangeSelectionData.value = [];
+
+            if (position < 0) {
+                selectedDatas.value.push(data);
+            } else {
+                selectedDatas.value.splice(position, 1);
+            }
+
+            emit(Emits.SelectedChanged, <ISelectedChange>{
+                selectedItems: selectedDatas.value,
+                selectionAction: SelectionAction.ADDING_SELECTION,
+            });
+        };
+
+        const selectRange = (data: TEntry) => {
+            if (!props.multiSelect) {
+                return;
+            }
+            let initPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
+            let endPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == data.id);
+            if (0 <= initPosition && 0 <= endPosition) {
+                // Remove of all previously selected by range
+                previousRangeSelectionData.value.forEach(data => {
+                    let position = selectedDatas.value.indexOf(data);
+                    if (0 <= position) {
+                        selectedDatas.value.splice(position, 1);
+                    }
+                });
+
+                // Add newly selected
+                let rangeSelectedDatas = [];
+                if (initPosition <= endPosition) {
+                    rangeSelectedDatas = dataList.value.slice(initPosition, endPosition + 1);
+                } else {
+                    rangeSelectedDatas = dataList.value.slice(endPosition, initPosition + 1);
                 }
-                emit(Emits.StopDragging)
-            };
 
-            const openItem = (data: TEntry) => {
-                draggingOverData.value = undefined;
-                initRangeSelectionData.value = undefined;
+                rangeSelectedDatas.forEach(data => {
+                    if (!selectedDatas.value.includes(data)) {
+                        selectedDatas.value.push(data);
+                    }
+                });
+
+                previousRangeSelectionData.value = rangeSelectedDatas;
+            }
+
+            emit(Emits.SelectedChanged, <ISelectedChange>{
+                selectedItems: selectedDatas.value,
+                selectionAction: SelectionAction.RANGE_SELECTION,
+            });
+        };
+
+        const dragStart = (e: any, data: TEntry) => {
+            if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
+                selectedDatas.value = [data];
+            }
+            e.dataTransfer.setData('text/plain', JSON.stringify(selectedDatas.value));
+            isDragging.value = true;
+            emit(Emits.StartDragging);
+        };
+
+        const dragOver = (data: TEntry) => {
+            draggingOverData.value = data;
+        };
+
+        const dragLeave = () => {
+            draggingOverData.value = undefined;
+        };
+
+        const dragDrop = (data: TEntry) => {
+            console.log('in dragDrop', JSON.stringify(data));
+            if (data.isFolder && !selectedDatas.value.includes(data)) {
+                emit(Emits.MoveItems, <IMoveItems>{
+                    source: selectedDatas.value,
+                    destination: data,
+                });
                 isDragging.value = false;
-                selectedDatas.value = [];
-                previousRangeSelectionData.value = [];
+                draggingOverData.value = undefined;
+            }
+            emit(Emits.StopDragging);
+        };
 
-                emit(Emits.OpenItem, data);
-            };
+        const openItem = (data: TEntry) => {
+            draggingOverData.value = undefined;
+            initRangeSelectionData.value = undefined;
+            isDragging.value = false;
+            selectedDatas.value = [];
+            previousRangeSelectionData.value = [];
 
-            return {
-                dataList,
-                sort,
-                sortData,
-                paginatedData,
-                handleSortChanged,
-                handlePageChanged,
-                handleSizeChanged,
-                Emits,
-                currentPage,
-                currentPageSize,
-                draggingOverData,
-                isDragging,
-                initRangeSelectionData,
-                selectedDatas,
-                selectItem,
-                selectRange,
-                addItemToSelect,
-                dragStart,
-                dragOver,
-                dragDrop,
-                dragLeave,
-                openItem,
-                displayColumn,
-                windowWidth,
-            };
-        },
-    });
+            emit(Emits.OpenItem, data);
+        };
+
+        return {
+            dataList,
+            sort,
+            sortData,
+            paginatedData,
+            handleSortChanged,
+            handlePageChanged,
+            handleSizeChanged,
+            Emits,
+            currentPage,
+            currentPageSize,
+            draggingOverData,
+            isDragging,
+            initRangeSelectionData,
+            selectedDatas,
+            selectItem,
+            selectRange,
+            addItemToSelect,
+            dragStart,
+            dragOver,
+            dragDrop,
+            dragLeave,
+            openItem,
+            displayColumn,
+            windowWidth,
+        };
+    },
+});
 </script>
 
 <style></style>
