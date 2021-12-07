@@ -80,7 +80,6 @@
             });
             //const headers: IHeader<TEntry>[] = [];
             const startInternalDrag = () => {
-                console.log('start');
                 isInternalDragging.value = true;
             };
             const stopInternalDrag = () => {
