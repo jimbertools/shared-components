@@ -14,28 +14,22 @@
                 </template>
             </Table> -->
 
-        <file-manager :data="data" withFiltering>
-            <!-- <template #sideBar v-if="sidebarData">
-              <div class="p-6">
-                <div class="flex flex-rowborder-b-2 pb-6 border-grey-100" :key="sidebarData.fileType">
-                  <em class="text-xl" :class="getIcon(sidebarData.fileType) + ' ' + getIconColor(sidebarData.fileType)"></em>
-                  <h1 class="flex-1 px-4 truncate">
-                    {{ getName(sidebarData) }}
-                  </h1>
-                  <em class="fas fa-save"></em>
-                </div>
-                <hr />
-                <h2 class="text-lg pt-2 font-bold">Details</h2>
-                <span class="block"> Aangemaakt: {{ sidebarData.created }} </span>
-                <span class="block"> Laatst gewijzigd: {{ sidebarData.modified }} </span>
-              </div>
+        <file-manager
+            class="block h-full"
+            :data="data"
+            drag-and-drop
+            withFiltering
+            @start-internal-drag="startInternalDrag"
+            @stop-internal-drag="stopInternalDrag"
+            display-sidebar="true"
+        >
+            <template #data-deleted="rowData">
+                <span v-if="rowData.row.deleted" class="italic text-red-600">DELETED</span>
             </template>
-            <template #id="name">
-              {{ name.row.id }}
+
+            <template #dragging-indicator>
+                <!--                <div v-if="isInternalDragging" class="max-w-max p-1 border-2 border-black bg-white"><em class="far fa-file"></em>MOVING</div>-->
             </template>
-            <template #data-name='name'>
-                      overwritesss
-                  </template>  -->
         </file-manager>
     </div>
     <div>
@@ -48,10 +42,9 @@
     //  import { FileManager, FileManagerEmits, TEntry, IHeader, ISort,  }  from "@jimber/shared-components"
     // import FileManager from "@jimber/shared-components/src/components/FileManager.vue"
     // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"
-
     import { getFileType } from '@/infrastructure/utils/FileUtil';
     import jsonData from './data.json';
-    import {IconButton, FileManager} from '@/entry.esm';
+    import { IconButton, FileManager } from '@/entry.esm';
 
     const getEverything = async () => {
         //@ts-ignore
@@ -64,6 +57,7 @@
         //@ts-ignore
         return <TEntry[]>dataToReturn;
     };
+
     const data = ref<any[]>([]);
 
     // const rowClicked = (e: any) => {
@@ -79,12 +73,19 @@
             IconButton,
         },
         setup() {
+            const isInternalDragging = ref<boolean>(false);
             onBeforeMount(async () => {
                 data.value = await getEverything();
                 console.log(data.value);
             });
             //const headers: IHeader<TEntry>[] = [];
-
+            const startInternalDrag = () => {
+                console.log('start');
+                isInternalDragging.value = true;
+            };
+            const stopInternalDrag = () => {
+                isInternalDragging.value = false;
+            };
             //const changeSelected = (clickedItem: any) => {
             //  //@todo actually fetch the data
             //  console.log('here');
@@ -95,6 +96,9 @@
 
             return {
                 data,
+                startInternalDrag,
+                stopInternalDrag,
+                isInternalDragging,
                 // rowClicked,
                 // headers,
                 // changeSelected,

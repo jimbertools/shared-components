@@ -1,22 +1,26 @@
 <template>
-    <div class='h-full overflow-y-auto'>
+    <div class="h-full overflow-y-auto">
         <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
             <thead>
                 <tr>
                     <th
                         class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm"
-                        :class="{ hidden: header?.displayWidth >= windowWidth, 'cursor-default': !header.enableSorting, 'cursor-pointer hover:text-gray-400': header.enableSorting}"
+                        :class="{
+                            hidden: header?.displayWidth >= windowWidth,
+                            'cursor-default': !header.enableSorting,
+                            'cursor-pointer hover:text-gray-400': header.enableSorting,
+                        }"
                         v-for="header in headers"
                         @click="sortData(header)"
                         :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
                     >
-                        <div class='flex flex-row items-center'>
+                        <div class="flex flex-row items-center">
                             <slot :name="`header-${header}`" :header="header">
                                 {{ header.displayName }}
                             </slot>
-                            <div class='flex flex-col ml-1' v-if='header.enableSorting'>
-                                <em class="fas fa-caret-up text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
-                                <em class="fas fa-caret-down text-gray-400"  :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
+                            <div class="flex flex-col ml-1" v-if="header.enableSorting">
+                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
+                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
                             </div>
                         </div>
                     </th>
@@ -24,17 +28,20 @@
             </thead>
             <tbody>
                 <tr
-                    class='h-8 md:h-12 border-gray-300 cursor-pointer'
+                    class="h-8 md:h-12 border-gray-300 cursor-pointer"
                     v-for="data in dataList"
                     :key="data"
-                    :class ="[(data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0 ? 'border-t-2 border-b-2 border-yellow-400' : 'border-t',
-                            !isDragging ? 'hover:bg-gray-100': '',
-                            selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50': '',
+                    :class="[
+                        (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
+                            ? 'border-t-2 border-b-2 border-yellow-400'
+                            : 'border-t',
+                        !isDragging ? 'hover:bg-gray-100' : '',
+                        selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                     ]"
                     @click.ctrl.exact="e => addItemToSelect(data)"
                     @click.exact="e => selectItem(data)"
                     @click.shift.exact="e => selectRange(data)"
-                    @dblclick.stop='e => openItem(data)'
+                    @dblclick.stop="e => openItem(data)"
                     :draggable="dragAndDrop ? 'true' : 'false'"
                     @drop.prevent="e => dragDrop(data)"
                     @dragend.prevent="$emit(Emits.StopDragging)"
@@ -55,8 +62,8 @@
                 </tr>
             </tbody>
         </table>
-        <div  v-if='data.length <= 0' class='w-full flex flex-row justify-center items-center'>
-            <slot name='emptyMessage'>
+        <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
+            <slot name="emptyMessage">
                 {{ emptyMessage }}
             </slot>
         </div>
@@ -84,9 +91,9 @@
             rowClass: { type: String, required: false },
             dragAndDrop: { type: Boolean, required: false, default: false },
             selectable: { type: Boolean, required: false, default: false },
-            multiSelect: { type: Boolean, required: false, default: false }
+            multiSelect: { type: Boolean, required: false, default: false },
         },
-        emits: [ "sort-changed", "page-changed", "page-size-changed", "move-items", "selected-changed", "open-item", "drop-items", "start-dragging", "stop-dragging" ],
+        emits: ['sort-changed', 'page-changed', 'page-size-changed', 'move-items', 'selected-changed', 'open-item', 'drop-items', 'start-dragging', 'stop-dragging'],
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
@@ -201,7 +208,7 @@
                 if (!props.multiSelect) {
                     return;
                 }
-                let initPosition = dataList.value.findIndex( dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
+                let initPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);
                 let endPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == data.id);
                 if (0 <= initPosition && 0 <= endPosition) {
                     // Remove of all previously selected by range
@@ -235,13 +242,13 @@
                 });
             };
 
-            const dragStart = (e:any, data: TEntry) => {
+            const dragStart = (e: any, data: TEntry) => {
                 if (selectedDatas.value.findIndex(sel => sel.id == data.id) === -1) {
                     selectedDatas.value = [data];
                 }
-                e.dataTransfer.setData("text/plain", JSON.stringify(selectedDatas.value));
+                e.dataTransfer.setData('text/plain', JSON.stringify(selectedDatas.value));
                 isDragging.value = true;
-                emit(Emits.StartDragging)
+                emit(Emits.StartDragging, e);
             };
 
             const dragOver = (data: TEntry) => {
@@ -249,8 +256,8 @@
             };
 
             const dragLeave = () => {
-                draggingOverData.value = undefined
-            }
+                draggingOverData.value = undefined;
+            };
 
             const dragDrop = (data: TEntry) => {
                 if (data.isFolder && !selectedDatas.value.includes(data)) {
@@ -261,7 +268,7 @@
                     isDragging.value = false;
                     draggingOverData.value = undefined;
                 }
-                emit(Emits.StopDragging)
+                emit(Emits.StopDragging);
             };
 
             const openItem = (data: TEntry) => {

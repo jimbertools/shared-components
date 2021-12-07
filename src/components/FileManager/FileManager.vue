@@ -16,7 +16,7 @@
                 <div class="flex flex-grow flex-wrap items-center w-full">
                     <slot name="breadcrumb" />
                 </div>
-                <div class="flex flex-row items-center h-10 justify-center" v-if='showViewTypes'>
+                <div class="flex flex-row items-center h-10 justify-center" v-if="showViewTypes">
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
                         <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
@@ -44,77 +44,72 @@
                     </div>
                 </div>
             </div>
-                <template v-if="activeView === 'list'">
-                    <Table
-                        :withPagination="withPagination"
-                        :backendPaginationSorting="backendPaginationSorting"
-                        rowClass="bg-gray-50"
-                        :data="dataList"
-                        :headers="headers"
-                        :pageSize="pageSize"
-                        :page="pageValue"
-                        :total="totalValue"
-                        :defaultSort="sort"
-                        :drag-and-drop='dragAndDrop'
-                        selectable
-                        multi-select
-                        :emptyMessage='emptyMessage'
-                        @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
-                        @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                        @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
-                        @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
-                        @[TableEmits.StartDragging]="startDragging"
-                        @[TableEmits.StopDragging]="stopDragging"
-                        :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
-                    >
-                        <template v-if="!hasSlot('data-name')" #data-name="rowData">
-                            <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
-                            {{ getName(rowData.row) }}
-                        </template>
-                        <template v-for="(_, slot) of $slots" v-slot:[slot]="props">
-                            <slot :name="slot" v-bind="props"></slot>
-                        </template>
-                    </Table>
-                </template>
-                <template v-else-if="activeView === 'grid'">
-                    <grid-view
-                        :withPagination="withPagination"
-                        :backendPaginationSorting="backendPaginationSorting"
-                        gridClass="bg-gray-50"
-                        :data="dataList"
-                        :headers="headers"
-                        :pageSize="pageSize"
-                        :page="pageValue"
-                        :total="totalValue"
-                        :defaultSort="sort"
-                        @[GridViewEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
-                    >
-                        <template #grid-item="gridData" class="">
-                            <div
-                                class="flex-col items-center justify-center text-center w-28 break-word p-2 hover:bg-gray-100 cursor-pointer"
-                                :key="getName(gridData.item)"
-                            >
-                                <div class="flex justify-center">
-                                    <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
-                                </div>
-
-                                <span class="block truncate whitespace-normal">
-                                    {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
-                                </span>
+            <template v-if="activeView === 'list'">
+                <Table
+                    :withPagination="withPagination"
+                    :backendPaginationSorting="backendPaginationSorting"
+                    rowClass="bg-gray-50"
+                    :data="dataList"
+                    :headers="headers"
+                    :pageSize="pageSize"
+                    :page="pageValue"
+                    :total="totalValue"
+                    :defaultSort="sort"
+                    :drag-and-drop="dragAndDrop"
+                    selectable
+                    multi-select
+                    :emptyMessage="emptyMessage"
+                    @[TableEmits.OpenItem]="data => $emit(Emits.OpenItem, data)"
+                    @[TableEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
+                    @[TableEmits.SelectedChanged]="e => $emit(Emits.SelectedChanged, e)"
+                    @[TableEmits.MoveItems]="e => $emit(Emits.MoveItems, e)"
+                    @[TableEmits.StartDragging]="startDragging"
+                    @[TableEmits.StopDragging]="stopDragging"
+                    :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
+                >
+                    <template v-if="!hasSlot('data-name')" #data-name="rowData">
+                        <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
+                        {{ getName(rowData.row) }}
+                    </template>
+                    <template v-for="(_, slot) of $slots" v-slot:[slot]="props">
+                        <slot :name="slot" v-bind="props"></slot>
+                    </template>
+                </Table>
+            </template>
+            <template v-else-if="activeView === 'grid'">
+                <grid-view
+                    :withPagination="withPagination"
+                    :backendPaginationSorting="backendPaginationSorting"
+                    gridClass="bg-gray-50"
+                    :data="dataList"
+                    :headers="headers"
+                    :pageSize="pageSize"
+                    :page="pageValue"
+                    :total="totalValue"
+                    :defaultSort="sort"
+                    @[GridViewEmits.SortChanged]="e => $emit(Emits.SortChanged, e)"
+                >
+                    <template #grid-item="gridData" class="">
+                        <div class="flex-col items-center justify-center text-center w-28 break-word p-2 hover:bg-gray-100 cursor-pointer" :key="getName(gridData.item)">
+                            <div class="flex justify-center">
+                                <em class="fa-2x" :class="getIcon(gridData.item.fileType) + ' ' + getIconColor(gridData.item.fileType)"></em>
                             </div>
-                        </template>
-                    </grid-view>
-                </template>
-            </div>
-        <slot name="sideBar"></slot>
 
+                            <span class="block truncate whitespace-normal">
+                                {{ gridData.item.name.length > 25 ? `${gridData.item.name.slice(0, 25)}...` : getName(gridData.item) }}
+                            </span>
+                        </div>
+                    </template>
+                </grid-view>
+            </template>
+        </div>
+        <slot name="sideBar"></slot>
+        <div id="emptyDraggingDiv" style="position: absolute; display: block; top: 0; left: 0; width: 0; height: 0"></div>
         <!-- Dragging indicator (replicate onedrive)-->
         <div class="absolute pointer-events-none z-0 inset-0">
-            <div v-if="dragging" :style="draggingIndicatorStyle" class="absolute overflow-hidden">
+            <div v-show="dragging" :style="draggingIndicatorStyle" class="absolute overflow-hidden">
                 <slot name="dragging-indicator">
-                    <div class="max-w-max p-1 border-2 border-black bg-white" >
-                        Dragging
-                    </div>
+                    <div class="max-w-max p-1 border-2 border-black bg-white">Dragging</div>
                 </slot>
             </div>
         </div>
@@ -192,7 +187,7 @@
             emptyMessage: { type: String, required: false },
             emptySearchMessage: { type: String, required: false },
         },
-        emits: [ "search-changed", "sort-changed", "selected-changed", "open-item", "do-search", "move-items", "start-internal-drag", "stop-internal-drag" ],
+        emits: ['search-changed', 'sort-changed', 'selected-changed', 'open-item', 'do-search', 'move-items', 'start-internal-drag', 'stop-internal-drag'],
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
             const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });
@@ -277,6 +272,8 @@
 
             const startDragging = (e: DragEvent) => {
                 dragging.value = true;
+                const element = document.getElementById('emptyDraggingDiv');
+                if (element) e?.dataTransfer?.setDragImage(element, 0, 0);
                 emit(Emits.StartInternalDrag, e);
             };
 
@@ -322,12 +319,12 @@
             };
         },
         computed: {
-            draggingIndicatorStyle(): {[key: string]: string} {
+            draggingIndicatorStyle(): { [key: string]: string } {
                 return {
                     transform: `translate(${this.mouseDraggingX}px,${this.mouseDraggingY}px)`,
                 };
             },
-        }
+        },
     });
 </script>
 
