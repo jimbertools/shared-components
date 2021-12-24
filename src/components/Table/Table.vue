@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full overflow-y-auto">
+    <div class="h-full overflow-y-auto" id="scroll-container">
         <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
             <thead>
                 <tr>
@@ -47,6 +47,8 @@
                     @dragend.prevent="$emit(Emits.StopDragging)"
                     @dragstart="e => dragStart(e, data)"
                     @dragover.prevent="e => dragOver(data)"
+                    @drag="e => drag(e)"
+                    @dragend="dragEnd"
                 >
                     <td
                         v-for="header in headers"
@@ -99,6 +101,7 @@
             const currentPage = ref<number>(props.page);
             const currentPageSize = ref<number>(props.pageSize);
             let windowWidth = ref(window?.innerWidth);
+            const stop = ref(false);
 
             const dataList = computed(() => {
                 let tempData = props.data;
@@ -281,6 +284,40 @@
                 emit(Emits.OpenItem, data);
             };
 
+            const drag = (e: DragEvent) => {
+                const container = document.getElementById("scroll-container")?.getBoundingClientRect();
+                if(!container) return;
+                stop.value = true;
+                
+                if (container.top + 120 > e.clientY) {
+                    stop.value = false;
+                    scroll(-1);
+                    return;
+                }
+
+                if (container.top + container.height - 120 < e.clientY) {
+                    stop.value = false;
+                    scroll(1);
+                    return;
+                }
+            }
+
+            const dragEnd = () => {
+                stop.value = true;
+            }
+
+            const scroll = function (step: number) {
+                const container = document.getElementById("scroll-container");
+                if(!container) return;
+                const scrollY = container.scrollTop;
+                container.scrollTo(0, scrollY + step)
+                if(stop.value) return;
+                setTimeout(function () {
+                    scroll(step)
+                }, 20);
+            };
+            
+
             return {
                 dataList,
                 sort,
@@ -306,6 +343,8 @@
                 openItem,
                 displayColumn,
                 windowWidth,
+                dragEnd,
+                drag
             };
         },
     });
