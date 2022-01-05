@@ -107,7 +107,7 @@
         <div id="emptyDraggingDiv" style="position: absolute; display: block; top: 0; left: 0; width: 0; height: 0"></div>
         <!-- Dragging indicator (replicate onedrive)-->
         <div class="absolute pointer-events-none z-0 inset-0">
-            <div v-show="dragging" :style="draggingIndicatorStyle" class="absolute overflow-hidden">
+            <div v-show="dragging" class="absolute overflow-hidden" ref='dragImg'>
                 <slot name="dragging-indicator">
                     <div class="max-w-max p-1 border-2 border-black bg-white">Dragging</div>
                 </slot>
@@ -196,6 +196,7 @@
             const mouseDraggingX = ref<number>(0);
             const mouseDraggingY = ref<number>(0);
             const dragging = ref<Boolean>(false);
+            const dragImg = ref<HTMLDivElement>();
 
             const headers = computed(() => {
                 if (!props.headers || !(props.headers.length > 0)) return defaultHeaders;
@@ -285,6 +286,8 @@
             ondragover = async event => {
                 mouseDraggingX.value = event.clientX;
                 mouseDraggingY.value = event.clientY;
+                if(!dragImg.value) return;
+                dragImg.value.style.transform =  `translate(${event.clientX}px,${event.clientY}px)`
             };
 
             return {
@@ -316,14 +319,8 @@
                 DropdownEmits,
                 View,
                 Emits,
+                dragImg
             };
-        },
-        computed: {
-            draggingIndicatorStyle(): { [key: string]: string } {
-                return {
-                    transform: `translate(${this.mouseDraggingX}px,${this.mouseDraggingY}px)`,
-                };
-            },
         },
     });
 </script>
