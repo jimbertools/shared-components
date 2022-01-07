@@ -24,9 +24,13 @@
 <script lang="ts">
     import { defineComponent, ref } from 'vue';
     import { InputEmits as Emits} from './index';
+    import { SearchIcon, XIcon } from '@heroicons/vue/solid';
 
     export default defineComponent({
         name: 'Input',
+        components:{
+            SearchIcon, XIcon
+        },
         props: {
             defaultValue: { type: String },
             placeholder: { type: String },
