@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.4",
+    "@heroicons/vue": "^1.0.5",
     "autoprefixer": "^9",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "@fortawesome/fontawesome-free": "^5.15.3"
