@@ -1,7 +1,7 @@
 <template>
     <div>
     <label for="search" class="sr-only">Search</label>
-    <div class="mt-1 relative rounded-md shadow-sm">
+    <div class="mt-2 relative rounded-md shadow-sm">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center" aria-hidden="true">
         <search-icon class="mr-3 h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" @click="submit" v-if="withButton"/>
       </div>
