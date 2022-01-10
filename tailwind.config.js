@@ -4,8 +4,12 @@ module.exports = {
     theme: {
         extend: {
             gridTemplateColumns: {
-                topBarSm: 'minmax(0,85vw) minmax(0,1fr)',
-                topBarLg: 'minmax(0,30vw) minmax(0,1fr)',
+                'topBarSm': 'minmax(0,85vw) minmax(0,1fr)',
+                'topBarLg': 'minmax(0,30vw) minmax(0,1fr)',
+            },
+            screens: {
+                s: [{ min: '768px', max: '890px' }],
+                m: '891px',
             },
         },
     },
