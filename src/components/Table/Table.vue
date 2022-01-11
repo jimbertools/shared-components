@@ -1,73 +1,88 @@
 <template>
-    <div class="h-full overflow-y-auto" id="scroll-container">
-        <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
-            <thead>
-                <tr>
-                    <th
-                        class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm"
-                        :class="{
-                            hidden: header?.displayWidth >= windowWidth,
-                            'cursor-default': !header.enableSorting,
-                            'cursor-pointer hover:text-gray-400': header.enableSorting,
-                        }"
-                        v-for="header in headers"
-                        @click="sortData(header)"
-                        :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
-                    >
-                        <div class="flex flex-row items-center">
-                            <slot :name="`header-${header}`" :header="header">
-                                {{ header.displayName }}
-                            </slot>
-                            <div class="flex flex-col ml-1" v-if="header.enableSorting">
-                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
-                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    class="h-8 md:h-12 border-gray-300 cursor-pointer"
-                    v-for="data in dataList"
-                    :key="data"
-                    :class="[
-                        (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
-                            ? 'border-t-2 border-b-2 border-yellow-400'
-                            : 'border-t',
-                        !isDragging ? 'hover:bg-gray-100' : '',
-                        selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
-                    ]"
-                    @click.ctrl.exact="e => addItemToSelect(data)"
-                    @click.exact="e => selectItem(data)"
-                    @click.shift.exact="e => selectRange(data)"
-                    @dblclick.stop="e => openItem(data)"
-                    :draggable="dragAndDrop ? 'true' : 'false'"
-                    @drop.prevent="e => dragDrop(data)"
-                    @dragend.prevent="$emit(Emits.StopDragging)"
-                    @dragstart="e => dragStart(e, data)"
-                    @dragover.prevent="e => dragOver(data)"
-                    @drag="e => drag(e)"
-                    @dragend="dragEnd"
-                >
-                    <td
-                        v-for="header in headers"
-                        :data-name="`data-${header.key}`"
-                        :key="data[header.key]"
-                        class="text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4"
-                        :class="{ hidden: header?.displayWidth >= windowWidth }"
-                    >
-                        <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
-                            {{ header.formatter ? header.formatter(data) : data[header.key] }}
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    :class="{
+                                        hidden: header?.displayWidth >= windowWidth,
+                                        'cursor-default': !header.enableSorting,
+                                        'cursor-pointer hover:text-gray-400': header.enableSorting,
+                                    }"
+                                    v-for="header in headers"
+                                    @click="sortData(header)"
+                                    :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
+                                >
+                                    <div class="flex flex-row items-center">
+                                        <slot :name="`header-${header}`" :header="header">
+                                            {{ header.displayName }}
+                                        </slot>
+                                        <div class="flex flex-col ml-1" v-if="header.enableSorting">
+                                            <em
+                                                class="fas fa-caret-up text-gray-400"
+                                                :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"
+                                            ></em>
+                                            <em
+                                                class="fas fa-caret-down text-gray-400"
+                                                :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"
+                                            ></em>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="data in dataList"
+                                :key="data"
+                                :class="[
+                                    (data.isFolder &&
+                                        draggingOverData !== undefined &&
+                                        draggingOverData.id === data.id &&
+                                        selectedDatas.findIndex(selected => selected.id === data.id)) < 0
+                                        ? 'border-t-2 border-b-2 border-yellow-400'
+                                        : 'border-t',
+                                    !isDragging ? 'hover:bg-gray-100' : '',
+                                    selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
+                                ]"
+                                @click.ctrl.exact="e => addItemToSelect(data)"
+                                @click.exact="e => selectItem(data)"
+                                @click.shift.exact="e => selectRange(data)"
+                                @dblclick.stop="e => openItem(data)"
+                                :draggable="dragAndDrop ? 'true' : 'false'"
+                                @drop.prevent="e => dragDrop(data)"
+                                @dragend.prevent="$emit(Emits.StopDragging)"
+                                @dragstart="e => dragStart(e, data)"
+                                @dragover.prevent="e => dragOver(data)"
+                                @drag="e => drag(e)"
+                                @dragend="dragEnd"
+                            >
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    v-for="header in headers"
+                                    :data-name="`data-${header.key}`"
+                                    :key="data[header.key]"
+                                    :class="{ hidden: header?.displayWidth >= windowWidth }"
+                                >
+                                    <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
+                                        {{ header.formatter ? header.formatter(data) : data[header.key] }}
+                                    </slot>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
+                        <slot name="emptyMessage">
+                            {{ emptyMessage }}
                         </slot>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
-            <slot name="emptyMessage">
-                {{ emptyMessage }}
-            </slot>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
