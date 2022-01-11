@@ -2,22 +2,7 @@
     <div class="relative inline-block text-left">
         <div class="">
             <button
-                class="
-                    inline-flex
-                    justify-center
-                    w-full
-                    rounded-md
-                    border border-gray-300
-                    shadow-sm
-                    px-4
-                    py-2
-                    bg-white
-                    text-sm
-                    font-medium
-                    text-gray-700
-                    hover:bg-blue-50 hover:text-blue-400 hover:border-blue-200
-                    h-10
-                "
+                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-400 hover:border-blue-200 h-10"
                 @click="isOpen = !isOpen"
                 @blur="isOpen = false"
             >

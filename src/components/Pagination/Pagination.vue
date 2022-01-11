@@ -2,41 +2,14 @@
     <div class="flex-1 flex justify-between sm:hidden">
         <div
             v-if="currentPage !== 1"
-            class="
-                relative
-                inline-flex
-                items-center
-                px-4
-                py-2
-                border border-gray-300
-                text-sm
-                font-medium
-                rounded-md
-                text-gray-700
-                bg-white
-                hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-            "
+            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500"
             @click="previous"
         >
             Previous
         </div>
         <div
             v-if="currentPage !== totalPages"
-            class="
-                ml-3
-                relative
-                inline-flex
-                items-center
-                px-4
-                py-2
-                border border-gray-300
-                text-sm
-                font-medium
-                rounded-md
-                text-gray-700
-                bg-white
-                hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-            "
+            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500"
             @click="next"
         >
             Next
@@ -58,20 +31,7 @@
             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 <div
                     v-if="currentPage !== 1"
-                    class="
-                        relative
-                        inline-flex
-                        items-center
-                        px-2
-                        py-2
-                        rounded-l-md
-                        border border-gray-300
-                        bg-white
-                        text-sm
-                        font-medium
-                        text-gray-500
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                    "
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500"
                     @click="previous"
                 >
                     <span class="sr-only">Previous</span>
@@ -88,22 +48,7 @@
 
                 <div
                     v-if="pagesToShow[0] !== 1"
-                    class="
-                        z-10
-                        bg-white
-                        border-gray-300
-                        text-gray-500
-                        relative
-                        inline-flex
-                        items-center
-                        px-4
-                        py-2
-                        border
-                        text-sm
-                        font-medium
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                     @click="goToPage(1)"
                 >
                     1
@@ -111,44 +56,14 @@
 
                 <div
                     v-if="pagesToShow[0] !== 1"
-                    class="
-                        z-10
-                        bg-white
-                        border-gray-300
-                        text-gray-500
-                        relative
-                        inline-flex
-                        items-center
-                        px-4
-                        py-2
-                        border
-                        text-sm
-                        font-medium
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                 >
                     ...
                 </div>
 
                 <div
                     v-for="page in pagesToShow"
-                    class="
-                        z-10
-                        bg-white
-                        border-gray-300
-                        text-gray-500
-                        relative
-                        inline-flex
-                        items-center
-                        px-4
-                        py-2
-                        border
-                        text-sm
-                        font-medium
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                     :class="{
                         'bg-blue-50 border-blue-300 text-blue-500': page === currentPage,
                     }"
@@ -159,44 +74,14 @@
 
                 <div
                     v-if="pagesToShow[pagesToShow.length - 1] !== totalPages"
-                    class="
-                        z-10
-                        bg-white
-                        border-gray-300
-                        text-gray-500
-                        relative
-                        inline-flex
-                        items-center
-                        px-4
-                        py-2
-                        border
-                        text-sm
-                        font-medium
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                 >
                     ...
                 </div>
 
                 <div
                     v-if="pagesToShow[pagesToShow.length - 1] !== totalPages"
-                    class="
-                        z-10
-                        bg-white
-                        border-gray-300
-                        text-gray-500
-                        relative
-                        inline-flex
-                        items-center
-                        px-4
-                        py-2
-                        border
-                        text-sm
-                        font-medium
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                     @click="goToPage(totalPages)"
                 >
                     {{ totalPages }}
@@ -204,21 +89,7 @@
 
                 <div
                     v-if="currentPage !== totalPages"
-                    class="
-                        relative
-                        inline-flex
-                        items-center
-                        px-2
-                        py-2
-                        rounded-r-md
-                        border border-gray-300
-                        bg-white
-                        text-sm
-                        font-medium
-                        text-gray-500
-                        hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500
-                        cursor-pointer
-                    "
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-500 cursor-pointer"
                     @click="next"
                 >
                     <span class="sr-only">Next</span>
@@ -238,7 +109,7 @@
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue';
-    import { PaginationEmits as Emits } from './index'
+    import { PaginationEmits as Emits } from './index';
 
     const range = (start: number, end: number) => {
         const arr = [];
@@ -286,7 +157,7 @@
                 totalPages,
                 offset,
                 next,
-                previous
+                previous,
             };
         },
     });

@@ -12,7 +12,7 @@
     import { computed, defineComponent, PropType, ref } from 'vue';
     import { IHeader, ISort } from '../../infrastructure/types/FileManagerTypes';
     import { orderBy } from '../../infrastructure/utils/SortUtil';
-    import { GridViewEmits as Emits} from './index';
+    import { GridViewEmits as Emits } from './index';
 
     function defineGenericComponent<T>() {
         return defineComponent({
