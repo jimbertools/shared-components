@@ -5,7 +5,7 @@ export enum ScreenWidth {
     Mobile = 320,
     Tablet = 481,
     Screen = 769,
-    Desktop = 1025
+    Desktop = 1190
 }
 
 export interface IHeader<T extends Record<string, any>> {
