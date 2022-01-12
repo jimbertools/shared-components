@@ -8,8 +8,8 @@ module.exports = {
                 'topBarLg': 'minmax(0,30vw) minmax(0,1fr)',
             },
             screens: {
-                s: [{ min: '768px', max: '890px' }],
-                m: '891px',
+                s: [{ min: '768px', max: '1330px' }],
+                m: '1331px',
             },
         },
     },
