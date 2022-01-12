@@ -1,7 +1,7 @@
 <template>
     <div>
     <label for="search" class="sr-only">Search</label>
-    <div class="mt-2 relative rounded-md border border-gray-200">
+    <div class="mt-2 relative">
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center" aria-hidden="true">
         <search-icon class="mr-3 h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" @click="submit" v-if="withButton"/>
       </div>
@@ -9,7 +9,7 @@
         type="text"
         name="search"
         id="search"
-        class="block w-full pl-9 sm:text-sm border-gray-300 rounded-md"
+        class="block w-full pl-9 sm:text-sm border border-gray-200 rounded-md"
         v-model="text"
         :placeholder="placeholder"
         @input="debounce"
