@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row w-full h-full">
         <div class="flex flex-col flex-1 h-full overflow-x-hidden">
-            <div class="grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none items-center mb-4 px-4 md:justify-between">
+            <div class="grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none items-center mb-4 px-4 mt-3 md:justify-between">
                 <div class="m:max-w-md">
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
@@ -12,7 +12,7 @@
             <div>
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
-            <div class="flex flex-row md:my-4">
+            <div class="flex flex-row my-4">
                 <div class="flex flex-grow flex-wrap items-center w-full">
                     <slot name="breadcrumb" />
                 </div>
@@ -67,6 +67,9 @@
                     @[TableEmits.StopDragging]="stopDragging"
                     :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
                 >
+                    <template #tableEmptyState>
+                        <slot name="emptyState"></slot>
+                    </template>
                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
                         {{ getName(rowData.row) }}
