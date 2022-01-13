@@ -77,10 +77,10 @@
                         </tbody>
                     </table>
                     <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
-                        <slot name="emptyMessage">
+                        <slot v-if="isSearching" name="emptyMessage">
                             {{ emptyMessage }}
                         </slot>
-                        <slot name="tableEmptyState"></slot>
+                        <slot v-else name="tableEmptyState"></slot>
                     </div>
                 </div>
             </div>
@@ -110,6 +110,7 @@
             dragAndDrop: { type: Boolean, required: false, default: false },
             selectable: { type: Boolean, required: false, default: false },
             multiSelect: { type: Boolean, required: false, default: false },
+            isSearching: { type:Boolean, required: false, default:false },
         },
         emits: ['sort-changed', 'page-changed', 'page-size-changed', 'move-items', 'selected-changed', 'open-item', 'drop-items', 'start-dragging', 'stop-dragging'],
         setup(props, { emit }) {
