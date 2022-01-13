@@ -66,6 +66,7 @@
                     @[TableEmits.StartDragging]="startDragging"
                     @[TableEmits.StopDragging]="stopDragging"
                     :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
+                    :isSearching="isSearching"
                 >
                     <template #tableEmptyState>
                         <slot name="emptyState"></slot>
