@@ -80,6 +80,7 @@
                         <slot name="emptyMessage">
                             {{ emptyMessage }}
                         </slot>
+                        <slot name="tableEmptyState"></slot>
                     </div>
                 </div>
             </div>
