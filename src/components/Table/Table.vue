@@ -1,97 +1,82 @@
 <template>
-    <div class="flex flex-col px-4">
-        <div class="overflow-x-auto">
-            <div class="align-middle inline-block min-w-full">
-                <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                    :class="{
-                                        hidden: header?.displayWidth >= windowWidth,
-                                        'cursor-default': !header.enableSorting,
-                                        'cursor-pointer hover:text-gray-400': header.enableSorting,
-                                    }"
-                                    v-for="header in headers"
-                                    @click="sortData(header)"
-                                    :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
-                                >
-                                    <div class="flex flex-row items-center">
-                                        <slot :name="`header-${header}`" :header="header">
-                                            {{ header.displayName }}
-                                        </slot>
-                                        <div class="flex flex-col ml-1" v-if="header.enableSorting">
-                                            <em
-                                                class="fas fa-caret-up text-gray-400"
-                                                :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"
-                                            ></em>
-                                            <em
-                                                class="fas fa-caret-down text-gray-400"
-                                                :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"
-                                            ></em>
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="data in dataList"
-                                :key="data"
-                                :class="[
-                                    (data.isFolder &&
-                                        draggingOverData !== undefined &&
-                                        draggingOverData.id === data.id &&
-                                        selectedDatas.findIndex(selected => selected.id === data.id)) < 0
-                                        ? 'border-t-2 border-b-2 border-yellow-400'
-                                        : 'border-t',
-                                    !isDragging ? 'hover:bg-gray-100' : '',
-                                    selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
-                                ]"
-                                @click.ctrl.exact="e => addItemToSelect(data)"
-                                @click.exact="e => selectItem(data)"
-                                @click.shift.exact="e => selectRange(data)"
-                                @dblclick.stop="e => openItem(data)"
-                                :draggable="dragAndDrop ? 'true' : 'false'"
-                                @drop.prevent="e => dragDrop(data)"
-                                @dragend.prevent="$emit(Emits.StopDragging)"
-                                @dragstart="e => dragStart(e, data)"
-                                @dragover.prevent="e => dragOver(data)"
-                                @drag="e => drag(e)"
-                                @dragend="dragEnd"
-                            >
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                    v-for="header in headers"
-                                    :data-name="`data-${header.key}`"
-                                    :key="data[header.key]"
-                                    :class="{ hidden: header?.displayWidth >= windowWidth }"
-                                >
-                                    <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
-                                        {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                                    </slot>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
-                        <slot v-if="isSearching" name="emptyMessage">
-                            {{ emptyMessage }}
+    <div class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th
+                        scope="col"
+                        class="sticky top-0 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        :class="{
+                            hidden: header?.displayWidth >= windowWidth,
+                            'cursor-default': !header.enableSorting,
+                            'cursor-pointer hover:text-gray-400': header.enableSorting,
+                        }"
+                        v-for="header in headers"
+                        @click="sortData(header)"
+                        :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
+                    >
+                        <div class="flex flex-row items-center">
+                            <slot :name="`header-${header}`" :header="header">
+                                {{ header.displayName }}
+                            </slot>
+                            <div class="flex flex-col ml-1" v-if="header.enableSorting">
+                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
+                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    v-for="data in dataList"
+                    :key="data"
+                    :class="[
+                        (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
+                            ? 'border-t-2 border-b-2 border-yellow-400'
+                            : 'border-t',
+                        !isDragging ? 'hover:bg-gray-100' : '',
+                        selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
+                    ]"
+                    @click.ctrl.exact="e => addItemToSelect(data)"
+                    @click.exact="e => selectItem(data)"
+                    @click.shift.exact="e => selectRange(data)"
+                    @dblclick.stop="e => openItem(data)"
+                    :draggable="dragAndDrop ? 'true' : 'false'"
+                    @drop.prevent="e => dragDrop(data)"
+                    @dragend.prevent="$emit(Emits.StopDragging)"
+                    @dragstart="e => dragStart(e, data)"
+                    @dragover.prevent="e => dragOver(data)"
+                    @drag="e => drag(e)"
+                    @dragend="dragEnd"
+                >
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                        v-for="header in headers"
+                        :data-name="`data-${header.key}`"
+                        :key="data[header.key]"
+                        :class="{ hidden: header?.displayWidth >= windowWidth }"
+                    >
+                        <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
+                            {{ header.formatter ? header.formatter(data) : data[header.key] }}
                         </slot>
-                        <slot v-else name="tableEmptyState"></slot>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
+            <slot v-if="isSearching" name="emptyMessage">
+                {{ emptyMessage }}
+            </slot>
+            <slot v-else name="tableEmptyState"></slot>
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref, onMounted, onUnmounted } from 'vue';
-    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '../../infrastructure/types/FileManagerTypes';
-    import { orderBy } from '../../infrastructure/utils/SortUtil';
+    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '@/infrastructure/types/FileManagerTypes';
+    import { orderBy } from '@/infrastructure/utils/SortUtil';
     import { TableEmits as Emits } from './index';
 
     export default defineComponent({
@@ -110,7 +95,7 @@
             dragAndDrop: { type: Boolean, required: false, default: false },
             selectable: { type: Boolean, required: false, default: false },
             multiSelect: { type: Boolean, required: false, default: false },
-            isSearching: { type:Boolean, required: false, default:false },
+            isSearching: { type: Boolean, required: false, default: false },
         },
         emits: ['sort-changed', 'page-changed', 'page-size-changed', 'move-items', 'selected-changed', 'open-item', 'drop-items', 'start-dragging', 'stop-dragging'],
         setup(props, { emit }) {
@@ -302,10 +287,10 @@
             };
 
             const drag = (e: DragEvent) => {
-                const container = document.getElementById("scroll-container")?.getBoundingClientRect();
-                if(!container) return;
+                const container = document.getElementById('scroll-container')?.getBoundingClientRect();
+                if (!container) return;
                 stop.value = true;
-                
+
                 if (container.top + 120 > e.clientY) {
                     stop.value = false;
                     scroll(-1);
@@ -317,23 +302,22 @@
                     scroll(1);
                     return;
                 }
-            }
+            };
 
             const dragEnd = () => {
                 stop.value = true;
-            }
+            };
 
             const scroll = function (step: number) {
-                const container = document.getElementById("scroll-container");
-                if(!container) return;
+                const container = document.getElementById('scroll-container');
+                if (!container) return;
                 const scrollY = container.scrollTop;
-                container.scrollTo(0, scrollY + step)
-                if(stop.value) return;
+                container.scrollTo(0, scrollY + step);
+                if (stop.value) return;
                 setTimeout(function () {
-                    scroll(step)
+                    scroll(step);
                 }, 20);
             };
-            
 
             return {
                 dataList,
@@ -361,7 +345,7 @@
                 displayColumn,
                 windowWidth,
                 dragEnd,
-                drag
+                drag,
             };
         },
     });

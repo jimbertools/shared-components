@@ -10,6 +10,13 @@ enum TableEmits {
     DropItems = 'drop-items',
     StartDragging = 'start-dragging',
     StopDragging = 'stop-dragging',
+    TriggerLoadMore = 'trigger-load-more',
+}
+
+export enum JTableAlignment {
+    START = 'left',
+    CENTER = 'center',
+    END = 'right',
 }
 
 export { Table, TableEmits };
