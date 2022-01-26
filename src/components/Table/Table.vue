@@ -99,7 +99,7 @@
             isSearching: { type: Boolean, required: false, default: false },
         },
         emits: [
-            'update-defaultSort',
+            'update:defaultSort',
             'sort-changed',
             'page-changed',
             'page-size-changed',
