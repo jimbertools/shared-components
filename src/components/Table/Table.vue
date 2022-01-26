@@ -36,6 +36,7 @@
                             ? 'border-t-2 border-b-2 border-yellow-400'
                             : 'border-t',
                         !isDragging ? 'hover:bg-gray-100' : '',
+                        selectable ? 'cursor-pointer' : '',
                         selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                     ]"
                     @click.ctrl.exact="e => addItemToSelect(data)"
@@ -102,8 +103,8 @@
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
             const currentPageSize = ref<number>(props.pageSize);
-            let windowWidth = ref(window?.innerWidth);
-            const stop = ref(false);
+            const windowWidth = ref<number>(window?.innerWidth);
+            const stop = ref<boolean>(false);
 
             const dataList = computed(() => {
                 let tempData = props.data;
@@ -138,6 +139,7 @@
                     order: 'ascending',
                     prop: key,
                 };
+                emit('sort-changed', sort.value);
             };
 
             const paginatedData = computed(() => {
