@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
+    <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -111,6 +111,7 @@
             'stop-dragging',
         ],
         setup(props, { emit }) {
+            const tableContainer = ref();
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
             const currentPageSize = ref<number>(props.pageSize);
@@ -150,6 +151,7 @@
                     order,
                     prop: key,
                 };
+                scrollToTop();
                 emit(Emits.UpdateDefaultSort, sort.value);
                 emit(Emits.SortChanged);
             };
@@ -333,7 +335,12 @@
                 }, 20);
             };
 
+            const scrollToTop = () => {
+                tableContainer.value.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
             return {
+                tableContainer,
                 dataList,
                 sort,
                 sortData,
