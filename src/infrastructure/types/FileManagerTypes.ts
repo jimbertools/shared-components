@@ -1,4 +1,5 @@
 import { FileType } from '@/infrastructure/utils/FileUtil';
+import { SortType } from '@/components';
 
 export enum ScreenWidth {
     All = 0,
@@ -23,7 +24,7 @@ export interface IHeader<T extends Record<string, any>> {
 
 export interface ISort {
     prop: string;
-    order: 'asc' | 'desc';
+    order: SortType;
 }
 
 export interface TEntry {

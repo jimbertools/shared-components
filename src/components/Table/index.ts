@@ -1,6 +1,6 @@
 import Table from './Table.vue';
 
-enum TableEmits {
+export enum TableEmits {
     UpdateDefaultSort = 'update:defaultSort',
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
@@ -20,4 +20,9 @@ export enum JTableAlignment {
     END = 'right',
 }
 
-export { Table, TableEmits };
+export enum SortType {
+    ASCENDING = 'ASC',
+    DESCENDING = 'DESC',
+}
+
+export { Table };

@@ -20,8 +20,8 @@
                                 {{ header.displayName }}
                             </slot>
                             <div class="flex flex-col ml-1" v-if="header.enableSorting">
-                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'descending' }"></em>
-                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === 'ascending' }"></em>
+                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"></em>
+                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"></em>
                             </div>
                         </div>
                     </th>
@@ -75,10 +75,10 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, PropType, ref, onMounted, onUnmounted } from 'vue';
-    import { IHeader, ISort, TEntry, IMoveItems, ISelectedChange, SelectionAction } from '@/infrastructure/types/FileManagerTypes';
+    import { computed, defineComponent, onMounted, onUnmounted, PropType, ref } from 'vue';
+    import { IHeader, IMoveItems, ISelectedChange, ISort, SelectionAction, TEntry } from '@/infrastructure/types/FileManagerTypes';
     import { orderBy } from '@/infrastructure/utils/SortUtil';
-    import { TableEmits as Emits } from './index';
+    import { SortType, TableEmits as Emits } from './index';
 
     export default defineComponent({
         name: 'Table',
@@ -142,9 +142,9 @@
                     return;
                 }
                 const key = String(header.key);
-                let order: 'asc' | 'desc' = 'asc';
+                let order: SortType = SortType.ASCENDING;
                 if (sort && sort.value && sort.value.prop == key) {
-                    order = sort.value.order === 'desc' ? 'asc' : 'desc';
+                    order = sort.value.order === SortType.DESCENDING ? SortType.ASCENDING : SortType.DESCENDING;
                 }
                 sort.value = {
                     order,
@@ -342,6 +342,7 @@
                 handlePageChanged,
                 handleSizeChanged,
                 Emits,
+                SortType,
                 currentPage,
                 currentPageSize,
                 draggingOverData,

@@ -19,12 +19,12 @@
                 <div class="flex flex-row items-center h-10 justify-center" v-if="showViewTypes">
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
-                        <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
+                        <IconButton v-if="sort?.order !== SortType.ASCENDING" @click="sortDirection(SortType.ASCENDING)">
                             <div>
                                 <em class="fas fa-sort-amount-down"></em>
                             </div>
                         </IconButton>
-                        <IconButton v-if="sort?.order !== 'descending'" @click="sortDirection('descending')">
+                        <IconButton v-if="sort?.order !== SortType.DESCENDING" @click="sortDirection(SortType.DESCENDING)">
                             <div>
                                 <em class="fas fa-sort-amount-up"></em>
                             </div>
@@ -122,7 +122,7 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import { Table, TableEmits } from '../Table';
+    import { SortType, Table, TableEmits } from '../Table';
     import { GridView, GridViewEmits } from '../GridView';
     import { IHeader, ISort, ScreenWidth, TEntry } from '../../infrastructure/types/FileManagerTypes';
     import { fileComparer, getIcon, getIconColor, getName } from '../../infrastructure/utils/FileUtil';
@@ -194,7 +194,7 @@
         emits: ['search-changed', 'sort-changed', 'selected-changed', 'open-item', 'do-search', 'move-items', 'start-internal-drag', 'stop-internal-drag'],
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
-            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'asc' });
+            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: SortType.ASCENDING });
             const searchValue = ref<string>();
             const pageValue = ref(props.page);
             const mouseDraggingX = ref<number>(0);
@@ -237,12 +237,12 @@
             const sortHeader = (option: IOption) => {
                 sort.value = {
                     prop: option.value,
-                    order: sort.value?.order === 'desc' ? 'asc' : 'desc',
+                    order: sort.value?.order === SortType.DESCENDING ? SortType.ASCENDING : SortType.DESCENDING,
                 } as ISort;
                 sortChanged();
             };
 
-            const sortDirection = (direction: 'asc' | 'desc') => {
+            const sortDirection = (direction: SortType) => {
                 sort.value = {
                     ...(sort.value ?? {}),
                     order: direction,
@@ -322,6 +322,7 @@
                 InputEmits,
                 DropdownEmits,
                 View,
+                SortType,
                 Emits,
                 dragImg,
             };
