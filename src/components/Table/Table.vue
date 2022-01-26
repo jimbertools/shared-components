@@ -98,7 +98,7 @@
             multiSelect: { type: Boolean, required: false, default: false },
             isSearching: { type: Boolean, required: false, default: false },
         },
-        emits: ['sort-changed', 'page-changed', 'page-size-changed', 'move-items', 'selected-changed', 'open-item', 'drop-items', 'start-dragging', 'stop-dragging'],
+        emits: Object.values(Emits),
         setup(props, { emit }) {
             const sort = ref<ISort | undefined>(props.defaultSort);
             const currentPage = ref<number>(props.page);
@@ -139,7 +139,8 @@
                     order,
                     prop: key,
                 };
-                emit('sort-changed', sort.value);
+                emit(Emits.UpdateDefaultSort, sort.value);
+                emit(Emits.SortChanged);
             };
 
             const paginatedData = computed(() => {

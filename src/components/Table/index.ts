@@ -1,6 +1,7 @@
 import Table from './Table.vue';
 
 enum TableEmits {
+    UpdateDefaultSort = 'update-defaultSort',
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
