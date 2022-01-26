@@ -111,7 +111,7 @@
         <div id="emptyDraggingDiv" style="position: absolute; display: block; top: 0; left: 0; width: 0; height: 0"></div>
         <!-- Dragging indicator (replicate onedrive)-->
         <div class="absolute pointer-events-none z-0 inset-0">
-            <div v-show="dragging" class="absolute overflow-hidden" ref='dragImg'>
+            <div v-show="dragging" class="absolute overflow-hidden" ref="dragImg">
                 <slot name="dragging-indicator">
                     <div class="max-w-max p-1 border-2 border-black bg-white">Dragging</div>
                 </slot>
@@ -194,7 +194,7 @@
         emits: ['search-changed', 'sort-changed', 'selected-changed', 'open-item', 'do-search', 'move-items', 'start-internal-drag', 'stop-internal-drag'],
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
-            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });
+            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'asc' });
             const searchValue = ref<string>();
             const pageValue = ref(props.page);
             const mouseDraggingX = ref<number>(0);
@@ -237,12 +237,12 @@
             const sortHeader = (option: IOption) => {
                 sort.value = {
                     prop: option.value,
-                    order: sort.value?.order === 'descending' ? 'ascending' : 'descending',
+                    order: sort.value?.order === 'desc' ? 'asc' : 'desc',
                 } as ISort;
                 sortChanged();
             };
 
-            const sortDirection = (direction: 'ascending' | 'descending') => {
+            const sortDirection = (direction: 'asc' | 'desc') => {
                 sort.value = {
                     ...(sort.value ?? {}),
                     order: direction,
@@ -290,8 +290,8 @@
             ondragover = async event => {
                 mouseDraggingX.value = event.clientX;
                 mouseDraggingY.value = event.clientY;
-                if(!dragImg.value) return;
-                dragImg.value.style.transform =  `translate(${event.clientX}px,${event.clientY}px)`
+                if (!dragImg.value) return;
+                dragImg.value.style.transform = `translate(${event.clientX}px,${event.clientY}px)`;
             };
 
             return {
@@ -323,7 +323,7 @@
                 DropdownEmits,
                 View,
                 Emits,
-                dragImg
+                dragImg,
             };
         },
     });

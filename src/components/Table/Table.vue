@@ -142,9 +142,9 @@
                     return;
                 }
                 const key = String(header.key);
-                let order: 'ascending' | 'descending' = 'ascending';
+                let order: 'asc' | 'desc' = 'asc';
                 if (sort && sort.value && sort.value.prop == key) {
-                    order = sort.value.order === 'descending' ? 'ascending' : 'descending';
+                    order = sort.value.order === 'desc' ? 'asc' : 'desc';
                 }
                 sort.value = {
                     order,

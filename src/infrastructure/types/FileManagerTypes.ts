@@ -5,7 +5,7 @@ export enum ScreenWidth {
     Mobile = 320,
     Tablet = 481,
     Screen = 769,
-    Desktop = 1190
+    Desktop = 1190,
 }
 
 export interface IHeader<T extends Record<string, any>> {
@@ -23,7 +23,7 @@ export interface IHeader<T extends Record<string, any>> {
 
 export interface ISort {
     prop: string;
-    order: 'ascending' | 'descending';
+    order: 'asc' | 'desc';
 }
 
 export interface TEntry {
@@ -35,7 +35,7 @@ export interface TEntry {
     extension?: string;
     isFolder: boolean;
     fileType: FileType;
-    deleted?: boolean
+    deleted?: boolean;
 }
 
 export interface ISelectedChange {
