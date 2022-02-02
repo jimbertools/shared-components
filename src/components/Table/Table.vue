@@ -20,8 +20,11 @@
                                 {{ header.displayName }}
                             </slot>
                             <div class="flex flex-col ml-1" v-if="header.enableSorting">
-                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"></em>
-                                <em class="fas fa-caret-down text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"></em>
+                                <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"></em>
+                                <em
+                                    class="fas fa-caret-down text-gray-400"
+                                    :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
+                                ></em>
                             </div>
                         </div>
                     </th>
