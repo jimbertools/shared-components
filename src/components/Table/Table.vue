@@ -1,6 +1,6 @@
 <template>
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
-        <table v-if="!isLoading" class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
                     <th
@@ -32,6 +32,7 @@
             </thead>
             <tbody>
                 <tr
+                    v-if="!isLoading"
                     v-for="data in dataList"
                     :key="data"
                     :class="[
@@ -74,7 +75,7 @@
             </slot>
             <slot v-if="$slots.tableEmptyState" name="tableEmptyState"></slot>
         </div>
-        <div v-if="isLoading" class="w-full flex flex-row justify-center items-center">
+        <div v-if="isLoading" class="w-full flex flex-row justify-center items-center mt-2">
             <span class="flex flex-col items-center mt-2">
                 <svg class="w-8 h-8 animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="text-primary opacity-60" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
