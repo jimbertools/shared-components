@@ -68,7 +68,7 @@
                 </tr>
             </tbody>
         </table>
-        <div v-if="data.length <= 0" class="w-full flex flex-row justify-center items-center">
+        <div v-if="data.length <= 0 && !isLoading" class="w-full flex flex-row justify-center items-center">
             <slot v-if="isSearching" name="emptyMessage">
                 {{ emptyMessage }}
             </slot>
