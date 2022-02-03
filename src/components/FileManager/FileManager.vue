@@ -66,7 +66,8 @@
                     @[TableEmits.StartDragging]="startDragging"
                     @[TableEmits.StopDragging]="stopDragging"
                     :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
-                    :isSearching="isSearching"
+                    :is-searching="isSearching"
+                    :is-loading="isLoading"
                 >
                     <template #tableEmptyState>
                         <slot name="emptyState"></slot>
@@ -190,6 +191,7 @@
             icons: { type: Object, required: false },
             emptyMessage: { type: String, required: false },
             emptySearchMessage: { type: String, required: false },
+            isLoading: { type: Boolean, required: false, default: false },
         },
         emits: ['search-changed', 'sort-changed', 'selected-changed', 'open-item', 'do-search', 'move-items', 'start-internal-drag', 'stop-internal-drag'],
         setup(props, { slots, emit }) {

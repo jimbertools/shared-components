@@ -1,6 +1,6 @@
 <template>
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200">
+        <table v-if="!isLoading" class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
                     <th
@@ -72,7 +72,20 @@
             <slot v-if="isSearching" name="emptyMessage">
                 {{ emptyMessage }}
             </slot>
-            <slot v-else name="tableEmptyState"></slot>
+            <slot v-if="$slots.tableEmptyState" name="tableEmptyState"></slot>
+        </div>
+        <div v-if="isLoading" class="w-full flex flex-row justify-center items-center">
+            <span class="flex flex-col items-center mt-2">
+                <svg class="w-8 h-8 animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="text-primary opacity-60" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path
+                        class="opacity-50"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                </svg>
+                <slot name="loading"> Loading items... </slot>
+            </span>
         </div>
     </div>
 </template>
@@ -100,6 +113,7 @@
             selectable: { type: Boolean, required: false, default: false },
             multiSelect: { type: Boolean, required: false, default: false },
             isSearching: { type: Boolean, required: false, default: false },
+            isLoading: { type: Boolean, required: false, default: false },
         },
         emits: [
             'update:defaultSort',
