@@ -5,7 +5,7 @@
                 <tr>
                     <th
                         scope="col"
-                        class="sticky top-0 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        class="sticky top-0 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider z-50"
                         :class="{
                             hidden: header?.displayWidth >= windowWidth,
                             'cursor-default': !header.enableSorting,
@@ -33,8 +33,9 @@
             <tbody>
                 <tr
                     v-if="!isLoading"
-                    v-for="data in dataList"
+                    v-for="(data, index) in dataList"
                     :key="data"
+                    class="border-b border-gray-100"
                     :class="[
                         (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
                             ? 'border-t-2 border-b-2 border-yellow-400'
@@ -62,7 +63,7 @@
                         :key="data[header.key]"
                         :class="{ hidden: header?.displayWidth >= windowWidth }"
                     >
-                        <slot :name="`data-${header.key}`" :data="data[header.key]" :row="data">
+                        <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                             {{ header.formatter ? header.formatter(data) : data[header.key] }}
                         </slot>
                     </td>
