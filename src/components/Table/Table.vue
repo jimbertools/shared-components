@@ -102,7 +102,7 @@
         name: 'Table',
         props: {
             data: { type: Array as () => any[], required: true },
-            emptyMessage: { type: String, required: false, default: 'No items found' },
+            emptyMessage: { type: String, required: false, default: '' },
             headers: { type: Object as () => IHeader<any>[], required: true },
             page: { type: Number, required: false, default: 1 },
             pageSize: { type: Number, required: false, default: 10 },
