@@ -5,7 +5,7 @@
                 <tr>
                     <th
                         scope="col"
-                        class="sticky top-0 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider z-50"
+                        class="sticky top-0 bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         :class="{
                             hidden: header?.displayWidth >= windowWidth,
                             'cursor-default': !header.enableSorting,
