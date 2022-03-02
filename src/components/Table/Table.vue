@@ -322,7 +322,6 @@
             };
 
             const openItem = (data: TEntry) => {
-                console.log('OPENING');
                 draggingOverData.value = undefined;
                 initRangeSelectionData.value = undefined;
                 isDragging.value = false;
