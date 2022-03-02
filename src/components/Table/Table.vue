@@ -109,6 +109,7 @@
             total: { type: Number, required: false },
             backendPaginationSorting: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
+            openWithSingleClick: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             rowClass: { type: String, required: false },
             dragAndDrop: { type: Boolean, required: false, default: false },
@@ -211,6 +212,12 @@
                 if (!props.selectable) {
                     return;
                 }
+
+                if (props.openWithSingleClick) {
+                    openItem(data);
+                    return;
+                }
+
                 if (selectedDatas.value.length == 1 && selectedDatas.value[0].id == data.id) {
                     selectedDatas.value = [];
                 } else {
@@ -227,6 +234,9 @@
             };
 
             const addItemToSelect = (data: TEntry) => {
+                if (props.openWithSingleClick) {
+                    return;
+                }
                 let position = selectedDatas.value.indexOf(data);
 
                 initRangeSelectionData.value = data;
@@ -245,7 +255,7 @@
             };
 
             const selectRange = (data: TEntry) => {
-                if (!props.multiSelect) {
+                if (!props.multiSelect || props.openWithSingleClick) {
                     return;
                 }
                 let initPosition = dataList.value.findIndex(dataListEntry => dataListEntry.id == initRangeSelectionData.value?.id);

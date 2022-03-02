@@ -48,6 +48,7 @@
                 <Table
                     :withPagination="withPagination"
                     :backendPaginationSorting="backendPaginationSorting"
+                    :openWithSingleClick="openWithSingleClick"
                     rowClass="bg-gray-50"
                     :data="dataList"
                     :headers="headers"
@@ -187,6 +188,7 @@
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },
+            openWithSingleClick: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
             emptyMessage: { type: String, required: false },
