@@ -1,6 +1,6 @@
 {
   "name": "@jimber/shared-components",
-  "version": "1.0.23",
+  "version": "1.0.48",
   "license": "Apache-2.0",
   "private": false,
   "description": "",
@@ -24,11 +24,11 @@
     "postbuild": "rimraf ./dist/types/dev ./dist/types/src/entry.d.ts"
   },
   "dependencies": {
-    "@tailwindcss/postcss7-compat": "^2.2.4",
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@heroicons/vue": "^1.0.5",
-    "autoprefixer": "^9",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
-    "@fortawesome/fontawesome-free": "^5.15.3"
+    "@tailwindcss/postcss7-compat": "^2.2.4",
+    "autoprefixer": "^10.4.2",
+    "tailwindcss": "^3.0.18"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
@@ -54,7 +54,7 @@
     "cross-env": "^7.0.3",
     "global": "^4.4.0",
     "minimist": "^1.2.5",
-    "postcss": "^8.2.10",
+    "postcss": "^8.4.6",
     "rimraf": "^3.0.2",
     "rollup": "^2.52.8",
     "rollup-plugin-commonjs": "^10.1.0",

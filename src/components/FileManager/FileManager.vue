@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-row w-full h-full">
         <div class="flex flex-col flex-1 h-full overflow-x-hidden">
-            <div class="grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none items-center mb-4 px-4 md:justify-between">
-                <div class="lg:max-w-md">
+            <div class="grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none items-center mb-4 px-4 mt-3 md:justify-between">
+                <div class="m:max-w-md">
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
                 <div class="flex flex-row flex-grow pl-2 md:pl-0">
@@ -12,19 +12,19 @@
             <div>
                 <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
-            <div class="flex flex-row md:my-4">
+            <div class="flex flex-row my-4">
                 <div class="flex flex-grow flex-wrap items-center w-full">
                     <slot name="breadcrumb" />
                 </div>
                 <div class="flex flex-row items-center h-10 justify-center" v-if="showViewTypes">
                     <div v-if="activeView === 'grid' && headers?.some(x => x.enableSorting)">
                         <Dropdown :options="headers.map(x => ({ label: x.displayName, value: x.key }))" @[DropdownEmits.Changed]="sortHeader" default-option="name" />
-                        <IconButton v-if="sort?.order !== 'ascending'" @click="sortDirection('ascending')">
+                        <IconButton v-if="sort?.order !== SortType.ASCENDING" @click="sortDirection(SortType.ASCENDING)">
                             <div>
                                 <em class="fas fa-sort-amount-down"></em>
                             </div>
                         </IconButton>
-                        <IconButton v-if="sort?.order !== 'descending'" @click="sortDirection('descending')">
+                        <IconButton v-if="sort?.order !== SortType.DESCENDING" @click="sortDirection(SortType.DESCENDING)">
                             <div>
                                 <em class="fas fa-sort-amount-up"></em>
                             </div>
@@ -48,6 +48,7 @@
                 <Table
                     :withPagination="withPagination"
                     :backendPaginationSorting="backendPaginationSorting"
+                    :openWithSingleClick="openWithSingleClick"
                     rowClass="bg-gray-50"
                     :data="dataList"
                     :headers="headers"
@@ -66,7 +67,12 @@
                     @[TableEmits.StartDragging]="startDragging"
                     @[TableEmits.StopDragging]="stopDragging"
                     :empty-message="isSearching && dataList.length <= 0 ? emptySearchMessage : emptyMessage"
+                    :is-searching="isSearching"
+                    :is-loading="isLoading"
                 >
+                    <template #tableEmptyState>
+                        <slot name="emptyState"></slot>
+                    </template>
                     <template v-if="!hasSlot('data-name')" #data-name="rowData">
                         <em :class="getIcon(rowData.row.fileType) + ' ' + getIconColor(rowData.row.fileType)"></em>
                         {{ getName(rowData.row) }}
@@ -107,7 +113,7 @@
         <div id="emptyDraggingDiv" style="position: absolute; display: block; top: 0; left: 0; width: 0; height: 0"></div>
         <!-- Dragging indicator (replicate onedrive)-->
         <div class="absolute pointer-events-none z-0 inset-0">
-            <div v-show="dragging" class="absolute overflow-hidden" ref='dragImg'>
+            <div v-show="dragging" class="absolute overflow-hidden" ref="dragImg">
                 <slot name="dragging-indicator">
                     <div class="max-w-max p-1 border-2 border-black bg-white">Dragging</div>
                 </slot>
@@ -118,7 +124,7 @@
 
 <script lang="ts">
     import { computed, defineComponent, PropType, ref } from 'vue';
-    import { Table, TableEmits } from '../Table';
+    import { SortType, Table, TableEmits } from '../Table';
     import { GridView, GridViewEmits } from '../GridView';
     import { IHeader, ISort, ScreenWidth, TEntry } from '../../infrastructure/types/FileManagerTypes';
     import { fileComparer, getIcon, getIconColor, getName } from '../../infrastructure/utils/FileUtil';
@@ -182,15 +188,17 @@
             backendFiltering: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             withFiltering: { type: Boolean, required: false, default: false },
+            openWithSingleClick: { type: Boolean, required: false, default: false },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             icons: { type: Object, required: false },
             emptyMessage: { type: String, required: false },
             emptySearchMessage: { type: String, required: false },
+            isLoading: { type: Boolean, required: false, default: false },
         },
         emits: ['search-changed', 'sort-changed', 'selected-changed', 'open-item', 'do-search', 'move-items', 'start-internal-drag', 'stop-internal-drag'],
         setup(props, { slots, emit }) {
             const activeView = ref<View>(View.List);
-            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: 'ascending' });
+            const sort = ref<ISort | undefined>(props.defaultSort ?? { prop: 'name', order: SortType.ASCENDING });
             const searchValue = ref<string>();
             const pageValue = ref(props.page);
             const mouseDraggingX = ref<number>(0);
@@ -233,12 +241,12 @@
             const sortHeader = (option: IOption) => {
                 sort.value = {
                     prop: option.value,
-                    order: sort.value?.order === 'descending' ? 'ascending' : 'descending',
+                    order: sort.value?.order === SortType.DESCENDING ? SortType.ASCENDING : SortType.DESCENDING,
                 } as ISort;
                 sortChanged();
             };
 
-            const sortDirection = (direction: 'ascending' | 'descending') => {
+            const sortDirection = (direction: SortType) => {
                 sort.value = {
                     ...(sort.value ?? {}),
                     order: direction,
@@ -286,8 +294,8 @@
             ondragover = async event => {
                 mouseDraggingX.value = event.clientX;
                 mouseDraggingY.value = event.clientY;
-                if(!dragImg.value) return;
-                dragImg.value.style.transform =  `translate(${event.clientX}px,${event.clientY}px)`
+                if (!dragImg.value) return;
+                dragImg.value.style.transform = `translate(${event.clientX}px,${event.clientY}px)`;
             };
 
             return {
@@ -318,8 +326,9 @@
                 InputEmits,
                 DropdownEmits,
                 View,
+                SortType,
                 Emits,
-                dragImg
+                dragImg,
             };
         },
     });

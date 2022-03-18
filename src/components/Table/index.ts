@@ -1,6 +1,7 @@
 import Table from './Table.vue';
 
-enum TableEmits {
+export enum TableEmits {
+    UpdateDefaultSort = 'update:defaultSort',
     SortChanged = 'sort-changed',
     PageChanged = 'page-changed',
     PageSizeChanged = 'page-size-changed',
@@ -10,6 +11,18 @@ enum TableEmits {
     DropItems = 'drop-items',
     StartDragging = 'start-dragging',
     StopDragging = 'stop-dragging',
+    TriggerLoadMore = 'trigger-load-more',
 }
 
-export { Table, TableEmits };
+export enum JTableAlignment {
+    START = 'left',
+    CENTER = 'center',
+    END = 'right',
+}
+
+export enum SortType {
+    ASCENDING = 'ASC',
+    DESCENDING = 'DESC',
+}
+
+export { Table };

@@ -19,6 +19,7 @@
             :data="data"
             drag-and-drop
             withFiltering
+            openWithSingleClick
             @start-internal-drag="startInternalDrag"
             @stop-internal-drag="stopInternalDrag"
             display-sidebar="true"
