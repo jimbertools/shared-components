@@ -1,7 +1,7 @@
 <template>
     <div class="h-full overflow-y-auto" id="scroll-container">
         <table class="w-full bg-white dark:bg-gray-800 select-none" @dragleave="dragLeave">
-            <thead>
+            <thead class="sticky z-20">
                 <tr>
                     <th
                         class="sticky top-0 py-2 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-normal text-left text-sm"
@@ -26,7 +26,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="relative z-10">
                 <tr
                     class="h-8 md:h-12 border-gray-300 cursor-pointer"
                     v-for="data in dataList"
