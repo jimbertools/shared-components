@@ -4,7 +4,7 @@
             <div class="align-middle inline-block min-w-full">
                 <div class="overflow-hidden border border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 sticky z-20">
                             <tr>
                                 <th
                                     scope="col"
@@ -36,7 +36,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="relative z-10">
                             <tr
                                 v-for="data in dataList"
                                 :key="data"
@@ -63,7 +63,7 @@
                                 @dragend="dragEnd"
                             >
                                 <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900"
                                     v-for="header in headers"
                                     :data-name="`data-${header.key}`"
                                     :key="data[header.key]"
