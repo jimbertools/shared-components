@@ -17,7 +17,7 @@
                         :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
                     >
                         <div class="flex flex-row items-center">
-                            <slot :name="`header-${header}`" :header="header">
+                            <slot :name="`header-${header.key}`" :header="header">
                                 {{ header.displayName }}
                             </slot>
                             <div class="flex flex-col ml-1" v-if="header.enableSorting">
