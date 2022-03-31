@@ -31,7 +31,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="relative z-10">
+            <tbody class="z-10">
                 <tr
                     v-if="!isLoading"
                     v-for="(data, index) in dataList"
