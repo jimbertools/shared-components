@@ -31,7 +31,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="z-10">
+            <tbody class="relative z-10">
                 <tr
                     v-if="!isLoading"
                     v-for="(data, index) in dataList"
@@ -58,7 +58,7 @@
                     @dragend="dragEnd"
                 >
                     <td
-                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                        class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                         v-for="header in headers"
                         :data-name="`data-${header.key}`"
                         :key="data[header.key]"
