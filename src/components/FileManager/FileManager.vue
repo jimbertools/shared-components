@@ -1,7 +1,8 @@
 <template>
     <div class="flex flex-row w-full h-full">
         <div class="flex flex-col flex-1 h-full overflow-x-hidden">
-            <div class="grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none items-center mb-4 px-4 mt-3 md:justify-between">
+            <!-- grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none -->
+            <div class="flex items-center mb-4 px-4 mt-3 md:justify-between">
                 <div class="m:max-w-md">
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
