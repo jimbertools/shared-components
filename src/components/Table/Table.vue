@@ -1,5 +1,4 @@
 <template>
-
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50 sticky z-20">
@@ -210,12 +209,12 @@
             const previousRangeSelectionData = ref<TEntry[]>([]);
 
             const selectItem = (data: TEntry) => {
-                if (!props.selectable) {
+                if (props.openWithSingleClick) {
+                    openItem(data);
                     return;
                 }
 
-                if (props.openWithSingleClick) {
-                    openItem(data);
+                if (!props.selectable) {
                     return;
                 }
 
