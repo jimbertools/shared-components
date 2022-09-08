@@ -19,7 +19,7 @@
                             <slot :name="`header-${header.key}`" :header="header">
                                 {{ header.displayName }}
                             </slot>
-                            <div class="flex flex-col ml-1" v-if="header.enableSorting">
+                            <div class="flex flex-col ml-2" v-if="header.enableSorting">
                                 <em class="fas fa-caret-up text-gray-400" :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"></em>
                                 <em
                                     class="fas fa-caret-down text-gray-400"
@@ -41,7 +41,7 @@
                             ? 'border-t-2 border-b-2 border-yellow-400'
                             : 'border-t',
                         !isDragging ? 'hover:bg-gray-100' : '',
-                        selectable ? 'cursor-pointer' : '',
+                        selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
                         selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                     ]"
                     @click.ctrl.exact="e => addItemToSelect(data)"
