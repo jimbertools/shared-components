@@ -140,8 +140,6 @@
             const windowWidth = ref<number>(window?.innerWidth);
             const stop = ref<boolean>(false);
 
-            console.log(props.data.length);
-
             const dataList = computed(() => {
                 let tempData = props.data;
                 if (props.backendPaginationSorting) return tempData;
