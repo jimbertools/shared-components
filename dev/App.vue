@@ -1,20 +1,9 @@
 <template>
     <div class="debug-screens w-full h-full" id="app">
         <IconButton> blas</IconButton>
-        <!-- <Table :data="data" :headers="headers" :page-size="20" :page-index="0">
-                <template v-slot:header-name="{ header }">
-                    <h2 class="inline">{{ header }} custom header</h2>
-                </template>
-                <template v-slot:data-name="{ data, row }">
-                    <td class="pink">
-                        <img class="inline-block w-6 h-6 aspect-1/1 rounded-full shadow" :src="row.image" alt="" />
-                        <h1 class="ml-4 inline">{{ data.first }}&nbsp</h1>
-                        <h2 class="inline">{{ data.last }}</h2>
-                    </td>
-                </template>
-            </Table> -->
+        <Table :data="iets" :headers="headers" :page-size="20" :page-index="0" empty-message="leeg"> </Table>
 
-        <file-manager
+        <!-- <file-manager
             class="block h-full"
             :data="data"
             drag-and-drop
@@ -29,9 +18,9 @@
             </template>
 
             <template #dragging-indicator>
-                <!--                <div v-if="isInternalDragging" class="max-w-max p-1 border-2 border-black bg-white"><em class="far fa-file"></em>MOVING</div>-->
+                              <div v-if="isInternalDragging" class="max-w-max p-1 border-2 border-black bg-white"><em class="far fa-file"></em>MOVING</div>
             </template>
-        </file-manager>
+        </file-manager> -->
     </div>
     <div>
         <!-- {{FileManagerEmits}} -->
@@ -39,13 +28,44 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, onBeforeMount, ref } from 'vue';
+    import { defineComponent, onBeforeMount, ref, computed } from 'vue';
     //  import { FileManager, FileManagerEmits, TEntry, IHeader, ISort,  }  from "@jimber/shared-components"
     // import FileManager from "@jimber/shared-components/src/components/FileManager.vue"
     // import {IHeader,IMoveItems,ISort,TEntry,FileManagerEmits,FileManagerViews} from "@jimber/shared-components/src/types/FileManagerTypes"
+    import Table from '../src/components/Table/Table.vue';
     import { getFileType } from '@/infrastructure/utils/FileUtil';
     import jsonData from './data.json';
-    import { IconButton, FileManager } from '@/entry.esm';
+    import { IconButton } from '@/entry.esm';
+
+    const iets = ref([] as any[]);
+
+    const headers = computed(() => [
+        {
+            key: 'userId',
+            displayName: 'Email',
+            enableSorting: true,
+        },
+        {
+            key: 'groupNumber',
+            displayName: 'Group Number',
+            enableSorting: true,
+        },
+        {
+            key: 'description',
+            displayName: 'Group Name',
+            enableSorting: true,
+        },
+        {
+            key: 'ipRange',
+            displayName: 'Ip range',
+            enableSorting: true,
+        },
+        {
+            key: 'actions',
+            displayName: '',
+            enableSorting: false,
+        },
+    ]);
 
     const getEverything = async () => {
         //@ts-ignore
@@ -70,7 +90,7 @@
     export default defineComponent({
         name: 'App',
         components: {
-            FileManager,
+            Table,
             IconButton,
         },
         setup() {
@@ -96,6 +116,8 @@
 
             return {
                 data,
+                iets,
+                headers,
                 startInternalDrag,
                 stopInternalDrag,
                 isInternalDragging,
