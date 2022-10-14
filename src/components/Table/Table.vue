@@ -1,7 +1,7 @@
 <template>
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50 sticky z-20" style="z-index:20;">
+            <thead class="bg-gray-50 sticky z-20" style="z-index: 20">
                 <tr>
                     <th
                         scope="col"
@@ -32,7 +32,7 @@
             </thead>
             <tbody class="relative z-10">
                 <tr
-                    v-if="!isLoading"
+                    v-if="!isLoading && dataList.length"
                     v-for="(data, index) in dataList"
                     :key="data"
                     class="border-b border-gray-100"
@@ -68,14 +68,16 @@
                         </slot>
                     </td>
                 </tr>
+                <tr v-else>
+                    <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <div class="w-full flex flex-row justify-center items-center">
+                            {{ emptyMessage }}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
-        <div v-if="data.length <= 0 && !isLoading" class="w-full flex flex-row justify-center items-center">
-            <slot v-if="isSearching" name="emptyMessage">
-                {{ emptyMessage }}
-            </slot>
-            <slot v-if="$slots.tableEmptyState" name="tableEmptyState"></slot>
-        </div>
+
         <div v-if="isLoading" class="w-full flex flex-row justify-center items-center mt-2">
             <span class="flex flex-col items-center mt-2">
                 <svg class="w-8 h-8 animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
