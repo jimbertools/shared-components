@@ -1,7 +1,7 @@
 <template>
     <div class="debug-screens w-full h-full" id="app">
         <IconButton> blas</IconButton>
-        <Table :data="iets" :headers="headers" :page-size="20" :page-index="0" empty-message="leeg"> </Table>
+        <Table :data="iets" :headers="headers" empty-message="leeg"> </Table>
 
         <!-- <file-manager
             class="block h-full"
@@ -115,7 +115,7 @@
             onBeforeMount(() => {});
 
             return {
-                data,
+                //data,
                 iets,
                 headers,
                 startInternalDrag,

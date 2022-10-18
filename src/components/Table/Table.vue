@@ -32,7 +32,7 @@
             </thead>
             <tbody class="relative z-10">
                 <tr
-                    v-if="!isLoading && dataList.length"
+                    v-if="!isLoading && dataList.length > 0"
                     v-for="(data, index) in dataList"
                     :key="data"
                     class="border-b border-gray-100"
@@ -43,6 +43,7 @@
                         !isDragging ? 'hover:bg-gray-100' : '',
                         selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
                         selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
+                        index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
                     ]"
                     @click.ctrl.exact="e => addItemToSelect(data)"
                     @click.exact="e => selectItem(data)"
