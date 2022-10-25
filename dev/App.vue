@@ -37,33 +37,20 @@
     import jsonData from './data.json';
     import { IconButton } from '@/entry.esm';
 
-    const iets = ref([] as any[]);
+    const iets = ref([
+        {
+            userId: 1,
+        },
+        {
+            userId: 2,
+        },
+    ]);
 
     const headers = computed(() => [
         {
             key: 'userId',
             displayName: 'Email',
             enableSorting: true,
-        },
-        {
-            key: 'groupNumber',
-            displayName: 'Group Number',
-            enableSorting: true,
-        },
-        {
-            key: 'description',
-            displayName: 'Group Name',
-            enableSorting: true,
-        },
-        {
-            key: 'ipRange',
-            displayName: 'Ip range',
-            enableSorting: true,
-        },
-        {
-            key: 'actions',
-            displayName: '',
-            enableSorting: false,
         },
     ]);
 
