@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import "./dev.css"
 import "@tailwindcss/postcss7-compat/dist/base.css";
 import "@tailwindcss/postcss7-compat/dist/components.css";
 import "@tailwindcss/postcss7-compat/dist/utilities.css";
