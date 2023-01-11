@@ -1,30 +1,16 @@
 <template>
-    <div class="flex space-x-5 w-full md:w-max">
-        <div class="w-full">
-            <label for="search" class="block text-sm font-medium text-gray-700 dark:text-dark-300"> Search </label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" aria-hidden="true">
-                    <!-- Heroicons MagnifyingGlassIcon-->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 text-gray-400">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                </div>
-                <input
-                    id="search"
-                    type="text"
-                    name="search"
-                    class="block w-full pl-9 sm:text-sm border-gray-300 dark:border-dark-200 dark:bg-dark-600 dark:text-white rounded-md dark:placeholder:text-dark-500"
-                    placeholder="Search"
-                />
-                <!-- Heroicons xmarkicon-->
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center" aria-hidden="true" @click="clearSearch">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
+    <SearchBar
+        v-if="searchOptions?.enableSearch"
+        class="flex w-full justify-between items-end"
+        :data="data"
+        :options="searchOptions.options"
+        :enumOptions="searchOptions.enumOptions"
+        :key="data.length"
+        @update:searchValue="dataFilterUpdate"
+        @update:searchClear="dataFilterClear"
+        :whitelistedOptions="searchOptions.whitelistedOptions"
+        :blacklistedOptions="searchOptions.blacklistedOptions"
+    />
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 dark:border-dark-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
             <thead class="bg-gray-50 sticky z-20 dark:bg-dark-700" style="z-index: 20">
@@ -129,6 +115,8 @@
     import { IHeader, IMoveItems, ISelectedChange, ISort, SelectionAction, TEntry } from '@/infrastructure/types/FileManagerTypes';
     import { orderBy } from '@/infrastructure/utils/SortUtil';
     import { SortType, TableEmits as Emits } from './index';
+    import { SearchBar } from '@/components/SearchBar';
+    import { SearchOptions } from '@/types/TableTypes';
 
     export default defineComponent({
         name: 'Table',
@@ -149,7 +137,10 @@
             multiSelect: { type: Boolean, required: false, default: false },
             isSearching: { type: Boolean, required: false, default: false },
             isLoading: { type: Boolean, required: false, default: false },
-            enableSearch: { type: Boolean, required: false, default: false },
+            searchOptions: { type: Object as PropType<SearchOptions>, required: false },
+        },
+        components: {
+            SearchBar,
         },
         emits: [
             'update:defaultSort',
@@ -170,9 +161,14 @@
             const currentPageSize = ref<number>(props.pageSize);
             const windowWidth = ref<number>(window?.innerWidth);
             const stop = ref<boolean>(false);
+            const filteredData = ref<any[]>();
+            const isFiltering = ref<boolean>();
 
             const dataList = computed(() => {
-                let tempData = props.data;
+                let tempData = isFiltering.value ? filteredData.value : props.data;
+
+                if (!tempData) return [];
+
                 if (props.backendPaginationSorting) return tempData;
 
                 if (sort.value) tempData = orderBy(tempData, sort.value, props.headers);
@@ -185,6 +181,15 @@
             const onWidthChange = () => (windowWidth.value = window.innerWidth);
             onMounted(() => window.addEventListener('resize', onWidthChange));
             onUnmounted(() => window.removeEventListener('resize', onWidthChange));
+
+            const dataFilterClear = () => {
+                isFiltering.value = false;
+                filteredData.value = props.data;
+            };
+            const dataFilterUpdate = (data: any[]) => {
+                isFiltering.value = true;
+                filteredData.value = data ? data : [];
+            };
 
             const displayColumn = (col: IHeader<any>): boolean => {
                 if (!col.displayWidth) return false;
@@ -430,6 +435,8 @@
                 windowWidth,
                 dragEnd,
                 drag,
+                dataFilterClear,
+                dataFilterUpdate,
             };
         },
     });
