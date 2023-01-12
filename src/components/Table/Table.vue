@@ -153,6 +153,8 @@
             'drop-items',
             'start-dragging',
             'stop-dragging',
+            'data-filter-update',
+            'data-filter-clear'
         ],
         setup(props, { emit }) {
             const tableContainer = ref();
@@ -185,10 +187,12 @@
             const dataFilterClear = () => {
                 isFiltering.value = false;
                 filteredData.value = props.data;
+                emit(Emits.DataFilterClear)
             };
             const dataFilterUpdate = (data: any[]) => {
                 isFiltering.value = true;
                 filteredData.value = data ? data : [];
+                emit(Emits.DataFilterUpdate, filteredData.value);
             };
 
             const displayColumn = (col: IHeader<any>): boolean => {
