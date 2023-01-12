@@ -1,7 +1,7 @@
 <template>
     <div class="debug-screens w-full h-full" id="app">
         <IconButton> blas</IconButton>
-        <Table :data="iets" :headers="headers" empty-message="leeg"> </Table>
+        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"> </Table>
 
         <!-- <file-manager
             class="block h-full"
@@ -36,6 +36,7 @@
     import { getFileType } from '@/infrastructure/utils/FileUtil';
     import jsonData from './data.json';
     import { IconButton } from '@/entry.esm';
+    import { SearchOptions } from '@/types/TableTypes';
 
     const iets = ref([
         {
@@ -45,6 +46,11 @@
             userId: 2,
         },
     ]);
+
+    const searchOptions = ref<SearchOptions>({
+        options: ['all'],
+        enableSearch: true,
+    });
 
     const headers = computed(() => [
         {
@@ -108,6 +114,7 @@
                 startInternalDrag,
                 stopInternalDrag,
                 isInternalDragging,
+                searchOptions,
                 // rowClicked,
                 // headers,
                 // changeSelected,

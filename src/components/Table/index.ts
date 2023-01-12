@@ -12,6 +12,8 @@ export enum TableEmits {
     StartDragging = 'start-dragging',
     StopDragging = 'stop-dragging',
     TriggerLoadMore = 'trigger-load-more',
+    DataFilterUpdate = 'data-filter-update',
+    DataFilterClear = 'data-filter-clear',
 }
 
 export enum JTableAlignment {
