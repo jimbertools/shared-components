@@ -10,4 +10,5 @@ export interface SearchOptions {
     enumOptions?: enumOptions;
     whitelistedOptions?: string[];
     blacklistedOptions?: string[];
+    matchCase?: boolean;
 }

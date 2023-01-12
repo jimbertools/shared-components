@@ -5,6 +5,7 @@
         :data="data"
         :options="searchOptions.options"
         :enumOptions="searchOptions.enumOptions"
+        :matchCase="searchOptions.matchCase"
         :key="data.length"
         @update:searchValue="dataFilterUpdate"
         @update:searchClear="dataFilterClear"
