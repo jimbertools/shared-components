@@ -119,7 +119,6 @@
         }
 
         if (searchKey.value === 'all') {
-            console.log(values);
             return values.filter((item: any) => {
                 const result = Object.keys(item).some((key: string) => {
                     return isPropertyAllowed(key) && doesPropertyContainString(item[key], searchString.value);
