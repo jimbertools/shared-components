@@ -63,10 +63,8 @@
     </div>
 </template>
 
-<script setup lang="ts">
-    import { ref } from 'vue';
-
-    const emit = defineEmits(['update:searchValue', 'update:searchClear']);
+<script lang="ts">
+    import { defineComponent, ref } from 'vue';
 
     interface enumOptions {
         filterKey: string;
@@ -74,86 +72,97 @@
         options: string[];
     }
 
-    //TODO fix rollup with interface IProps and use it here
-    const { data, options, enumOptions, whitelistedOptions, blacklistedOptions } = defineProps<{
-        options: string[];
-        enumOptions?: enumOptions; // @TODO: make enumOptions an array to filter on multiple (e.g. status, case-ref, victim-ref)
-        data: any[];
-        whitelistedOptions?: string[];
-        blacklistedOptions?: string[];
-    }>();
+    export default defineComponent({
+        name: 'Table',
+        props: {
+            options: { type: Array as () => string[], required: true },
+            enumOptions: { type: Object as () => enumOptions, required: true },
+            whitelistedOptions: { type: Array as () => string[], required: true },
+            blacklistedOptions: { type: Array as () => string[], required: true },
+            data: { type: Array as () => any[], required: true },
+        },
+        components: {},
+        emits: ['update:searchValue', 'update:searchClear'],
+        setup(props, { emit }) {
+            const searchKey = ref(props.options[0]);
+            const enumKey = ref(props.enumOptions?.options[0]);
+            const searchString = ref<string>('');
+            const matchCase = ref(false);
 
-    const searchKey = ref(options[0]);
-    const enumKey = ref(enumOptions?.options[0]);
-    const searchString = ref<string>('');
-    const matchCase = ref(false);
+            const filter = () => {
+                if (searchString.value === '' && (!props.enumOptions || enumKey.value === 'all')) {
+                    return emit('update:searchClear');
+                }
+                const result = updateSearch();
+                return emit('update:searchValue', result);
+            };
 
-    const filter = () => {
-        if (searchString.value === '' && (!enumOptions || enumKey.value === 'all')) {
-            return emit('update:searchClear');
-        }
-        const result = updateSearch();
-        return emit('update:searchValue', result);
-    };
+            const clearSearch = () => {
+                searchString.value = '';
+                searchKey.value = props.options[0];
+                if (props.enumOptions) {
+                    enumKey.value = props.enumOptions.options[0];
+                }
+                return emit('update:searchClear');
+            };
 
-    const clearSearch = () => {
-        searchString.value = '';
-        searchKey.value = options[0];
-        if (enumOptions) {
-            enumKey.value = enumOptions.options[0];
-        }
-        return emit('update:searchClear');
-    };
+            const updateSearch = () => {
+                let values = Object.values(props.data);
 
-    const updateSearch = () => {
-        let values = Object.values(data);
+                if (props.enumOptions && enumKey.value !== 'all') {
+                    values = values.filter(item => {
+                        return item[props.enumOptions.filterKey] === enumKey.value;
+                    });
+                }
 
-        if (enumOptions && enumKey.value !== 'all') {
-            values = values.filter(item => {
-                return item[enumOptions.filterKey] === enumKey.value;
-            });
-        }
+                if (searchString.value === '') {
+                    return values;
+                }
 
-        if (searchString.value === '') {
-            return values;
-        }
+                if (searchKey.value === 'all') {
+                    return values.filter((item: any) => {
+                        const result = Object.keys(item).some((key: string) => {
+                            return isPropertyAllowed(key) && doesPropertyContainString(item[key], searchString.value);
+                        });
+                        return result;
+                    });
+                }
 
-        if (searchKey.value === 'all') {
-            return values.filter((item: any) => {
-                const result = Object.keys(item).some((key: string) => {
-                    return isPropertyAllowed(key) && doesPropertyContainString(item[key], searchString.value);
+                const result = values.filter((item: any) => {
+                    return doesPropertyContainString(item[searchKey.value], searchString.value);
                 });
                 return result;
-            });
-        }
+            };
 
-        const result = values.filter(item => {
-            return doesPropertyContainString(item[searchKey.value], searchString.value);
-        });
-        return result;
-    };
+            const isPropertyAllowed = (property: string) => {
+                if (props.blacklistedOptions && props.blacklistedOptions.length > 0) {
+                    return !props.blacklistedOptions.includes(property);
+                }
+                if (props.whitelistedOptions && props.whitelistedOptions.length > 0) {
+                    return props.whitelistedOptions.includes(property);
+                }
+                return true;
+            };
 
-    const isPropertyAllowed = (property: string) => {
-        if (blacklistedOptions && blacklistedOptions.length > 0) {
-            return !blacklistedOptions.includes(property);
-        }
-        if (whitelistedOptions && whitelistedOptions.length > 0) {
-            return whitelistedOptions.includes(property);
-        }
-        return true;
-    };
+            const doesPropertyContainString = (property: string, searchString: string) => {
+                if (matchCase.value) {
+                    return property?.includes(searchString);
+                }
 
-    const doesPropertyContainString = (property: string, searchString: string) => {
-        if (matchCase.value) {
-            return property?.includes(searchString);
-        }
+                if (typeof property !== 'object') {
+                    return property && String(property)?.toLowerCase().includes(searchString?.toLowerCase());
+                }
+            };
 
-        if (typeof property !== 'object') {
-            return property && String(property)?.toLowerCase().includes(searchString?.toLowerCase());
-        }
-    };
-
-    defineExpose({
-        filter,
+            return {
+                filter,
+                clearSearch,
+                updateSearch,
+                isPropertyAllowed,
+                doesPropertyContainString,
+                searchKey,
+                searchString,
+            };
+        },
     });
 </script>

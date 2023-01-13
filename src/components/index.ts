@@ -8,3 +8,4 @@ export * from './Input';
 export * from './Pagination';
 export * from './Table';
 export * from './Buttons/IconButton';
+export * from './SearchBar';

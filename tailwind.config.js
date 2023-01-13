@@ -4,14 +4,16 @@ module.exports = {
     theme: {
         extend: {
             gridTemplateColumns: {
-                'topBarSm': 'minmax(0,85vw) minmax(0,1fr)',
-                'topBarLg': 'minmax(0,30vw) minmax(0,1fr)',
+                topBarSm: 'minmax(0,85vw) minmax(0,1fr)',
+                topBarLg: 'minmax(0,30vw) minmax(0,1fr)',
             },
             screens: {
-                s: [{
-                    min: '768px',
-                    max: '1330px'
-                }],
+                s: [
+                    {
+                        min: '768px',
+                        max: '1330px',
+                    },
+                ],
                 m: '1331px',
             },
             colors: {
@@ -26,17 +28,12 @@ module.exports = {
                     700: '#1D2028',
                     800: '#0E1117',
                     900: '#01040A',
-                }
+                },
             },
         },
     },
     variants: {
         extend: {},
     },
-    plugins: [
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/typography'),
-        require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/aspect-ratio'),
-    ],
+    plugins: [],
 };

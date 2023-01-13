@@ -155,7 +155,7 @@
             'start-dragging',
             'stop-dragging',
             'data-filter-update',
-            'data-filter-clear'
+            'data-filter-clear',
         ],
         setup(props, { emit }) {
             const tableContainer = ref();
@@ -188,7 +188,7 @@
             const dataFilterClear = () => {
                 isFiltering.value = false;
                 filteredData.value = props.data;
-                emit(Emits.DataFilterClear)
+                emit(Emits.DataFilterClear);
             };
             const dataFilterUpdate = (data: any[]) => {
                 isFiltering.value = true;
