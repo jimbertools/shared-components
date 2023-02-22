@@ -1,17 +1,24 @@
 <template>
-    <SearchBar
-        v-if="searchOptions?.enableSearch"
-        class="flex w-full justify-between items-end"
-        :data="data"
-        :options="searchOptions.options"
-        :enumOptions="searchOptions.enumOptions"
-        :matchCase="searchOptions.matchCase"
-        :key="data.length"
-        @update:searchValue="dataFilterUpdate"
-        @update:searchClear="dataFilterClear"
-        :whitelistedOptions="searchOptions.whitelistedOptions"
-        :blacklistedOptions="searchOptions.blacklistedOptions"
-    />
+    <div
+        v-if="searchOptions?.enableSearch || $slots.actions"
+        class="flex items-center"
+        :class="{ 'justify-end': !searchOptions?.enableSearch, 'justify-between': searchOptions?.enableSearch }"
+    >
+        <SearchBar
+            v-if="searchOptions?.enableSearch"
+            class="flex w-full justify-between items-end"
+            :data="data"
+            :options="searchOptions.options"
+            :enumOptions="searchOptions.enumOptions"
+            :matchCase="searchOptions.matchCase"
+            :key="data.length"
+            @update:searchValue="dataFilterUpdate"
+            @update:searchClear="dataFilterClear"
+            :whitelistedOptions="searchOptions.whitelistedOptions"
+            :blacklistedOptions="searchOptions.blacklistedOptions"
+        />
+        <slot name="buttons" />
+    </div>
     <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 dark:border-dark-200 sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
             <thead class="bg-gray-50 sticky z-20 dark:bg-dark-700" style="z-index: 20">
@@ -56,7 +63,7 @@
                         (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
                             ? 'border-t-2 border-b-2 border-yellow-400'
                             : 'border-t',
-                        !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-800' : '',
+                        !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-900' : '',
                         selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
                         selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                         index % 2 === 0 ? 'bg-white dark:bg-dark-600' : 'bg-gray-50 dark:bg-dark-700',

@@ -1,7 +1,7 @@
 <template>
     <div class="debug-screens w-full h-full" id="app">
         <IconButton> blas</IconButton>
-        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"> </Table>
+        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"><template #actions>yuu</template> </Table>
 
         <!-- <file-manager
             class="block h-full"
