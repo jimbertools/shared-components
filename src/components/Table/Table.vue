@@ -1,119 +1,121 @@
 <template>
-    <div
-        v-if="searchOptions?.enableSearch || $slots.actions"
-        class="flex items-center"
-        :class="{ 'justify-end': !searchOptions?.enableSearch, 'justify-between': searchOptions?.enableSearch }"
-    >
-        <SearchBar
-            v-if="searchOptions?.enableSearch"
-            class="flex w-full justify-between items-end"
-            :data="data"
-            :options="searchOptions.options"
-            :enumOptions="searchOptions.enumOptions"
-            :matchCase="searchOptions.matchCase"
-            :key="data.length"
-            @update:searchValue="dataFilterUpdate"
-            @update:searchClear="dataFilterClear"
-            :whitelistedOptions="searchOptions.whitelistedOptions"
-            :blacklistedOptions="searchOptions.blacklistedOptions"
-        />
-        <slot name="buttons" />
-    </div>
-    <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 dark:border-dark-200 sm:rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
-            <thead class="bg-gray-50 sticky z-20 dark:bg-dark-700" style="z-index: 20">
-                <tr>
-                    <th
-                        scope="col"
-                        class="sticky top-0 bg-gray-50 dark:bg-dark-700 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-300 uppercase tracking-wider"
-                        :class="{
-                            hidden: header?.displayWidth >= windowWidth,
-                            'cursor-default': !header.enableSorting,
-                            'cursor-pointer hover:text-gray-400 dark:hover:text-dark-50': header.enableSorting,
-                        }"
-                        v-for="header in headers"
-                        @click="sortData(header)"
-                        :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
-                    >
-                        <div class="flex flex-row items-center">
-                            <slot :name="`header-${header.key}`" :header="header">
-                                {{ header.displayName }}
-                            </slot>
-                            <div class="flex flex-col ml-2" v-if="header.enableSorting">
-                                <em
-                                    class="fas fa-caret-up text-gray-400 dark:text-dark-50"
-                                    :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
-                                ></em>
-                                <em
-                                    class="fas fa-caret-down text-gray-400 dark:text-dark-50"
-                                    :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
-                                ></em>
+    <div>
+        <div
+            v-if="searchOptions?.enableSearch || $slots.actions"
+            class="flex items-center"
+            :class="{ 'justify-end': !searchOptions?.enableSearch, 'justify-between': searchOptions?.enableSearch }"
+        >
+            <SearchBar
+                v-if="searchOptions?.enableSearch"
+                class="flex w-full justify-between items-end"
+                :data="data"
+                :options="searchOptions.options"
+                :enumOptions="searchOptions.enumOptions"
+                :matchCase="searchOptions.matchCase"
+                :key="data.length"
+                @update:searchValue="dataFilterUpdate"
+                @update:searchClear="dataFilterClear"
+                :whitelistedOptions="searchOptions.whitelistedOptions"
+                :blacklistedOptions="searchOptions.blacklistedOptions"
+            />
+            <slot name="buttons" />
+        </div>
+        <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 dark:border-dark-200 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
+                <thead class="bg-gray-50 sticky z-20 dark:bg-dark-700" style="z-index: 20">
+                    <tr>
+                        <th
+                            scope="col"
+                            class="sticky top-0 bg-gray-50 dark:bg-dark-700 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-300 uppercase tracking-wider"
+                            :class="{
+                                hidden: header?.displayWidth >= windowWidth,
+                                'cursor-default': !header.enableSorting,
+                                'cursor-pointer hover:text-gray-400 dark:hover:text-dark-50': header.enableSorting,
+                            }"
+                            v-for="header in headers"
+                            @click="sortData(header)"
+                            :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
+                        >
+                            <div class="flex flex-row items-center">
+                                <slot :name="`header-${header.key}`" :header="header">
+                                    {{ header.displayName }}
+                                </slot>
+                                <div class="flex flex-col ml-2" v-if="header.enableSorting">
+                                    <em
+                                        class="fas fa-caret-up text-gray-400 dark:text-dark-50"
+                                        :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
+                                    ></em>
+                                    <em
+                                        class="fas fa-caret-down text-gray-400 dark:text-dark-50"
+                                        :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
+                                    ></em>
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="relative z-10">
-                <tr
-                    v-if="!isLoading && dataList.length > 0"
-                    v-for="(data, index) in dataList"
-                    :key="data"
-                    class="border-b border-gray-100 dark:border-dark-200"
-                    :class="[
-                        (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
-                            ? 'border-t-2 border-b-2 border-yellow-400'
-                            : 'border-t',
-                        !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-900' : '',
-                        selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
-                        selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
-                        index % 2 === 0 ? 'bg-white dark:bg-dark-600' : 'bg-gray-50 dark:bg-dark-700',
-                    ]"
-                    @click.ctrl.exact="e => addItemToSelect(data)"
-                    @click.exact="e => selectItem(data)"
-                    @click.shift.exact="e => selectRange(data)"
-                    @dblclick.stop="e => openItem(data)"
-                    :draggable="dragAndDrop ? 'true' : 'false'"
-                    @drop.prevent="e => dragDrop(data)"
-                    @dragend.prevent="$emit(Emits.StopDragging)"
-                    @dragstart="e => dragStart(e, data)"
-                    @dragover.prevent="e => dragOver(data)"
-                    @drag="e => drag(e)"
-                    @dragend="dragEnd"
-                >
-                    <td
-                        class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
-                        v-for="header in headers"
-                        :data-name="`data-${header.key}`"
-                        :key="data[header.key]"
-                        :class="{ hidden: header?.displayWidth >= windowWidth }"
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="relative z-10">
+                    <tr
+                        v-if="!isLoading && dataList.length > 0"
+                        v-for="(data, index) in dataList"
+                        :key="data"
+                        class="border-b border-gray-100 dark:border-dark-200"
+                        :class="[
+                            (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
+                                ? 'border-t-2 border-b-2 border-yellow-400'
+                                : 'border-t',
+                            !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-900' : '',
+                            selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
+                            selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
+                            index % 2 === 0 ? 'bg-white dark:bg-dark-600' : 'bg-gray-50 dark:bg-dark-700',
+                        ]"
+                        @click.ctrl.exact="e => addItemToSelect(data)"
+                        @click.exact="e => selectItem(data)"
+                        @click.shift.exact="e => selectRange(data)"
+                        @dblclick.stop="e => openItem(data)"
+                        :draggable="dragAndDrop ? 'true' : 'false'"
+                        @drop.prevent="e => dragDrop(data)"
+                        @dragend.prevent="$emit(Emits.StopDragging)"
+                        @dragstart="e => dragStart(e, data)"
+                        @dragover.prevent="e => dragOver(data)"
+                        @drag="e => drag(e)"
+                        @dragend="dragEnd"
                     >
-                        <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
-                            {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                        </slot>
-                    </td>
-                </tr>
-                <tr v-else class="dark:bg-dark-700">
-                    <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        <div class="w-full flex flex-row justify-center items-center">
-                            {{ emptyMessage }}
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <td
+                            class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
+                            v-for="header in headers"
+                            :data-name="`data-${header.key}`"
+                            :key="data[header.key]"
+                            :class="{ hidden: header?.displayWidth >= windowWidth }"
+                        >
+                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
+                                {{ header.formatter ? header.formatter(data) : data[header.key] }}
+                            </slot>
+                        </td>
+                    </tr>
+                    <tr v-else class="dark:bg-dark-700">
+                        <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            <div class="w-full flex flex-row justify-center items-center">
+                                {{ emptyMessage }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <div v-if="isLoading" class="w-full flex flex-row justify-center items-center mt-2">
-            <span class="flex flex-col items-center mt-2">
-                <svg class="w-8 h-8 animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="text-primary opacity-60" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path
-                        class="opacity-50"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                </svg>
-                <slot name="loading"> Loading items... </slot>
-            </span>
+            <div v-if="isLoading" class="w-full flex flex-row justify-center items-center mt-2">
+                <span class="flex flex-col items-center mt-2">
+                    <svg class="w-8 h-8 animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="text-primary opacity-60" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path
+                            class="opacity-50"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    <slot name="loading"> Loading items... </slot>
+                </span>
+            </div>
         </div>
     </div>
 </template>

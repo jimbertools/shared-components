@@ -76,9 +76,9 @@
         name: 'Table',
         props: {
             options: { type: Array as () => string[], required: true },
-            enumOptions: { type: Object as () => enumOptions, required: true },
-            whitelistedOptions: { type: Array as () => string[], required: true },
-            blacklistedOptions: { type: Array as () => string[], required: true },
+            enumOptions: { type: Object as () => enumOptions, required: false },
+            whitelistedOptions: { type: Array as () => string[], required: false },
+            blacklistedOptions: { type: Array as () => string[], required: false },
             data: { type: Array as () => any[], required: true },
         },
         components: {},
@@ -111,7 +111,7 @@
 
                 if (props.enumOptions && enumKey.value !== 'all') {
                     values = values.filter(item => {
-                        return item[props.enumOptions.filterKey] === enumKey.value;
+                        if(props.enumOptions) return item[props.enumOptions.filterKey] === enumKey.value;
                     });
                 }
 
