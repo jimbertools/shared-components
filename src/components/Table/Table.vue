@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col min-h-0 overflow-auto h-full">
         <div
             v-if="searchOptions?.enableSearch || $slots.actions"
             class="flex items-center"
