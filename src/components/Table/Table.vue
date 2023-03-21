@@ -225,7 +225,7 @@
                 };
                 scrollToTop();
                 emit(Emits.UpdateDefaultSort, sort.value);
-                emit(Emits.SortChanged);
+                emit(Emits.SortChanged, { prop: key, order });
             };
 
             const paginatedData = computed(() => {
