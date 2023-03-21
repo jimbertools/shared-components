@@ -82,7 +82,7 @@
                         @dragend="dragEnd"
                     >
                         <td
-                            class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
+                            class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white"
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
                             :key="data[header.key]"
