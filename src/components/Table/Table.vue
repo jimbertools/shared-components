@@ -94,7 +94,7 @@
                         </td>
                     </tr>
                     <tr v-else class="dark:bg-dark-700">
-                        <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                        <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                             <div class="w-full flex flex-row justify-center items-center">
                                 {{ emptyMessage }}
                             </div>
