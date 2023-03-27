@@ -1,6 +1,13 @@
 <template>
     <div class="debug-screens w-full h-full" id="app">
-        <IconButton> blas</IconButton>
+        <div>
+            <h3>Input field</h3>
+            <Input />
+        </div>
+        <div>
+            <h3>IconButton</h3>
+            <IconButton>IconButton</IconButton>
+        </div>
         <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"><template #actions>yuu</template> </Table>
 
         <!-- <file-manager
@@ -37,6 +44,7 @@
     import jsonData from './data.json';
     import { IconButton } from '@/entry.esm';
     import { SearchOptions } from '@/types/TableTypes';
+    import { Input } from '../src/components/Input';
 
     const iets = ref([
         {
@@ -67,7 +75,6 @@
             const type = getFileType(dataItem.isFolder ? 'dir' : dataItem.extension);
             return { ...dataItem };
         });
-        console.log(dataToReturn);
         //@ts-ignore
         return <TEntry[]>dataToReturn;
     };
@@ -85,12 +92,12 @@
         components: {
             Table,
             IconButton,
+            Input,
         },
         setup() {
             const isInternalDragging = ref<boolean>(false);
             onBeforeMount(async () => {
                 data.value = await getEverything();
-                console.log(data.value);
             });
             //const headers: IHeader<TEntry>[] = [];
             const startInternalDrag = () => {

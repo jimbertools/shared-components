@@ -12,11 +12,12 @@
                 :options="searchOptions.options"
                 :enumOptions="searchOptions.enumOptions"
                 :matchCase="searchOptions.matchCase"
-                :key="data.length"
                 @update:searchValue="dataFilterUpdate"
                 @update:searchClear="dataFilterClear"
+                @update:appliedFilters="$emit('update:applied-filters', $event)"
                 :whitelistedOptions="searchOptions.whitelistedOptions"
                 :blacklistedOptions="searchOptions.blacklistedOptions"
+                :backend-search="backendPaginationSorting"
             />
             <slot name="buttons" />
         </div>
@@ -165,6 +166,7 @@
             'stop-dragging',
             'data-filter-update',
             'data-filter-clear',
+            'update:applied-filters',
         ],
         setup(props, { emit }) {
             const tableContainer = ref();
