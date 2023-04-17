@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, ref } from 'vue';
+    import { defineComponent, ref, watch } from 'vue';
     import { Input, InputEmits } from '../Input';
 
     interface enumOptions {
@@ -156,6 +156,13 @@
                     return property && String(property)?.toLowerCase().includes(searchString?.toLowerCase());
                 }
             };
+
+            watch(
+                () => props.data,
+                () => {
+                    filter();
+                }
+            );
 
             return {
                 filter,
