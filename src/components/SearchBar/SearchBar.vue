@@ -85,11 +85,11 @@
             const matchCase = ref(false);
 
             const filter = () => {
-                if (searchString.value === '' && (!props.enumOptions || enumKey.value === 'all')) {
-                    return emit(SearchBarEmits.SearchClear);
-                }
                 if (props.backendSearch) {
                     return emit(SearchBarEmits.AppliedFilters, { searchString: searchString.value });
+                }
+                if (searchString.value === '' && (!props.enumOptions || enumKey.value === 'all')) {
+                    return emit(SearchBarEmits.SearchClear);
                 }
                 const result = updateSearch();
                 return emit(SearchBarEmits.SearchValueChanged, result);
