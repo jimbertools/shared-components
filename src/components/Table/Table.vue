@@ -21,7 +21,7 @@
             />
             <slot name="buttons" />
         </div>
-        <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-full border border-gray-200 dark:border-dark-200 sm:rounded-lg">
+        <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-min border border-gray-200 dark:border-dark-200 sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
                 <thead class="bg-gray-50 sticky z-20 dark:bg-dark-700" style="z-index: 20">
                     <tr>
