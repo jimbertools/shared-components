@@ -86,7 +86,6 @@
                             class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white"
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
-                            :key="data[header.key]"
                             :class="{ hidden: header?.displayWidth >= windowWidth }"
                         >
                             <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
