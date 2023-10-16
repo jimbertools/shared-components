@@ -12782,6 +12782,13 @@ tsutils@^2.29.0:
   dependencies:
     tslib "^1.8.1"
 
+ttsc@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/ttsc/-/ttsc-0.3.1.tgz#bc1feae07d6df68c36aa98da28d753f22c57f6e9"
+  integrity sha512-3l5bxt8xRc/0Yty9QiF8iPG9lk/FLwiHNU/CkFQUZ82WoxCBKk1HgBQ9GSuiQfn0up+ou5f8tHMlh9kGFOO1Vg==
+  dependencies:
+    resolve ">=1.9.0"
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"

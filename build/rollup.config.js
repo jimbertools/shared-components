@@ -9,7 +9,8 @@ import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
 import PostCSS from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
-import ttypescript from 'ttypescript';
+// import ttypescript from 'ttypescript';
+import ttsc from 'ttsc';
 import typescript from 'rollup-plugin-typescript2';
 import minimist from 'minimist';
 import tailwind from 'tailwindcss';
@@ -119,7 +120,7 @@ if (!argv.format || argv.format === 'es') {
             // Only use typescript for declarations - babel will
             // do actual js transformations
             typescript({
-                typescript: ttypescript,
+                typescript: ttsc,
                 useTsconfigDeclarationDir: true,
                 emitDeclarationOnly: true,
             }),

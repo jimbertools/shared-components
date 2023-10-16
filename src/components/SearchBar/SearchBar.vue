@@ -1,5 +1,5 @@
 <template>
-    <div class="flex space-x-5 mb-2 w-full md:w-max">
+    <div class="flex space-x-5 w-full md:w-max">
         <div class="w-full">
             <div class="mt-1 flex rounded-md shadow-sm">
                 <Input
@@ -160,7 +160,7 @@
             watch(
                 () => props.data,
                 () => {
-                    filter();
+                    if (!props.backendSearch) filter();
                 }
             );
 

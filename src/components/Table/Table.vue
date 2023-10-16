@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col min-h-0 overflow-auto h-full">
         <div
-            v-if="searchOptions?.enableSearch || $slots.actions"
-            class="flex items-center"
+            v-if="searchOptions?.enableSearch || $slots.buttons"
+            class="flex items-center mb-2"
             :class="{ 'justify-end': !searchOptions?.enableSearch, 'justify-between': searchOptions?.enableSearch }"
         >
             <SearchBar
