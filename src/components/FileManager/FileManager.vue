@@ -1,17 +1,19 @@
 <template>
     <div class="flex flex-row w-full h-full">
-        <div class="flex flex-col flex-1 h-full overflow-x-hidden">
+        <div class="flex flex-row">
+            <div>
+                <slot name="quickAccess"> {{ quickAccessData }}</slot>
+            </div>
+        </div>
+        <div class="flex flex-col flex-1 h-full px-4 overflow-x-hidden">
             <!-- grid grid-cols-topBarSm s:grid-rows-2 s:grid-cols-1 m:grid-cols-topBarLg m:grid-rows-none -->
-            <div class="flex items-center mb-4 px-4 mt-3 md:justify-between">
+            <div class="flex items-center mb-4 mt-3 md:justify-between">
                 <div class="m:max-w-md">
                     <Input clearable with-button placeholder="Search..." @[InputEmits.TextChanged]="searchChanged" @[InputEmits.ButtonClicked]="search" />
                 </div>
                 <div class="flex flex-row flex-grow pl-2 md:pl-0">
                     <slot name="topRight"></slot>
                 </div>
-            </div>
-            <div>
-                <slot name="quickAccess"> {{ quickAccessData }}</slot>
             </div>
             <div class="flex flex-row my-4">
                 <div class="flex flex-grow flex-wrap items-center w-full">
