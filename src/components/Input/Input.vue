@@ -9,7 +9,7 @@
                 type="text"
                 name="search"
                 id="search"
-                class="block w-full pl-9 sm:text-sm border border-gray-200 dark:border-dark-200 dark:bg-dark-600 dark:text-white rounded-md dark:placeholder:text-dark-500"
+                class="block w-full pl-9 sm:text-sm border border-gray-200 dark:border-dark-200 dark:bg-dark-400 dark:text-white rounded-md dark:placeholder:text-dark-200"
                 :class="inputClass"
                 v-model="text"
                 :placeholder="placeholder"
