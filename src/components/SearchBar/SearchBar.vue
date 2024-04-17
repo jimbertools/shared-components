@@ -1,7 +1,7 @@
 <template>
     <div class="flex space-x-5 w-full md:w-max">
         <div class="w-full">
-            <div class="mt-1 flex rounded-md shadow-sm">
+            <div class="mt-1 flex rounded-md">
                 <Input
                     class="block w-full sm:text-sm border-gray-300 dark:border-dark-200 dark:bg-dark-400 dark:text-white dark:placeholder:text-dark-200"
                     :input-class="{

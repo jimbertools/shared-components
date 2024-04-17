@@ -21,7 +21,7 @@
             />
             <slot name="buttons" />
         </div>
-        <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-min border border-gray-200 dark:border-dark-200 sm:rounded-lg">
+        <div ref="tableContainer" class="flex flex-col min-h-0 overflow-auto h-min border border-gray-200 dark:border-dark-200" :class="{ 'sm:rounded-md': roundedBorder }">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-200">
                 <thead class="bg-gray-50 sticky z-20 dark:bg-dark-400" style="z-index: 20">
                     <tr>
@@ -148,6 +148,7 @@
             isSearching: { type: Boolean, required: false, default: false },
             isLoading: { type: Boolean, required: false, default: false },
             searchOptions: { type: Object as PropType<SearchOptions>, required: false },
+            roundedBorder: { type: Boolean, required: false, default: true },
         },
         components: {
             SearchBar,
