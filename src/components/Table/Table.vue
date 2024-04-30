@@ -72,7 +72,7 @@
                             !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-500' : '',
                             selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
                             selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
-                            index % 2 === 0 ? 'bg-white dark:bg-dark-300/70' : 'bg-gray-50 dark:bg-dark-400',
+                            index % 2 === 0 ? 'bg-white dark:bg-dark-300' : 'bg-gray-50 dark:bg-dark-400',
                         ]"
                         @click.ctrl.exact="e => addItemToSelect(data)"
                         @click.exact="e => selectItem(data)"
