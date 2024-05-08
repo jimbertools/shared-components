@@ -31,11 +31,11 @@
                     <tr>
                         <th
                             scope="col"
-                            class="sticky top-0 bg-gray-50 dark:bg-dark-400 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-100 uppercase tracking-wider"
+                            class="sticky top-0 bg-gray-50 dark:bg-dark-500 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider"
                             :class="{
                                 hidden: header?.displayWidth >= windowWidth,
                                 'cursor-default': !header.enableSorting,
-                                'cursor-pointer hover:text-gray-400 dark:hover:text-dark-50': header.enableSorting,
+                                'cursor-pointer hover:text-gray-400 dark:hover:text-gray-50': header.enableSorting,
                             }"
                             v-for="header in headers"
                             @click="sortData(header)"
@@ -47,11 +47,11 @@
                                 </slot>
                                 <div class="flex flex-col ml-2" v-if="header.enableSorting">
                                     <em
-                                        class="fas fa-caret-up text-gray-400 dark:text-dark-50"
+                                        class="fas fa-caret-up text-gray-400 dark:text-gray-50"
                                         :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
                                     ></em>
                                     <em
-                                        class="fas fa-caret-down text-gray-400 dark:text-dark-50"
+                                        class="fas fa-caret-down text-gray-400 dark:text-gray-50"
                                         :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
                                     ></em>
                                 </div>
