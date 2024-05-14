@@ -3,7 +3,7 @@
         <div class="w-full">
             <div class="mt-1 flex rounded-md">
                 <Input
-                    class="block w-full sm:text-sm border-gray-300 dark:border-dark-200 dark:bg-dark-400 dark:text-white dark:placeholder:text-gray-200"
+                    class="block w-full sm:text-sm border-gray-300 dark:border-dark-200 dark:bg-dark-400 dark:text-gray-300 dark:placeholder:text-gray-200"
                     :input-class="{
                         'rounded-r-md': options.length === 1,
                         'rounded-r-none': options.length > 1,
@@ -20,7 +20,7 @@
                     v-if="options.length > 1"
                     id="typeSearch"
                     name="typeSearch"
-                    class="-ml-px relative inline-flex items-center space-x-2 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary dark:border-dark-200 dark:bg-dark-400 dark:text-white"
+                    class="-ml-px relative inline-flex items-center space-x-2 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary dark:border-dark-200 dark:bg-dark-400 dark:text-gray-300"
                     @change="filter"
                     v-model="searchKey"
                     :disabled="options.length === 1"
@@ -33,11 +33,11 @@
         </div>
         <template v-if="enumOptions">
             <div class="flex flex-col">
-                <label for="enumKey" class="block text-sm font-medium text-gray-700 dark:text-white">{{ enumOptions.filterKey }} hi</label>
+                <label for="enumKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ enumOptions.filterKey }} hi</label>
                 <select
                     id="enumKey"
                     name="enumKey"
-                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary focus:outline-none focus:ring-primary sm:text-sm dark:border-dark-200 dark:bg-dark-400 dark:text-white"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary focus:outline-none focus:ring-primary sm:text-sm dark:border-dark-200 dark:bg-dark-400 dark:text-gray-300"
                     v-model="enumKey"
                     @change="filter"
                 >
