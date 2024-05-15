@@ -31,7 +31,7 @@
                     <tr>
                         <th
                             scope="col"
-                            class="sticky top-0 bg-gray-50 dark:bg-dark-500 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider"
+                            class="sticky top-0 bg-gray-50 dark:bg-dark-400 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider"
                             :class="{
                                 hidden: header?.displayWidth >= windowWidth,
                                 'cursor-default': !header.enableSorting,
@@ -69,10 +69,10 @@
                             (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
                                 ? 'border-t-2 border-b-2 border-yellow-400'
                                 : 'border-t',
-                            !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-500' : '',
+                            !isDragging && (selectable || multiSelect || openWithSingleClick) ? 'hover:bg-gray-100 dark:hover:bg-dark-400' : '',
                             selectable || multiSelect || openWithSingleClick ? 'cursor-pointer' : '',
                             selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
-                            index % 2 === 0 ? 'bg-white dark:bg-dark-300' : 'bg-gray-50 dark:bg-dark-400',
+                            index % 2 === 0 ? 'bg-white dark:bg-dark-300' : 'bg-gray-50 dark:bg-dark-200',
                         ]"
                         @click.ctrl.exact="e => addItemToSelect(data)"
                         @click.exact="e => selectItem(data)"
