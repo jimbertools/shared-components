@@ -421,7 +421,7 @@ video {
   -webkit-appearance: none;
           appearance: none;
   background-color: #fff;
-  border-color: #6b7280;
+  border-color: #D1D5DB;
   border-width: 1px;
   border-radius: 0px;
   padding-top: 0.5rem;
@@ -447,12 +447,12 @@ video {
 }
 
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  color: #6b7280;
+  color: #D1D5DB;
   opacity: 1;
 }
 
 input::placeholder,textarea::placeholder {
-  color: #6b7280;
+  color: #D1D5DB;
   opacity: 1;
 }
 
@@ -503,7 +503,7 @@ select {
   width: 1rem;
   color: #2563eb;
   background-color: #fff;
-  border-color: #6b7280;
+  border-color: #D1D5DB;
   border-width: 1px;
   --tw-shadow: 0 0 #0000;
 }
