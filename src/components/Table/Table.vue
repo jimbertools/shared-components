@@ -33,7 +33,7 @@
                             scope="col"
                             class="sticky top-0 bg-gray-50 dark:bg-dark-400 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider"
                             :class="{
-                                hidden: header?.displayWidth >= windowWidth,
+                                hidden: header?.displayWidth && header?.displayWidth >= windowWidth,
                                 'cursor-default': !header.enableSorting,
                                 'cursor-pointer hover:text-gray-400 dark:hover:text-gray-50': header.enableSorting,
                             }"
@@ -74,15 +74,15 @@
                             selectedDatas.includes(data) ? 'bg-blue-100 hover:bg-blue-50' : '',
                             index % 2 === 0 ? 'bg-white dark:bg-dark-300' : 'bg-gray-50 dark:bg-dark-200',
                         ]"
-                        @click.ctrl.exact="e => addItemToSelect(data)"
-                        @click.exact="e => selectItem(data)"
-                        @click.shift.exact="e => selectRange(data)"
-                        @dblclick.stop="e => openItem(data)"
+                        @click.ctrl.exact="addItemToSelect(data)"
+                        @click.exact="selectItem(data)"
+                        @click.shift.exact="selectRange(data)"
+                        @dblclick.stop="openItem(data)"
                         :draggable="dragAndDrop ? 'true' : 'false'"
-                        @drop.prevent="e => dragDrop(data)"
+                        @drop.prevent="dragDrop(data)"
                         @dragend.prevent="$emit(Emits.StopDragging)"
                         @dragstart="e => dragStart(e, data)"
-                        @dragover.prevent="e => dragOver(data)"
+                        @dragover.prevent="dragOver(data)"
                         @drag="e => drag(e)"
                         @dragend="dragEnd"
                     >
@@ -90,7 +90,7 @@
                             class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
-                            :class="{ hidden: header?.displayWidth >= windowWidth }"
+                            :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
                         >
                             <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}
