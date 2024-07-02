@@ -45,15 +45,15 @@
                                 <slot :name="`header-${header.key}`" :header="header">
                                     {{ header.displayName }}
                                 </slot>
-                                <div class="flex flex-col ml-2" v-if="header.enableSorting">
-                                    <em
-                                        class="fas fa-caret-up text-gray-400 dark:text-gray-50"
-                                        :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
-                                    ></em>
-                                    <em
-                                        class="fas fa-caret-down text-gray-400 dark:text-gray-50"
-                                        :class="{ 'text-primary': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
-                                    ></em>
+                                <div class="flex flex-col ml-2 w-4 h-7" v-if="header.enableSorting">
+                                    <ChevronUpIcon
+                                        class="text-gray-400 dark:text-gray-50 h-4"
+                                        :class="{ 'text-primary-600': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
+                                    ></ChevronUpIcon>
+                                    <ChevronDownIcon
+                                        class="text-gray-400 dark:text-gray-50 h-4"
+                                        :class="{ 'text-primary-600': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
+                                    ></ChevronDownIcon>
                                 </div>
                             </div>
                         </th>
@@ -131,6 +131,7 @@
     import { SortType, TableEmits as Emits } from './index';
     import { SearchBar } from '@/components/SearchBar';
     import { SearchOptions } from '@/types/TableTypes';
+    import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/solid';
 
     export default defineComponent({
         name: 'Table',
@@ -156,6 +157,8 @@
         },
         components: {
             SearchBar,
+            ChevronDownIcon, 
+            ChevronUpIcon
         },
         emits: [
             'update:defaultSort',
