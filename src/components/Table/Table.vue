@@ -86,10 +86,23 @@
                         @drag="e => drag(e)"
                         @dragend="dragEnd"
                     >
-                        <a v-if="navigateWithSingleClick" :href="navigateWithSingleClick.basePath + '/' + data[navigateWithSingleClick.navigationKey]" class="block">
-                            <TableCell v-for="header in headers" :header="header" :data="data" :windowWidth="windowWidth" />
+                        <a v-if="navigateWithSingleClick" class="block" :href="navigateWithSingleClick.basePath + '/' + data[navigateWithSingleClick.navigationKey]">
+                            <TableCell v-for="header in headers" :data-name="`data-${header.key}`" :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }">
+                                <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
+                                    {{ header.formatter ? header.formatter(data) : data[header.key] }}
+                                </slot>
+                            </TableCell>
                         </a>
-                        <TableCell v-else v-for="header in headers" :header="header" :data="data" :windowWidth="windowWidth" />
+                        <TableCell
+                            v-else
+                            v-for="header in headers"
+                            :data-name="`data-${header.key}`"
+                            :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
+                        >
+                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
+                                {{ header.formatter ? header.formatter(data) : data[header.key] }}
+                            </slot>
+                        </TableCell>
                     </tr>
                     <tr v-else class="dark:bg-dark-300">
                         <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">

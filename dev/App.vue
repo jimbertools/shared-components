@@ -8,7 +8,15 @@
             <h3>IconButton</h3>
             <IconButton>IconButton</IconButton>
         </div>
-        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg" :navigate-with-single-click="{ basePath: '/iets', navigationKey: 'userId' }"
+        <Table
+            :searchOptions="searchOptions"
+            :data="iets"
+            :headers="headers"
+            empty-message="leeg"
+            :navigate-with-single-click="{
+                basePath: '/test',
+                navigationKey: 'userId',
+            }"
             ><template #actions>yuu</template>
         </Table>
 
