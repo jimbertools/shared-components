@@ -27,4 +27,9 @@ export enum SortType {
     DESCENDING = 'DESC',
 }
 
+export type INavigateWithSingleClick = {
+    basePath: string;
+    navigationKey: string;
+};
+
 export { Table };

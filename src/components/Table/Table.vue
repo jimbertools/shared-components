@@ -86,16 +86,10 @@
                         @drag="e => drag(e)"
                         @dragend="dragEnd"
                     >
-                        <td
-                            class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                            v-for="header in headers"
-                            :data-name="`data-${header.key}`"
-                            :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
-                        >
-                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
-                                {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                            </slot>
-                        </td>
+                        <a v-if="navigateWithSingleClick" :href="navigateWithSingleClick.basePath + '/' + data[navigateWithSingleClick.navigationKey]" class="block">
+                            <TableCell v-for="header in headers" :header="header" :data="data" :windowWidth="windowWidth" />
+                        </a>
+                        <TableCell v-else v-for="header in headers" :header="header" :data="data" :windowWidth="windowWidth" />
                     </tr>
                     <tr v-else class="dark:bg-dark-300">
                         <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
@@ -128,10 +122,11 @@
     import { computed, defineComponent, onMounted, onUnmounted, PropType, ref } from 'vue';
     import { IHeader, IMoveItems, ISelectedChange, ISort, SelectionAction, TEntry } from '@/infrastructure/types/FileManagerTypes';
     import { orderBy } from '@/infrastructure/utils/SortUtil';
-    import { SortType, TableEmits as Emits } from './index';
+    import { SortType, TableEmits as Emits, INavigateWithSingleClick } from './index';
     import { SearchBar } from '@/components/SearchBar';
     import { SearchOptions } from '@/types/TableTypes';
     import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/solid';
+    import TableCell from './TableCell.vue';
 
     export default defineComponent({
         name: 'Table',
@@ -145,6 +140,7 @@
             backendPaginationSorting: { type: Boolean, required: false, default: false },
             withPagination: { type: Boolean, required: false, default: false },
             openWithSingleClick: { type: Boolean, required: false, default: false },
+            navigateWithSingleClick: { type: Object as () => INavigateWithSingleClick, required: false, default: null },
             defaultSort: { type: Object as PropType<ISort>, required: false },
             rowClass: { type: String, required: false },
             dragAndDrop: { type: Boolean, required: false, default: false },
@@ -157,8 +153,9 @@
         },
         components: {
             SearchBar,
-            ChevronDownIcon, 
-            ChevronUpIcon
+            ChevronDownIcon,
+            ChevronUpIcon,
+            TableCell,
         },
         emits: [
             'update:defaultSort',

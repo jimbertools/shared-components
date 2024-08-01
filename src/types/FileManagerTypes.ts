@@ -11,6 +11,7 @@ export interface IHeader<T extends Record<string, any>> {
     formatter?: (dataToFormat: T) => string;
     customTemplate?: boolean;
     width?: string;
+    displayWidth?: number;
 }
 
 export interface ISort {

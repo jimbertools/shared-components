@@ -8,7 +8,9 @@
             <h3>IconButton</h3>
             <IconButton>IconButton</IconButton>
         </div>
-        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"><template #actions>yuu</template> </Table>
+        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg" :navigate-with-single-click="{ basePath: '/iets', navigationKey: 'userId' }"
+            ><template #actions>yuu</template>
+        </Table>
 
         <!-- <file-manager
             class="block h-full"
