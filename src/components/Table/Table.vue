@@ -86,18 +86,11 @@
                         @drag="e => drag(e)"
                         @dragend="dragEnd"
                     >
-                        <a v-if="navigateWithSingleClick" class="block" :href="navigateWithSingleClick.basePath + '/' + data[navigateWithSingleClick.navigationKey]">
-                            <TableCell v-for="header in headers" :data-name="`data-${header.key}`" :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }">
-                                <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
-                                    {{ header.formatter ? header.formatter(data) : data[header.key] }}
-                                </slot>
-                            </TableCell>
-                        </a>
                         <TableCell
-                            v-else
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
                             :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
+                            :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
                         >
                             <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}

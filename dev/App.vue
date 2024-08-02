@@ -59,9 +59,11 @@
     const iets = ref([
         {
             userId: 1,
+            name: 'test',
         },
         {
             userId: 2,
+            name: 'test',
         },
     ]);
 
@@ -74,6 +76,11 @@
         {
             key: 'userId',
             displayName: 'Email',
+            enableSorting: true,
+        },
+        {
+            key: 'name',
+            displayName: 'Name',
             enableSorting: true,
         },
     ]);
