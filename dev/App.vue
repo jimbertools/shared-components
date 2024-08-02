@@ -8,6 +8,11 @@
             <h3>IconButton</h3>
             <IconButton>IconButton</IconButton>
         </div>
+        <Table :searchOptions="searchOptions" :data="iets" :headers="headers" empty-message="leeg"
+            ><template #data-actions
+                ><div><AcademicCapIcon class="w-5 h-5" /></div
+            ></template>
+        </Table>
         <Table
             :searchOptions="searchOptions"
             :data="iets"
@@ -17,7 +22,9 @@
                 basePath: '/test',
                 navigationKey: 'userId',
             }"
-            ><template #actions>yuu</template>
+            ><template #data-actions
+                ><div><AcademicCapIcon class="w-5 h-5" /></div
+            ></template>
         </Table>
 
         <!-- <file-manager
@@ -55,6 +62,7 @@
     import { IconButton } from '@/entry.esm';
     import { SearchOptions } from '@/types/TableTypes';
     import { Input } from '../src/components/Input';
+    import { AcademicCapIcon } from '@heroicons/vue/outline';
 
     const iets = ref([
         {
@@ -83,6 +91,11 @@
             displayName: 'Name',
             enableSorting: true,
         },
+        {
+            key: 'actions',
+            displayName: 'Actions',
+            enableSorting: false,
+        },
     ]);
 
     const getEverything = async () => {
@@ -110,6 +123,7 @@
             Table,
             IconButton,
             Input,
+            AcademicCapIcon,
         },
         setup() {
             const isInternalDragging = ref<boolean>(false);
