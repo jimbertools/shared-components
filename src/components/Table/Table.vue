@@ -91,6 +91,12 @@
                             :data-name="`data-${header.key}`"
                             :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
                             :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
+                            @click="(e) => {
+                                if(openWithSingleClick) {
+                                    e.preventDefault();
+                                    openItem(data);
+                                } 
+                            }"
                         >
                             <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}
