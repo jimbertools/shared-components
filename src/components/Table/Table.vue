@@ -91,9 +91,8 @@
                             :data-name="`data-${header.key}`"
                             :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
                             :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
-                            @click="(e) => {
+                            @click.stop="() => {
                                 if(openWithSingleClick) {
-                                    e.preventDefault();
                                     openItem(data);
                                 } 
                             }"
