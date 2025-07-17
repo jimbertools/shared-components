@@ -63,7 +63,7 @@
                     <tr
                         v-if="!isLoading && dataList.length > 0"
                         v-for="(data, index) in dataList"
-                        :key="data"
+                        :key="tableRowKey ? data[tableRowKey] : data"
                         class="border-b border-gray-100 dark:border-dark-200"
                         :class="[
                             (data.isFolder && draggingOverData !== undefined && draggingOverData.id === data.id && selectedDatas.findIndex(selected => selected.id === data.id)) < 0
@@ -161,6 +161,7 @@
             isLoading: { type: Boolean, required: false, default: false },
             searchOptions: { type: Object as PropType<SearchOptions>, required: false },
             roundedBorder: { type: Boolean, required: false, default: true },
+            tableRowKey: { type: String, required: false },
         },
         components: {
             SearchBar,
