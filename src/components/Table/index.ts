@@ -33,3 +33,7 @@ export interface INavigateWithSingleClick {
 }
 
 export { Table };
+
+export interface TableStyle {
+    takeFullHeight?: boolean; // Table will automatically grow/keep its height even if no data is present
+}

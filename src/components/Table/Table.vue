@@ -23,8 +23,12 @@
         </div>
         <div
             ref="tableContainer"
-            class="flex flex-col min-h-0 overflow-auto h-min border border-gray-300 dark:border-dark-200"
-            :class="{ 'sm:rounded-md rounded-borders': roundedBorder }"
+            class="flex flex-col min-h-0 overflow-auto border border-gray-300 dark:border-dark-200"
+            :class="{
+                'sm:rounded-md rounded-borders': roundedBorder,
+                'h-full': tableStyle.takeFullHeight,
+                'h-min': !tableStyle.takeFullHeight,
+            }"
         >
             <table class="min-w-full divide-y divide-gray300 dark:divide-dark-200">
                 <thead class="bg-gray-50 sticky z-20 dark:bg-dark-400" style="z-index: 20">
@@ -91,11 +95,13 @@
                             :data-name="`data-${header.key}`"
                             :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
                             :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
-                            @click.stop="() => {
-                                if(openWithSingleClick) {
-                                    openItem(data);
-                                } 
-                            }"
+                            @click.stop="
+                                () => {
+                                    if (openWithSingleClick) {
+                                        openItem(data);
+                                    }
+                                }
+                            "
                         >
                             <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}
@@ -133,7 +139,7 @@
     import { computed, defineComponent, onMounted, onUnmounted, PropType, ref } from 'vue';
     import { IHeader, IMoveItems, ISelectedChange, ISort, SelectionAction, TEntry } from '@/infrastructure/types/FileManagerTypes';
     import { orderBy } from '@/infrastructure/utils/SortUtil';
-    import { SortType, TableEmits as Emits, INavigateWithSingleClick } from './index';
+    import { SortType, TableEmits as Emits, INavigateWithSingleClick, TableStyle } from './index';
     import { SearchBar } from '@/components/SearchBar';
     import { SearchOptions } from '@/types/TableTypes';
     import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/solid';
@@ -162,6 +168,13 @@
             searchOptions: { type: Object as PropType<SearchOptions>, required: false },
             roundedBorder: { type: Boolean, required: false, default: true },
             tableRowKey: { type: String, required: false },
+            tableStyle: {
+                type: Object as PropType<TableStyle>,
+                required: false,
+                default: () => ({
+                    takeFullHeight: false,
+                }),
+            },
         },
         components: {
             SearchBar,
