@@ -104,7 +104,7 @@
                                 }
                             "
                         >
-                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="{ data, index }">
+                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}
                             </slot>
                         </TableCell>
