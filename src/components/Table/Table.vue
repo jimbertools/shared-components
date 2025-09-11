@@ -89,6 +89,7 @@
                         @dragover.prevent="dragOver(data)"
                         @drag="e => drag(e)"
                         @dragend="dragEnd"
+                        :data-testid="tableName ? `table-${tableName}-row-${index}` : undefined"
                     >
                         <TableCell
                             v-for="header in headers"
@@ -103,7 +104,7 @@
                                 }
                             "
                         >
-                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="data">
+                            <slot :name="`data-${header.key}`" :data="data[header.key]" :index="index" :row="{ data, index }">
                                 {{ header.formatter ? header.formatter(data) : data[header.key] }}
                             </slot>
                         </TableCell>
@@ -175,6 +176,7 @@
                     takeFullHeight: false,
                 }),
             },
+            tableName: { type: String, required: false, default: 'default' }, // used for testing purposes
         },
         components: {
             SearchBar,
