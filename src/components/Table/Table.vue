@@ -44,6 +44,7 @@
                             v-for="header in headers"
                             @click="sortData(header)"
                             :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
+                            :data-testid="`${header.key}-header`"
                         >
                             <div class="flex flex-row items-center">
                                 <slot :name="`header-${header.key}`" :header="header">
