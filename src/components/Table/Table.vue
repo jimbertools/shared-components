@@ -52,12 +52,20 @@
                                 </slot>
                                 <div class="flex flex-col ml-2 w-4 h-7" v-if="header.enableSorting">
                                     <ChevronUpIcon
-                                        class="text-gray-400 dark:text-gray-50 h-4"
-                                        :class="{ 'text-primary-600': sort && sort.prop === header.key && sort.order === SortType.ASCENDING }"
+                                        class="h-4"
+                                        :class="[
+                                            sort?.prop === header.key && sort?.order === SortType.ASCENDING
+                                                ? 'text-primary-600 dark:text-red-500'
+                                                : 'text-gray-400 dark:text-gray-50',
+                                        ]"
                                     ></ChevronUpIcon>
                                     <ChevronDownIcon
-                                        class="text-gray-400 dark:text-gray-50 h-4"
-                                        :class="{ 'text-primary-600': sort && sort.prop === header.key && sort.order === SortType.DESCENDING }"
+                                        class="h-4"
+                                        :class="[
+                                            sort?.prop === header.key && sort?.order === SortType.DESCENDING
+                                                ? 'text-primary-600 dark:text-tertiary-600'
+                                                : 'text-gray-400 dark:text-gray-50',
+                                        ]"
                                     ></ChevronDownIcon>
                                 </div>
                             </div>
