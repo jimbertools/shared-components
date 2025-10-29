@@ -53,19 +53,13 @@
                                 <div class="flex flex-col ml-2 w-4 h-7" v-if="header.enableSorting">
                                     <ChevronUpIcon
                                         class="h-4"
-                                        :class="[
-                                            sort?.prop === header.key && sort?.order === SortType.ASCENDING
-                                                ? 'text-primary-600 dark:text-red-500'
-                                                : 'text-gray-400 dark:text-gray-50',
-                                        ]"
+                                        :class="[sort?.prop === header.key && sort?.order === SortType.ASCENDING ? 'text-primary-600' : 'text-gray-400 dark:text-gray-50']"
+                                        :style="sort?.prop === header.key && sort?.order === SortType.ASCENDING && isDarkMode ? 'color: #2c9ea0' : ''"
                                     ></ChevronUpIcon>
                                     <ChevronDownIcon
                                         class="h-4"
-                                        :class="[
-                                            sort?.prop === header.key && sort?.order === SortType.DESCENDING
-                                                ? 'text-primary-600 dark:text-tertiary-600'
-                                                : 'text-gray-400 dark:text-gray-50',
-                                        ]"
+                                        :class="[sort?.prop === header.key && sort?.order === SortType.DESCENDING ? 'text-primary-600' : 'text-gray-400 dark:text-gray-50']"
+                                        :style="sort?.prop === header.key && sort?.order === SortType.DESCENDING && isDarkMode ? 'color: #2c9ea0' : ''"
                                     ></ChevronDownIcon>
                                 </div>
                             </div>
@@ -462,6 +456,8 @@
                 tableContainer.value.scrollTo({ top: 0, behavior: 'smooth' });
             };
 
+            const isDarkMode = computed(() => document.documentElement.classList.contains('dark'));
+
             return {
                 tableContainer,
                 dataList,
@@ -493,6 +489,7 @@
                 drag,
                 dataFilterClear,
                 dataFilterUpdate,
+                isDarkMode,
             };
         },
     });
