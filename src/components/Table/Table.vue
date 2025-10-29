@@ -54,7 +54,7 @@
                                     <ChevronUpIcon
                                         class="h-4"
                                         :class="[
-                                            sort?.prop === header.key && sort?.order === SortType.DESCENDING
+                                            sort?.prop === header.key && sort?.order === SortType.ASCENDING
                                                 ? isDarkMode
                                                     ? 'text-tertiary-600'
                                                     : 'text-primary-600'
@@ -64,7 +64,7 @@
                                     <ChevronDownIcon
                                         class="h-4"
                                         :class="[
-                                            sort?.prop === header.key && sort?.order === SortType.ASCENDING
+                                            sort?.prop === header.key && sort?.order === SortType.DESCENDING
                                                 ? isDarkMode
                                                     ? 'text-tertiary-600'
                                                     : 'text-primary-600'
