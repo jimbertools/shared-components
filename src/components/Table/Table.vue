@@ -53,13 +53,23 @@
                                 <div class="flex flex-col ml-2 w-4 h-7" v-if="header.enableSorting">
                                     <ChevronUpIcon
                                         class="h-4"
-                                        :class="[sort?.prop === header.key && sort?.order === SortType.ASCENDING ? 'text-primary-600' : 'text-gray-400 dark:text-gray-50']"
-                                        :style="sort?.prop === header.key && sort?.order === SortType.ASCENDING && isDarkMode ? 'color: #2c9ea0' : ''"
+                                        :class="[
+                                            sort?.prop === header.key && sort?.order === SortType.ASCENDING
+                                                ? isDarkMode
+                                                    ? 'text-tertiary-600'
+                                                    : 'text-primary-600'
+                                                : 'text-gray-400 dark:text-gray-50',
+                                        ]"
                                     ></ChevronUpIcon>
                                     <ChevronDownIcon
                                         class="h-4"
-                                        :class="[sort?.prop === header.key && sort?.order === SortType.DESCENDING ? 'text-primary-600' : 'text-gray-400 dark:text-gray-50']"
-                                        :style="sort?.prop === header.key && sort?.order === SortType.DESCENDING && isDarkMode ? 'color: #2c9ea0' : ''"
+                                        :class="[
+                                            sort?.prop === header.key && sort?.order === SortType.DESCENDING
+                                                ? isDarkMode
+                                                    ? 'text-tertiary-600'
+                                                    : 'text-primary-600'
+                                                : 'text-gray-400 dark:text-gray-50',
+                                        ]"
                                     ></ChevronDownIcon>
                                 </div>
                             </div>
