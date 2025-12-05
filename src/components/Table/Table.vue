@@ -2,9 +2,10 @@
     <div class="flex flex-col min-h-0 overflow-auto h-full">
         <div
             v-if="searchOptions?.enableSearch || $slots.buttons"
-            class="flex items-center mb-2"
+            class="flex items-end mb-2 gap-4"
             :class="{ 'justify-end': !searchOptions?.enableSearch, 'justify-between': searchOptions?.enableSearch }"
         >
+            <slot name="before-search" />
             <SearchBar
                 v-if="searchOptions?.enableSearch"
                 class="flex w-full justify-between items-end"
