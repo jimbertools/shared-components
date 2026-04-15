@@ -18,7 +18,7 @@ export interface IHeader<T extends Record<string, any>> {
     comparer?: (t1: T, t2: T, i: number) => any;
     formatter?: (dataToFormat: T) => string;
     customTemplate?: boolean;
-    width?: number;
+    width?: string | number;
     displayWidth?: ScreenWidth;
 }
 

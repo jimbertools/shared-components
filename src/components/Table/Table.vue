@@ -37,11 +37,16 @@
                         <th
                             scope="col"
                             class="sticky top-0 bg-gray-50 dark:bg-dark-400 px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider"
-                            :class="{
-                                hidden: header?.displayWidth && header?.displayWidth >= windowWidth,
-                                'cursor-default': !header.enableSorting,
-                                'cursor-pointer hover:text-gray-400 dark:hover:text-gray-50': header.enableSorting,
-                            }"
+                            :class="[
+                                {
+                                    hidden: header?.displayWidth && header?.displayWidth >= windowWidth,
+                                    'cursor-default': !header.enableSorting,
+                                    'cursor-pointer hover:text-gray-400 dark:hover:text-gray-50': header.enableSorting,
+                                    'overflow-hidden': header.width,
+                                },
+                                typeof header.width === 'string' ? header.width : undefined,
+                            ]"
+                            :style="typeof header.width === 'number' ? { maxWidth: header.width + 'px', overflow: 'hidden' } : undefined"
                             v-for="header in headers"
                             @click="sortData(header)"
                             :key="`${header.key}${sort ? sort.prop + '_' + sort.order : ''}`"
@@ -108,7 +113,8 @@
                         <TableCell
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
-                            :class="{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth }"
+                            :class="[{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth, 'overflow-hidden': header.width }, typeof header.width === 'string' ? header.width : undefined]"
+                            :style="typeof header.width === 'number' ? { maxWidth: header.width + 'px', overflow: 'hidden' } : undefined"
                             :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
                             @click.stop="
                                 () => {
