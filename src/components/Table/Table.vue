@@ -31,7 +31,7 @@
                 'h-min': !tableStyle.takeFullHeight,
             }"
         >
-            <table class="min-w-full divide-y divide-gray300 dark:divide-dark-200">
+            <table class="min-w-full divide-y divide-gray300 dark:divide-dark-200" :style="hasColumnWidths ? { tableLayout: 'fixed', width: '100%' } : undefined">
                 <thead class="bg-gray-50 sticky z-20 dark:bg-dark-400" style="z-index: 20">
                     <tr>
                         <th
@@ -475,7 +475,10 @@
 
             const isDarkMode = computed(() => document.documentElement.classList.contains('dark'));
 
+            const hasColumnWidths = computed(() => props.headers.some(h => h.width));
+
             return {
+                hasColumnWidths,
                 tableContainer,
                 dataList,
                 sort,
