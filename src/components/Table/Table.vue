@@ -132,7 +132,7 @@
                     <tr v-else class="dark:bg-dark-300">
                         <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
                             <div class="w-full flex flex-row justify-center items-center">
-                                {{ emptyMessage }}
+                                <slot name="empty">{{ emptyMessage }}</slot>
                             </div>
                         </td>
                     </tr>
