@@ -113,7 +113,10 @@
                         <TableCell
                             v-for="header in headers"
                             :data-name="`data-${header.key}`"
-                            :class="[{ hidden: header?.displayWidth && header?.displayWidth >= windowWidth, 'overflow-hidden': header.width }, typeof header.width === 'string' ? header.width : undefined]"
+                            :class="[
+                                { hidden: header?.displayWidth && header?.displayWidth >= windowWidth, 'overflow-hidden': header.width },
+                                typeof header.width === 'string' ? header.width : undefined,
+                            ]"
                             :style="typeof header.width === 'number' ? { maxWidth: header.width + 'px', overflow: 'hidden' } : undefined"
                             :link="navigateWithSingleClick ? `${navigateWithSingleClick.basePath}/${data[navigateWithSingleClick.navigationKey]}` : undefined"
                             @click.stop="
@@ -129,15 +132,11 @@
                             </slot>
                         </TableCell>
                     </tr>
-                    <tr v-else class="dark:bg-dark-300">
-                        <td :colspan="headers.length" class="relative px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                            <div class="w-full flex flex-row justify-center items-center">
-                                <slot name="empty">{{ emptyMessage }}</slot>
-                            </div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+            <div v-if="!isLoading && dataList.length === 0" class="flex flex-1 items-center justify-center px-6 py-4 text-sm text-gray-900 dark:bg-dark-300 dark:text-gray-300">
+                <slot name="empty">{{ emptyMessage }}</slot>
+            </div>
 
             <div v-if="isLoading" class="w-full flex flex-row justify-center items-center mt-2">
                 <span class="flex flex-col items-center mt-2">
