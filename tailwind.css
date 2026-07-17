@@ -1,0 +1,10 @@
+@theme {
+    --breakpoint-s: (min-width: 768px) and (max-width: 1330px);
+    --breakpoint-m: 1331px;
+
+    --grid-template-columns-topBarSm: minmax(0, 85vw) minmax(0, 1fr);
+    --grid-template-columns-topBarLg: minmax(0, 30vw) minmax(0, 1fr);
+}
+
+@source './src/components/**/*.vue';
+@source './src/components/**/*.ts';
